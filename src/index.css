@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  background-color: black;
+  color: #FF00FF;
+}
+
+a {
+    color: #FF00FF;
+}
+
+a:hover {
+    font-size: xx-large;
+}
