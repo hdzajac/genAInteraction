@@ -2,9 +2,11 @@ import React from 'react';
 import { styled } from '@mui/system';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import ContentTemplate from './ContentTemplate';
+import HomePageContent from './Pages/HomePageContent';
+import AboutPageContent from './Pages/AboutPageContent';
+import ContactPageContent from './Pages/ContactPageContent';
 
 const Container = styled('div')`
   display: flex;
@@ -56,13 +58,22 @@ const NavigationLink = ({ to, children }) => {
   );
 };
 
+const HomePage = () => {
+  return(
+    <MainContent>
+      <ContentTemplate page="Welcome Home">
+        <HomePageContent/>
+      </ContentTemplate>
+    </MainContent>
+  )
+}
+
 
 const AboutPage = () => {
   return (
     <MainContent>
-    <ContentTemplate page="Hubert D. Zając">
-      <Typography variant="h3">About Page</Typography>
-      {/* Add your content for the About page */}
+    <ContentTemplate page="About">
+      <AboutPageContent />
     </ContentTemplate>
     </MainContent>
 
@@ -73,8 +84,9 @@ const AboutPage = () => {
 const ContactPage = () => {
   return (
     <MainContent>
-      <Typography variant="h3">Contact Me Page</Typography>
-      {/* Add your content for the Contact Me page */}
+      <ContentTemplate page="Contact">
+        <ContactPageContent />
+      </ContentTemplate>
     </MainContent>
   );
 };
@@ -87,7 +99,7 @@ const PageTemplate = ({ activePage }) => {
       case 'contact':
         return <ContactPage />;
       default:
-        return <MainContent>{/* Add your default content here */}</MainContent>;
+        return <HomePage />;
     }
   };
 

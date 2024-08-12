@@ -1,12 +1,13 @@
 import { Typography } from '@mui/material';
 import React from 'react';
+import Box from '@mui/material/Box';
 
 const ContentTemplate = ({page, children}) => {
   return (
-    <div>
+    <Box>
     <Typography variant="h1">{page}</Typography>
     {children}
-    </div>
+    </Box>
   );
 };
 
