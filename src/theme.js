@@ -13,14 +13,14 @@ export const theme = createTheme({
   },
   typography: {
     h1: {
-        fontSize: '10em',
+        fontSize: '5em',
         marginTop: '-0.2em'
     },
     h2: {
-        fontSize: '5em'
+        fontSize: '3em'
     },
     h3: {
-        fontSize: '3em'
+        fontSize: '2em'
     },
     body1: {
         
