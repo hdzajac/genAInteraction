@@ -4,7 +4,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { Link } from "react-router-dom";
 import HomePageContent from "./Pages/HomePageContent";
-import AboutPageContent from "./Pages/AboutPageContent";
+import ChatPageContent from "./Pages/ChatPageContent";
 import ContactPageContent from "./Pages/ContactPageContent";
 import { Grid } from "@mui/material";
 
@@ -39,8 +39,8 @@ const NavigationLink = ({ to, children }) => {
 const PageTemplate = ({ activePage }) => {
   const getPageContent = () => {
     switch (activePage) {
-      case "about":
-        return <AboutPageContent />;
+      case "chat":
+        return <ChatPageContent />;
       case "contact":
         return <ContactPageContent />;
       default:
@@ -67,7 +67,7 @@ const PageTemplate = ({ activePage }) => {
                 <NavigationLink to="/">Home</NavigationLink>
               </NavigationItem>
               <NavigationItem>
-                <NavigationLink to="/about"> About</NavigationLink>
+                <NavigationLink to="/chat"> Chat</NavigationLink>
               </NavigationItem>
               <NavigationItem>
                 <NavigationLink to="/contact">Contact Me</NavigationLink>
