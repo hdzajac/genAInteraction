@@ -1,0 +1,11 @@
+"Egen læge ønsker diagnostisk afklaring, forslag til videre håndtering, og feedback om diagnosen."
+Vurdering af læsion på højre arm hos 41-årig mand med hudtype II, uden tidligere hudkræft eller immunsuppression. Læsionen har været til stede i flere år og er vokset det seneste år.
+"Jeg er sikker på, at det er et dermatofibrom."
+"Super gode billeder. Det kliniske billede er klart og giver et godt overblik. Det dermatoskopiske billede er også skarpt!"
+"Der er en hvid baggrund i midten af dermatoskopien, der stråler udad, omgivet af et retikulært pigmentnetværk. Læsionen fremstår let violet og hævet."
+"Enig, det ser ud til at være et dermatofibrom. Godt klaret!"
+Elevationen og den let violette farve tyder på dermatofibrom, hvilket også understøttes af dermoskopi, der viser et centralt radierende arvævsområde under pigmentnetværket. Der er ingen oplagte differentialdiagnoser.
+Et dermatofibrom er en godartet hudtumor, ofte forårsaget af mindre skader, insektbid eller hudbetændelse. Det viser sig typisk som en fast, let pigmenteret nodulær læsion, der kan føles som en lille knude. Dermatofibromer er typisk 5-10 mm i diameter og varierer i farve fra brun til rød. De kendetegnes ved en central indtrækning ved lateralt tryk (dimple sign). Dermatofibromer er harmløse og kræver sjældent behandling, medmindre de er symptomatiske eller kosmetisk generende.
+"Læsionen er godartet, og patienten kan beroliges uden opfølgning. Det anbefales dog at opfordre til solbeskyttelse og selvkontrol af læsioner for at forhindre fremtidig hudkræft."
+"Jeg opfordrer til egenkontrol af læsionen. Den må gerne vokse en smule, men ved væsentlig eller hurtig vækst bør patienten kontakte sin læge."
+"Ved dermoskopi af eleverede, hår- eller skællende læsioner er det nyttigt at påføre sprit før undersøgelsen."
