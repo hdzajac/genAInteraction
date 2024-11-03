@@ -3,14 +3,18 @@ type Payload = {
   payload: Record<string, unknown>
 }
 
-const request = (payload: Payload) =>
-  fetch('http://localhost:3000/api/llm', {
+const request = async (payload: Payload) => {
+  const token = localStorage.getItem('token') ?? ''
+
+  return fetch('http://localhost:3000/api/llm', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      authorization: token,
     },
     body: JSON.stringify(payload),
   }).then((res) => res.json())
+}
 
 export function useOpenAI() {
   return {
