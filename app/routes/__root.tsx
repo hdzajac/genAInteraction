@@ -1,11 +1,11 @@
-import { Flex, Spinner, Theme } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 import '@radix-ui/themes/styles.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import {
-  createRootRouteWithContext,
+  createRootRoute,
   Outlet,
+  redirect,
   ScrollRestoration,
-  useNavigate,
   useRouter,
 } from '@tanstack/react-router'
 import { Body, Head, Html, Meta, Scripts } from '@tanstack/start'
@@ -16,9 +16,7 @@ import { queryClient } from '@/router'
 
 import '../global.css'
 
-export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient
-}>()({
+export const Route = createRootRoute({
   meta: () => [
     {
       charSet: 'utf-8',
@@ -36,20 +34,7 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
-  return (
-    <RootDocument>
-      <QueryClientProvider client={queryClient}>
-        <Auth>
-          <Outlet />
-        </Auth>
-      </QueryClientProvider>
-    </RootDocument>
-  )
-}
-
-function Auth({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
-  const navigate = useNavigate()
   const router = useRouter()
 
   useEffect(() => {
@@ -57,29 +42,26 @@ function Auth({ children }: { children: React.ReactNode }) {
       setIsLoading(false)
       return
     }
-
     if (router.latestLocation.href !== '/login') {
       const token = localStorage.getItem('token')
-
       if (token) {
         setIsLoading(false)
       } else {
-        navigate({ to: '/login' })
+        throw redirect({ to: '/login' })
       }
     } else {
       setIsLoading(false)
     }
+    setIsLoading(false)
   }, [])
 
-  if (isLoading) {
-    return (
-      <Flex align="center" justify="center" height="100vh">
-        <Spinner />
-      </Flex>
-    )
-  }
-
-  return children
+  return (
+    <RootDocument>
+      <QueryClientProvider client={queryClient}>
+        <Outlet />
+      </QueryClientProvider>
+    </RootDocument>
+  )
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
