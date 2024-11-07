@@ -24,6 +24,7 @@ export default async function ({ paragraph }: Props) {
   }
 
   const prompt = `
+      You are a medical doctor.
       Take the following text and create two alternative versions.
       The first one should be revised to add bit more of detail and context.
       The second should be revised to be more concise and shorter:'
@@ -32,7 +33,7 @@ export default async function ({ paragraph }: Props) {
   const completion = await client.beta.chat.completions.parse({
     model: 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: 'You are a medical doctor.' },
+      { role: 'system', content: prompt },
       { role: 'user', content: paragraph },
     ],
     response_format: zodResponseFormat(ParagraphsFormat, 'alternatives'),
