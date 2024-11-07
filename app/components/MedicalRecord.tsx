@@ -1,21 +1,35 @@
-import { Box } from '@radix-ui/themes'
+import { Box, Flex, Grid } from '@radix-ui/themes'
 
-import pictureUrl from '@/assets/picture.jpg'
+import { MedicalRecord as TMedicalRecord } from '@/store/types'
+import './MedicalRecord.css'
 
-export default function MedicalRecord() {
+type Props = {
+  record: TMedicalRecord
+}
+
+export default function MedicalRecord({ record }: Props) {
   return (
-    <Box
+    <Flex
+      direction="column"
+      gap="4"
+      p="var(--space-4)"
       style={{
         backgroundColor: '#fff',
         borderRight: '1px solid #bfbfbf',
-      }}
-      p="var(--space-4)">
-      <img src={pictureUrl} alt="" />
+      }}>
+      <h2>Overview • Lesion #{record.id}</h2>
 
-      <Box className="panel">
-        <h2>Lesion #3 | Undiagnosed</h2>
-        <h4>Læsionens alder</h4>
-        <p>Måneder</p>
+      <Grid className="panel MedicalRecord-images" columns="1fr 1fr 1fr" gap="4">
+        {record.images.map((image, index) => (
+          <img key={index} src={'/_build/app/' + image} alt="" />
+        ))}
+      </Grid>
+
+      <Box className="panel MedicalRecord">
+        <h3>Medical record</h3>
+        <p>
+          {record.age} {record.gender}
+        </p>
         <h4>Symptomer</h4>
         <p>Itching, ingen blodning </p>
         <h4>Ændringer i udseende (gennem mineder)</h4>
@@ -29,6 +43,6 @@ export default function MedicalRecord() {
         <h4>Ovrige objektive fund</h4>
         <p>Ingen</p>
       </Box>
-    </Box>
+    </Flex>
   )
 }

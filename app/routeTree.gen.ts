@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SelectionImport } from './routes/selection'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
+import { Route as CasesIndexImport } from './routes/cases.index'
+import { Route as CasesCaseIdImport } from './routes/cases.$caseId'
 
 // Create/Update Routes
 
@@ -32,6 +34,18 @@ const LoginRoute = LoginImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CasesIndexRoute = CasesIndexImport.update({
+  id: '/cases/',
+  path: '/cases/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CasesCaseIdRoute = CasesCaseIdImport.update({
+  id: '/cases/$caseId',
+  path: '/cases/$caseId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +74,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SelectionImport
       parentRoute: typeof rootRoute
     }
+    '/cases/$caseId': {
+      id: '/cases/$caseId'
+      path: '/cases/$caseId'
+      fullPath: '/cases/$caseId'
+      preLoaderRoute: typeof CasesCaseIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/cases/': {
+      id: '/cases/'
+      path: '/cases'
+      fullPath: '/cases'
+      preLoaderRoute: typeof CasesIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -69,12 +97,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/selection': typeof SelectionRoute
+  '/cases/$caseId': typeof CasesCaseIdRoute
+  '/cases': typeof CasesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/selection': typeof SelectionRoute
+  '/cases/$caseId': typeof CasesCaseIdRoute
+  '/cases': typeof CasesIndexRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +114,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/selection': typeof SelectionRoute
+  '/cases/$caseId': typeof CasesCaseIdRoute
+  '/cases/': typeof CasesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/selection'
+  fullPaths: '/' | '/login' | '/selection' | '/cases/$caseId' | '/cases'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/selection'
-  id: '__root__' | '/' | '/login' | '/selection'
+  to: '/' | '/login' | '/selection' | '/cases/$caseId' | '/cases'
+  id: '__root__' | '/' | '/login' | '/selection' | '/cases/$caseId' | '/cases/'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +131,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   SelectionRoute: typeof SelectionRoute
+  CasesCaseIdRoute: typeof CasesCaseIdRoute
+  CasesIndexRoute: typeof CasesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   SelectionRoute: SelectionRoute,
+  CasesCaseIdRoute: CasesCaseIdRoute,
+  CasesIndexRoute: CasesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +155,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/selection"
+        "/selection",
+        "/cases/$caseId",
+        "/cases/"
       ]
     },
     "/": {
@@ -128,6 +168,12 @@ export const routeTree = rootRoute
     },
     "/selection": {
       "filePath": "selection.tsx"
+    },
+    "/cases/$caseId": {
+      "filePath": "cases.$caseId.tsx"
+    },
+    "/cases/": {
+      "filePath": "cases.index.tsx"
     }
   }
 }

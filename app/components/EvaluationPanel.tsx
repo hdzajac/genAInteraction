@@ -1,4 +1,3 @@
-import { useEvaluationStore } from '@/store/evaluation'
 import {
   Button,
   Dialog,
@@ -9,18 +8,21 @@ import {
   TextArea,
   TextField,
 } from '@radix-ui/themes'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-export default function EvaluationPanel() {
-  const { evaluation, updateEvaluation } = useEvaluationStore()
+import { useEvaluationStore } from '@/store/evaluation'
+
+export default function EvaluationPanel({ defaultEvaluation }) {
+  const { evaluation, updateEvaluation, init } = useEvaluationStore()
+
+  useEffect(() => {
+    init(defaultEvaluation)
+  }, [])
 
   const { register, handleSubmit, control } = useForm({
     defaultValues: evaluation,
   })
-
-  const onSubmit = (formData: typeof evaluation) => {
-    updateEvaluation(formData)
-  }
 
   return (
     <div className="panel">
@@ -39,7 +41,7 @@ export default function EvaluationPanel() {
             <Dialog.Description size="2" mb="4">
               Make changes to your profile.
             </Dialog.Description>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(updateEvaluation)}>
               <Flex direction="column" gap="3">
                 <label>
                   <Text as="div" size="2" mb="1" weight="bold">

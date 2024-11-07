@@ -1,10 +1,13 @@
 import { Box, Flex } from '@radix-ui/themes'
 
-import pictureUrl from '@/assets/picture.jpg'
-
+import { MedicalRecord } from '@/store/types'
 import './MainNav.css'
 
-export default function MainNav() {
+type Props = {
+  record: MedicalRecord
+}
+
+export default function MainNav({ record }: Props) {
   const casesList = [
     {
       title: '#3 Undiagnosed',
@@ -24,7 +27,7 @@ export default function MainNav() {
   ]
 
   return (
-    <Box width="260px" height="100%" className="MainNav">
+    <Box height="100%" className="MainNav">
       <Box p="3" className="MainNav-separator">
         Male <span>010180-1234</span>
       </Box>
@@ -52,7 +55,7 @@ export default function MainNav() {
         {casesList.map(({ title, date }, index) => (
           <li className={index === 1 ? 'active' : ''} key={index}>
             <Flex gap="2">
-              <img src={pictureUrl} alt="" />
+              <img src={'/_build/app/' + record.images[0]} alt="" />
               <div>
                 <div>{title}</div>
                 <div>{date}</div>

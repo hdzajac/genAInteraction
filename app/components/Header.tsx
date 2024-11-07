@@ -1,5 +1,5 @@
 import { Flex } from '@radix-ui/themes'
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 
 import './Header.css'
 
@@ -32,7 +32,7 @@ export default function Header() {
           />
         </svg>
 
-        <span>Cases</span>
+        <Link to="/cases">Cases</Link>
         <span>Tele-referal</span>
       </Flex>
 

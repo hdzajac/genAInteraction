@@ -11,6 +11,8 @@
 
 # production
 /build
+.vercel
+.vinxi
 
 # misc
 .env
@@ -23,3 +25,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+

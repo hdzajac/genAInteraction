@@ -1,4 +1,4 @@
-import { Button, DropdownMenu, Flex } from '@radix-ui/themes'
+import { Button, DropdownMenu, Flex, Grid } from '@radix-ui/themes'
 import { createFileRoute } from '@tanstack/react-router'
 import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -7,39 +7,47 @@ import Header from '@/components/Header'
 import MainNav from '@/components/MainNav'
 import MedicalRecord from '@/components/MedicalRecord'
 import { useOpenAI } from '@/hooks/useOpenAI'
+import { getRecord } from './cases.$caseId'
 
 const defaultParagraph =
   'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are sharp, suggesting a demarcated border indicative of a benign nature. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.'
 
 export const Route = createFileRoute('/selection')({
-  component: () => (
-    <div style={{ backgroundColor: 'var(--surface)' }}>
-      <Header />
+  loader: async ({ params }) => getRecord('1'),
+  component: () => {
+    const record = Route.useLoaderData()
 
-      <Flex>
-        <MainNav />
-        <MedicalRecord />
+    if (!record) return null
 
-        <Flex direction="column" p="6" width="100%" gap="3">
-          <EvaluationPanel />
+    return (
+      <div style={{ backgroundColor: 'var(--surface)' }}>
+        <Header />
 
-          <Flex direction="column" gap="2">
-            <Flex justify="end" gap="2">
-              <Button variant="surface" onClick={() => {}}>
-                Auto-generate
-              </Button>
+        <Grid columns="200px 2fr 3fr">
+          <MainNav record={record} />
+          <MedicalRecord record={record} />
 
-              {/* <Button onClick={() => rephrase('aa')}>TEST</Button> */}
-              <Button>Approve</Button>
-            </Flex>
-            <Flex className="panel" direction="column" gap="4">
-              <Selection />
+          <Flex direction="column" p="6" width="100%" gap="3">
+            <EvaluationPanel defaultEvaluation={record?.evaluation} />
+
+            <Flex direction="column" gap="2">
+              <Flex justify="end" gap="2">
+                <Button variant="surface" onClick={() => {}}>
+                  Auto-generate
+                </Button>
+
+                {/* <Button onClick={() => rephrase('aa')}>TEST</Button> */}
+                <Button>Approve</Button>
+              </Flex>
+              <Flex className="panel" direction="column" gap="4">
+                <Selection />
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
-      </Flex>
-    </div>
-  ),
+        </Grid>
+      </div>
+    )
+  },
 })
 
 function Selection() {

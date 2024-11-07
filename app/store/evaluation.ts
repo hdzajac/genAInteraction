@@ -1,15 +1,10 @@
 import { create } from 'zustand'
 
-export type EvaluationReport = {
-  diagnosis: string
-  treatment: string
-  imageQuality: string
-  visualFeatures: string
-  educationalComments: string
-}
+import { EvaluationReport } from './types'
 
 type EvaluationState = {
   evaluation: EvaluationReport
+  init: (evaluation: EvaluationReport) => void
   updateEvaluation(evaluation: EvaluationState): void
 }
 
@@ -23,6 +18,9 @@ const defaultValues = {
 
 export const useEvaluationStore = create<EvaluationState>((set) => ({
   evaluation: defaultValues,
+  init(evaluation) {
+    set({ evaluation })
+  },
   updateEvaluation(updatedValues) {
     set((state) => ({
       evaluation: {
