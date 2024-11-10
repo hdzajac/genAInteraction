@@ -5,7 +5,7 @@ import { z } from 'zod'
 const ParagraphsFormat = z.object({
   alternatives: z.array(
     z.object({
-      sentences: z.array(z.string()),
+      content: z.string(),
     }),
   ),
 })
@@ -49,14 +49,12 @@ function testingMode() {
     setTimeout(() => {
       resolve([
         {
-          sentences: [
+          content:
             'The patient is a 60-year-old man who has a significant family history of skin cancer, which raises concern for potential malignant changes. He presents with a lesion on his skin and reports experiencing mild itching in the surrounding area. Importantly, he denies experiencing any pain, bleeding, or other troubling symptoms associated with the lesion. It is noteworthy that this lesion has not undergone any previous biopsies or treatments, highlighting the need for a thorough examination and possible intervention.',
-          ],
         },
         {
-          sentences: [
+          content:
             'A 60-year-old man with a family history of skin cancer reports mild itching around a skin lesion but denies pain or bleeding. He has not had any biopsies or treatments for this lesion before.',
-          ],
         },
       ])
     }, 200)

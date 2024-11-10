@@ -1,13 +1,11 @@
-import { Button, DropdownMenu, Flex, Heading } from '@radix-ui/themes'
+import { Button, DropdownMenu, Flex, Heading, Spinner } from '@radix-ui/themes'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 
-import ReportParagraph from './ReportParagraph'
-import { ReportSection as TReportSection, useReport } from './useReport'
-
+import { useOpenAI } from '@/hooks/useOpenAI'
+import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportSection.css'
-
-type Props = {
-  section: TReportSection
-}
+import { Alternative, ReportSection as TReportSection, useReport } from './useReport'
 
 const reportSection = {
   VISUAL_DESCRIPTION: 'Visual description',
@@ -16,8 +14,39 @@ const reportSection = {
   ALTERNATIVE_PLAN: 'Alternative plan',
 }
 
+type Props = {
+  section: TReportSection
+}
+
 export default function ReportSection({ section }: Props) {
+  const { pickAlternative, summarizeSection, rephraseSelection } = useReport()
+  const { getAlternatives } = useOpenAI()
   const { deleteSection } = useReport()
+  const [showAlternatives, setShowAlternatives] = useState(false)
+
+  const { data: alternatives, isLoading } = useQuery({
+    queryKey: ['alternatives', section.content],
+    queryFn: () => getAlternatives({ paragraph: section.content }),
+    enabled: showAlternatives,
+  })
+
+  const handleSummarize = async () => {
+    await summarizeSection(section.type)
+  }
+
+  const handleShowAlternatives = () => {
+    setShowAlternatives(true)
+  }
+
+  const handlePick = (alternative: Alternative) => {
+    pickAlternative(section.type, alternative)
+
+    setShowAlternatives(false)
+  }
+
+  const handleAction = async (type: ActionTypes, selection: string) => {
+    await rephraseSelection(section.type, selection, type)
+  }
 
   return (
     <div className="ReportSection">
@@ -25,16 +54,28 @@ export default function ReportSection({ section }: Props) {
         <Heading as="h3" size="2" mb="1">
           {reportSection[section.type]}
         </Heading>
-        <DropdownMenuBtn handleDelete={() => deleteSection(section.type)} />
+        <DropdownMenuBtn
+          onDelete={() => deleteSection(section.type)}
+          onShowAlternatives={handleShowAlternatives}
+          onSummarize={handleSummarize}
+        />
       </Flex>
-      <Flex direction="column" gap="2" mb="4">
-        <ReportParagraph paragraph={section.content} id={{ section: section.type, index: 0 }} />
+      <Flex direction="column" gap="2" mb="4" position="relative">
+        <Flex className="ReportSection-content" align="start">
+          <ContentEditor content={section.content} onAction={handleAction} />
+        </Flex>
       </Flex>
+
+      {isLoading && <Spinner />}
+
+      {alternatives && (
+        <AlternativesSelection alternatives={alternatives} pickAlternative={handlePick} />
+      )}
     </div>
   )
 }
 
-const DropdownMenuBtn = ({ handleDelete }) => {
+const DropdownMenuBtn = ({ onDelete, onSummarize, onShowAlternatives }) => {
   return (
     <Flex gap="3" align="center">
       <DropdownMenu.Root>
@@ -44,11 +85,36 @@ const DropdownMenuBtn = ({ handleDelete }) => {
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content size="1">
-          <DropdownMenu.Item color="red" onClick={handleDelete}>
+          <DropdownMenu.Item onClick={onSummarize}>Summarize</DropdownMenu.Item>
+          <DropdownMenu.Item onClick={onShowAlternatives}>Show alternatives</DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item color="red" onClick={onDelete}>
             Delete
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
+    </Flex>
+  )
+}
+
+type AlternativesProps = {
+  alternatives: Alternative[]
+  pickAlternative: (alternative: Alternative) => void
+}
+
+function AlternativesSelection({ alternatives, pickAlternative }: AlternativesProps) {
+  return (
+    <Flex direction="column" gap="2">
+      {alternatives?.map((alternative, index) => (
+        <div key={index}>
+          <Flex gap="2" align="start" direction="column" className="ReportSection-alt">
+            {alternative.content}
+            <Button variant="soft" onClick={() => pickAlternative(alternative)}>
+              Pick this version
+            </Button>
+          </Flex>
+        </div>
+      ))}
     </Flex>
   )
 }

@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { z } from 'zod'
 
 import { useOpenAI } from '@/hooks/useOpenAI'
-import { useEvaluationStore } from '../store/evaluation'
-import { useReportStore } from '../store/report'
+import { useEvaluationStore } from '@/store/evaluation'
+import { useReportStore } from '@/store/report'
+import { ActionTypes } from './ContentEditor'
 
-export const SectionType = z.enum([
+export const SectionTypes = z.enum([
   'VISUAL_DESCRIPTION',
   'ASSESSMENT',
   'PRIMARY_PLAN',
@@ -19,19 +20,20 @@ export type Report = {
 }
 
 export type ReportSection = {
-  type: z.infer<typeof SectionType>
+  type: SectionType
   content: string
 }
 
-type ParagraphId = {
-  section: string
-  index: number
+export type Alternative = {
+  content: string
 }
+
+export type SectionType = z.infer<typeof SectionTypes>
 
 export function useReport() {
   const { report, updateReport } = useReportStore()
   const { evaluation } = useEvaluationStore()
-  const { generateReport, summarizeParagraph } = useOpenAI()
+  const { generateReport, summarizeParagraph, rephraseSelection } = useOpenAI()
   const [isLoading, setIsLoading] = useState(false)
 
   return {
@@ -63,30 +65,15 @@ export function useReport() {
         sections: report.sections.filter((section) => section.type !== key),
       })
     },
-    /**
-     * Deletes a paragraph from a section
-     */
-    deleteParagraph: (id: ParagraphId) => {
-      if (!report) return
-
-      updateReport({
-        ...report,
-        sections: report.sections.map((section) => {
-          if (section.type !== id.section) return section
-
-          return {
-            ...section,
-          }
-        }),
+    summarizeSection: async (id: SectionType) => {
+      const newText = await summarizeParagraph({
+        paragraph: report.sections.find((s) => s.type === id)?.content ?? '',
       })
-    },
-    summarizeParagraph: async (id: ParagraphId, paragraph: string) => {
-      const newText = await summarizeParagraph({ paragraph })
 
       updateReport({
         ...report,
         sections: report.sections.map((section) => {
-          if (section.type !== id.section) return section
+          if (section.type !== id) return section
 
           return {
             ...section,
@@ -95,19 +82,31 @@ export function useReport() {
         }),
       })
     },
-    pickAlternative: (id: ParagraphId, alternative: Array<{ sentences: string[] }>) => {
-      if (!report) return
+    pickAlternative: (id: SectionType, alternative: Alternative) => {
+      updateReport({
+        ...report,
+        sections: report.sections.map((section) => {
+          if (section.type !== id) return section
 
-      console.log('alternative', report, alternative, id)
+          return {
+            ...section,
+            content: alternative.content,
+          }
+        }),
+      })
+    },
+    rephraseSelection: async (id: SectionType, selection: string, type: ActionTypes) => {
+      const paragraph = report.sections.find((s) => s.type === id)?.content ?? ''
+      const newText = await rephraseSelection({ paragraph, selection, type })
 
       updateReport({
         ...report,
         sections: report.sections.map((section) => {
-          if (section.type !== id.section) return section
+          if (section.type !== id) return section
 
           return {
             ...section,
-            content: alternative.sentences.join(' '),
+            content: newText,
           }
         }),
       })
