@@ -80,8 +80,8 @@ export function useReport() {
         }),
       })
     },
-    summarizeParagraph: async (id: ParagraphId, paragraph) => {
-      const newText = await summarizeParagraph(paragraph)
+    summarizeParagraph: async (id: ParagraphId, paragraph: string) => {
+      const newText = await summarizeParagraph({ paragraph })
 
       updateReport({
         ...report,

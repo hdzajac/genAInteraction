@@ -8,7 +8,7 @@ import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportParagraph.css'
 
 type Props = {
-  paragraph: any
+  paragraph: string
   id: {
     section: string
     index: number
@@ -23,7 +23,7 @@ export default function ReportParagraph({ paragraph, id }: Props) {
 
   const { data: alternatives, isLoading } = useQuery({
     queryKey: ['alternatives', paragraph],
-    queryFn: () => getAlternatives(paragraph),
+    queryFn: () => getAlternatives({ paragraph }),
     enabled: showAlternatives,
   })
 

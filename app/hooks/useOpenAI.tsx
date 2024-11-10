@@ -1,8 +1,23 @@
 import { ActionTypes } from '@/components/ContentEditor'
+import { ReportSection } from '@/components/useReport'
+import { EvaluationReport } from '@/store/types'
 
 type Payload = {
   action?: string
   payload: Record<string, unknown>
+}
+
+type GeneratePayload = {
+  evaluation: EvaluationReport
+  sections: ReportSection['type'][]
+}
+
+type GetAlternativesPayload = {
+  paragraph: string
+}
+
+type SummarizePayload = {
+  paragraph: string
 }
 
 type RephrasePayload = {
@@ -26,26 +41,22 @@ const request = async (payload: Payload) => {
 
 export function useOpenAI() {
   return {
-    async generateReport(payload: any) {
+    async generateReport(payload: GeneratePayload) {
       return request({
         action: 'GENERATE_REPORT',
         payload,
       })
     },
-    async getAlternatives(paragraph: string) {
+    async getAlternatives(payload: GetAlternativesPayload) {
       return request({
         action: 'GET_ALTERNATIVES',
-        payload: {
-          paragraph,
-        },
+        payload,
       })
     },
-    async summarizeParagraph(paragraph: string) {
+    async summarizeParagraph(payload: SummarizePayload) {
       return request({
         action: 'SUMMARIZE_PARAGRAPH',
-        payload: {
-          paragraph,
-        },
+        payload,
       })
     },
     async rephraseSelection(payload: RephrasePayload) {
