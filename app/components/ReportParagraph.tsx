@@ -1,9 +1,10 @@
-import { Button, DropdownMenu, Flex, Spinner, TextArea } from '@radix-ui/themes'
+import { Button, DropdownMenu, Flex, Spinner } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-import { useOpenAI } from '@/hooks/useOpenAI'
 import { useReport } from '@/components/useReport'
+import { useOpenAI } from '@/hooks/useOpenAI'
+import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportParagraph.css'
 
 type Props = {
@@ -16,7 +17,7 @@ type Props = {
 
 export default function ReportParagraph({ paragraph, id }: Props) {
   const { deleteParagraph, summarizeParagraph, pickAlternative } = useReport()
-  const { getAlternatives } = useOpenAI()
+  const { getAlternatives, rephraseSelection } = useOpenAI()
   const [showAlternatives, setShowAlternatives] = useState(false)
   const [tempParagraph, setParagraph] = useState(paragraph)
 
@@ -33,10 +34,14 @@ export default function ReportParagraph({ paragraph, id }: Props) {
     setShowAlternatives(false)
   }
 
+  const handleAction = async (type: ActionTypes, selection: string) => {
+    setParagraph(await rephraseSelection({ paragraph, selection, type }))
+  }
+
   return (
     <Flex direction="column" gap="2" position="relative">
       <Flex className="ReportParagraph" align="start">
-        <div>{paragraph}</div>
+        <ContentEditor content={tempParagraph} onAction={handleAction} />
         <DropdownMenuBtn
           handleDelete={() => deleteParagraph(id)}
           summarize={() => summarizeParagraph(id, paragraph)}

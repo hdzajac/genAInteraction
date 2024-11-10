@@ -1,0 +1,47 @@
+.ContentEditor-bubbleMenu {
+  display: flex;
+  gap: var(--space-1);
+  --base-menu-bg: var(--color-panel-solid);
+  padding: var(--base-menu-content-padding);
+  background-color: var(--base-menu-bg);
+  box-shadow: var(--shadow-5);
+  border-radius: var(--radius-3);
+  padding: 4px;
+}
+
+.ContentEditor-bubbleItem {
+  font-size: var(--font-size-1);
+  line-height: var(--line-height-1);
+  letter-spacing: var(--letter-spacing-1);
+  border-radius: var(--radius-1);
+  padding-inline: var(--space-2);
+  padding-block: var(--space-1);
+
+  &:hover {
+    background-color: var(--accent-9);
+    color: #fff;
+  }
+}
+
+.ProseMirror {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--space-2);
+  padding-right: 30px;
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--gray-8);
+  pointer-events: none;
+  height: 0;
+}

@@ -4,17 +4,22 @@
   width: 100%;
   border-radius: 6px;
   transition: all 200ms;
+  border: 1px solid var(--gray-3);
 
   .ReportParagraph-dropdown {
     opacity: 0;
   }
 
   &:hover {
-    background-color: #fafad7;
+    background-color: var(--gray-1);
 
     .ReportParagraph-dropdown {
       opacity: 1;
     }
+  }
+
+  > div:first-child {
+    width: 100%;
   }
 }
 

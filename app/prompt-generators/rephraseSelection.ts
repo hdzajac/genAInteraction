@@ -1,14 +1,24 @@
 import OpenAI from 'openai'
 
+import { ActionTypes } from '@/components/ContentEditor'
+
 const client = new OpenAI({})
 
 type Props = {
   paragraph: string
   selection: string
+  type: ActionTypes
 }
 
-export default async function ({ paragraph, selection }: Props) {
-  console.log('PAYLOAD', paragraph, selection)
+const typeInstructions = {
+  SIMPLIFY: 'Rephrase the selection to use a simpler language',
+  MAKE_SHORTER:
+    'Rephrase the selection to be shorter. It should be half the length of the original selection.',
+  MAKE_LONGER:
+    'Expand the selection to be longer, giving a more detailed explanation. It should be twice the length of the original selection.',
+}
+export default async function ({ paragraph, selection, type }: Props) {
+  console.log('PAYLOAD', paragraph, selection, type)
 
   if (process.env.TESTING_MODE === 'true') {
     return testingMode()
@@ -17,7 +27,7 @@ export default async function ({ paragraph, selection }: Props) {
   const prompt = `
       You are a dermatologist.
       You are writing a report to be sent to a general practitioner.
-      You are asked to rephrase selection of text. You should rephrase the selection to be more concise and to the point.
+      ${typeInstructions[type]}
       
       The selection to be rephrased is following:
       ${selection}
@@ -25,7 +35,7 @@ export default async function ({ paragraph, selection }: Props) {
       That selection is part of the following paragraph:
       ${paragraph}
 
-      You should only rewrite the selection and not the entire paragraph.
+      Only rewrite the selection and not the entire paragraph.
       Return the whole paragraph, and put the rephrased selection surrounded by the html tag <strong></strong>.
     `
 

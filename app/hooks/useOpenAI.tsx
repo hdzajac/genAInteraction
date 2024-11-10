@@ -1,6 +1,14 @@
+import { ActionTypes } from '@/components/ContentEditor'
+
 type Payload = {
   action?: string
   payload: Record<string, unknown>
+}
+
+type RephrasePayload = {
+  paragraph: string
+  selection: string
+  type: ActionTypes
 }
 
 const request = async (payload: Payload) => {
@@ -40,13 +48,10 @@ export function useOpenAI() {
         },
       })
     },
-    async rephraseSelection(selection: string, paragraph: string) {
+    async rephraseSelection(payload: RephrasePayload) {
       return request({
         action: 'REPHRASE_SELECTION',
-        payload: {
-          paragraph,
-          selection,
-        },
+        payload,
       })
     },
   }

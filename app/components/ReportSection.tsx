@@ -22,7 +22,7 @@ export default function ReportSection({ section }: Props) {
   return (
     <div className="ReportSection">
       <Flex justify="between" pr="2" mt="3">
-        <Heading as="h3" size="2" mb="2">
+        <Heading as="h3" size="2" mb="1">
           {reportSection[section.type]}
         </Heading>
         <DropdownMenuBtn handleDelete={() => deleteSection(section.type)} />
