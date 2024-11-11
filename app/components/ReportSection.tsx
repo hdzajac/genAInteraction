@@ -1,8 +1,10 @@
 import { Button, DropdownMenu, Flex, Heading, Spinner } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query'
+import { WandSparkles } from 'lucide-react'
 import { useState } from 'react'
 
 import { useOpenAI } from '@/hooks/useOpenAI'
+import { debounce } from '@/utils'
 import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportSection.css'
 import { Alternative, ReportSection as TReportSection, useReport } from './useReport'
@@ -19,10 +21,13 @@ type Props = {
 }
 
 export default function ReportSection({ section }: Props) {
-  const { pickAlternative, summarizeSection, rephraseSelection } = useReport()
+  const { pickAlternative, summarizeSection, rephraseSelection, generateSection, updateContent } =
+    useReport()
   const { getAlternatives } = useOpenAI()
   const { deleteSection } = useReport()
   const [showAlternatives, setShowAlternatives] = useState(false)
+
+  const isEmpty = section.content === '' || section.content === '<p></p>'
 
   const { data: alternatives, isLoading } = useQuery({
     queryKey: ['alternatives', section.content],
@@ -48,11 +53,20 @@ export default function ReportSection({ section }: Props) {
     await rephraseSelection(section.type, selection, type)
   }
 
+  const handleGenerateSection = async () => {
+    await generateSection(section.type)
+  }
+
   return (
     <div className="ReportSection">
       <Flex justify="between" pr="2" mt="3">
-        <Heading as="h3" size="2" mb="1">
+        <Heading as="h3" size="2" mb="1" style={{ display: 'flex', alignItems: 'center' }}>
           {reportSection[section.type]}
+          {isEmpty && (
+            <Button variant="ghost" ml="2" size="1" onClick={handleGenerateSection}>
+              <WandSparkles size={14} color="var(--gray-9)" />
+            </Button>
+          )}
         </Heading>
         <DropdownMenuBtn
           onDelete={() => deleteSection(section.type)}
@@ -62,7 +76,13 @@ export default function ReportSection({ section }: Props) {
       </Flex>
       <Flex direction="column" gap="2" mb="4" position="relative">
         <Flex className="ReportSection-content" align="start">
-          <ContentEditor content={section.content} onAction={handleAction} />
+          <ContentEditor
+            content={section.content}
+            onAction={handleAction}
+            onUpdate={({ editor }) => {
+              debounce(updateContent(section.type, editor.getHTML()), 200)
+            }}
+          />
         </Flex>
       </Flex>
 

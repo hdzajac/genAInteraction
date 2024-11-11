@@ -45,7 +45,9 @@ export function useReport() {
     createReport: async () => {
       setIsLoading(true)
 
-      const sections = report.sections.map((section) => section.type)
+      const sections = report.sections
+        .filter((s) => s.content === '' || s.content === '<p></p>')
+        .map((section) => section.type)
       const result = await generateReport({ evaluation, sections })
 
       setIsLoading(false)
@@ -78,6 +80,35 @@ export function useReport() {
           return {
             ...section,
             content: newText,
+          }
+        }),
+      })
+    },
+    generateSection: async (id: SectionType) => {
+      const section = await generateReport({ evaluation, sections: [id] })
+      const newSection = section.find((s) => s.type === id)
+
+      updateReport({
+        ...report,
+        sections: report.sections.map((section) => {
+          if (section.type !== id) return section
+
+          return {
+            ...section,
+            content: newSection.content,
+          }
+        }),
+      })
+    },
+    updateContent: async (id: SectionType, content: string) => {
+      updateReport({
+        ...report,
+        sections: report.sections.map((section) => {
+          if (section.type !== id) return section
+
+          return {
+            ...section,
+            content,
           }
         }),
       })

@@ -1,7 +1,7 @@
-import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react'
+import Placeholder from '@tiptap/extension-placeholder'
+import { BubbleMenu, EditorContent, EditorEvents, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useEffect } from 'react'
-import Placeholder from '@tiptap/extension-placeholder'
 
 import './ContentEditor.css'
 
@@ -10,16 +10,19 @@ export type ActionTypes = 'SIMPLIFY' | 'MAKE_SHORTER' | 'MAKE_LONGER'
 type Props = {
   content: string
   onAction: (type: ActionTypes, selection: string) => void
+  onUpdate?: (ev: EditorEvents['update']) => void
 }
 
-export default function ContentEditor({ content, onAction }: Props) {
+export default function ContentEditor({ content, onAction, onUpdate }: Props) {
   const editor = useEditor({
+    onUpdate: onUpdate ?? onUpdate,
     extensions: [
       StarterKit,
       Placeholder.configure({
         placeholder: 'Write report here …',
       }),
     ],
+
     content: content,
   })
 
