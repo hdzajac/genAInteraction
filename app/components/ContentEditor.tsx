@@ -23,11 +23,13 @@ export default function ContentEditor({ content, onAction, onUpdate }: Props) {
       }),
     ],
 
-    content: content,
+    content,
   })
 
   useEffect(() => {
-    editor?.commands.setContent(content)
+    if (editor?.getHTML() !== content) {
+      editor?.commands.setContent(content)
+    }
   }, [content])
 
   function handleAction(type: ActionTypes) {
