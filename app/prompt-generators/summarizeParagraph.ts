@@ -1,7 +1,4 @@
-import { EvaluationReport } from '@/store/evaluation'
-import OpenAI from 'openai'
-
-const client = new OpenAI({})
+import { openai } from '@/openai'
 
 type Props = {
   paragraph: string
@@ -24,7 +21,7 @@ export default async function ({ paragraph }: Props) {
       The text is following:
     `
 
-  const completion = await client.chat.completions.create({
+  const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       { role: 'system', content: prompt },
@@ -41,7 +38,7 @@ function testingMode() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(
-        'The dermoscopic image reveals a well-defined lesion under 6 mm, exhibiting a uniform color and sharp borders, indicative of a benign nature. No color or texture irregularities are present, aligning with a stable and non-suspicious appearance.',
+        'The dermoscopic image reveals a well-defined lesion under 6 mm, exhibiting a uniform color and sharp borders, indicative of a benign nature. No color or texture irregularities are present, aligning with a stable and non-suspicious appearance.'
       )
     }, 200)
   })

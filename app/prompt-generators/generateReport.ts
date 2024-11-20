@@ -1,11 +1,9 @@
-import OpenAI from 'openai'
-import { zodResponseFormat } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 import { SectionTypes } from '@/components/useReport'
 import { EvaluationReport } from '@/store/types'
-
-const client = new OpenAI({})
+import { openai } from '@/openai'
+import { zodResponseFormat } from 'openai/helpers/zod'
 
 export const sectionInfo = [
   {
@@ -50,7 +48,7 @@ const ReportFormat = z.object({
     z.object({
       type: SectionTypes,
       content: z.string(),
-    }),
+    })
   ),
 })
 

@@ -1,6 +1,6 @@
 import { Flex, Grid } from '@radix-ui/themes'
-import { createFileRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/start'
+import { useLoaderData } from '@remix-run/react'
+import { LoaderFunctionArgs } from '@remix-run/server-runtime'
 import * as fs from 'node:fs'
 import path from 'node:path'
 
@@ -9,30 +9,21 @@ import Header from '@/components/Header'
 import MainNav from '@/components/MainNav'
 import MedicalRecord from '@/components/MedicalRecord'
 import ReportPreview from '@/components/ReportPreview'
-import { MedicalRecord as TMedicalRecord } from '@/store/types'
 
-export const getRecord = createServerFn(
-  'GET',
-  async (caseId: string): Promise<TMedicalRecord | undefined> => {
-    try {
-      const data = await fs.promises.readFile(
-        path.join('./app/data/cases/', caseId + '.json'),
-        'utf-8',
-      )
-      return JSON.parse(data)
-    } catch (error) {
-      console.log('error', error)
-    }
-  },
-)
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  try {
+    const data = await fs.promises.readFile(
+      path.join('./app/data/cases/', params.caseId + '.json'),
+      'utf-8'
+    )
+    return JSON.parse(data)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
 
-export const Route = createFileRoute('/cases/$caseId')({
-  component: RouteComponent,
-  loader: async ({ params }) => getRecord(params.caseId),
-})
-
-function RouteComponent() {
-  const record = Route.useLoaderData()
+export default function Case() {
+  const record = useLoaderData()
 
   if (!record) return null
 

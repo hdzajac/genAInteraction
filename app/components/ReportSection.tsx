@@ -1,5 +1,4 @@
 import { Button, DropdownMenu, Flex, Heading, Spinner } from '@radix-ui/themes'
-import { useQuery } from '@tanstack/react-query'
 import { WandSparkles } from 'lucide-react'
 import { useState } from 'react'
 
@@ -9,7 +8,7 @@ import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportSection.css'
 import { Alternative, ReportSection as TReportSection, useReport } from './useReport'
 
-const reportSection = {
+const reportSection: Record<string, string> = {
   VISUAL_DESCRIPTION: 'Visual description',
   ASSESSMENT: 'Assessment',
   PRIMARY_PLAN: 'Primary plan',
@@ -25,28 +24,27 @@ export default function ReportSection({ section }: Props) {
     useReport()
   const { getAlternatives } = useOpenAI()
   const { deleteSection } = useReport()
-  const [showAlternatives, setShowAlternatives] = useState(false)
+  const [alternatives, setAlternatives] = useState<any[] | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(false)
 
   const isEmpty = section.content === '' || section.content === '<p></p>'
-
-  const { data: alternatives, isLoading } = useQuery({
-    queryKey: ['alternatives', section.content],
-    queryFn: () => getAlternatives({ paragraph: section.content }),
-    enabled: showAlternatives,
-  })
 
   const handleSummarize = async () => {
     await summarizeSection(section.type)
   }
 
-  const handleShowAlternatives = () => {
-    setShowAlternatives(true)
+  const handleShowAlternatives = async () => {
+    setIsLoading(true)
+    const alternatives = await getAlternatives({ paragraph: section.content })
+
+    setAlternatives(alternatives)
+    setIsLoading(false)
   }
 
   const handlePick = (alternative: Alternative) => {
     pickAlternative(section.type, alternative)
 
-    setShowAlternatives(false)
+    setAlternatives(undefined)
   }
 
   const handleAction = async (type: ActionTypes, selection: string) => {

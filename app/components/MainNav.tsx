@@ -55,7 +55,7 @@ export default function MainNav({ record }: Props) {
         {casesList.map(({ title, date }, index) => (
           <li className={index === 1 ? 'active' : ''} key={index}>
             <Flex gap="2">
-              <img src={'/_build/app/' + record.images[0]} alt="" />
+              <img src={record.images[0]} alt="" />
               <div>
                 <div>{title}</div>
                 <div>{date}</div>

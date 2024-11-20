@@ -21,7 +21,7 @@ export default function MedicalRecord({ record }: Props) {
 
       <Grid className="panel MedicalRecord-images" columns="1fr 1fr 1fr" gap="4">
         {record.images.map((image, index) => (
-          <img key={index} src={'/_build/app/' + image} alt="" />
+          <img key={index} src={image} alt="" />
         ))}
       </Grid>
 

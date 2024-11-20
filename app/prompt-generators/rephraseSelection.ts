@@ -1,8 +1,5 @@
-import OpenAI from 'openai'
-
 import { ActionTypes } from '@/components/ContentEditor'
-
-const client = new OpenAI({})
+import { openai } from '@/openai'
 
 type Props = {
   paragraph: string
@@ -41,7 +38,7 @@ export default async function ({ paragraph, selection, type }: Props) {
 
   console.log('PROMP', prompt)
 
-  const completion = await client.chat.completions.create({
+  const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [{ role: 'system', content: prompt }],
   })
@@ -55,7 +52,7 @@ function testingMode() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(
-        'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are <strong>well-defined, indicating benign characteristics without color irregularities</strong>. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.',
+        'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are <strong>well-defined, indicating benign characteristics without color irregularities</strong>. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.'
       )
     }, 200)
   })

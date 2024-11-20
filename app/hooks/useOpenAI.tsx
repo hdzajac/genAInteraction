@@ -29,7 +29,7 @@ type RephrasePayload = {
 const request = async (payload: Payload) => {
   const token = localStorage.getItem('token') ?? ''
 
-  return fetch('http://localhost:3000/api/llm', {
+  return fetch('/api/llm', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

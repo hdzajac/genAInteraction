@@ -1,60 +1,44 @@
 import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
-import { useMutation } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/start'
+import { Form, json, useActionData, useNavigate } from '@remix-run/react'
+import { ActionFunctionArgs } from 'react-router'
 
-import { token, password } from '@/auth'
+import { password, token } from '@/auth'
+import { useEffect } from 'react'
 
-export const loginFn = createServerFn(
-  'POST',
-  async (
-    payload: {
-      password: string
-    },
-    { request },
-  ) => {
-    if (payload.password !== password) {
-      return {
-        error: true,
-        message: 'Incorrect password',
-      }
-    }
+type ActionData = {
+  error?: boolean
+  message?: string
+  token?: string
+}
 
+export async function action({ request }: ActionFunctionArgs) {
+  const body = await request.formData()
+
+  if (body.get('password') !== password) {
     return {
-      token: token,
+      error: true,
+      message: 'Incorrect password',
     }
-  },
-)
+  }
 
-export const Route = createFileRoute('/login')({
-  component: RouteComponent,
-})
-
-function RouteComponent() {
-  const router = useRouter()
-
-  const loginMutation = useMutation({
-    mutationFn: loginFn,
-    onSuccess: async (response) => {
-      if (response.token) {
-        localStorage.setItem('token', response.token)
-        router.navigate({ to: '/' })
-      }
-    },
+  return json({
+    token: token,
   })
+}
+
+export default function Login() {
+  const navigate = useNavigate()
+  const actionData = useActionData<ActionData>()
+
+  useEffect(() => {
+    if (actionData?.token) {
+      localStorage.setItem('token', actionData.token)
+      navigate('/', { replace: true })
+    }
+  }, [actionData, navigate])
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-
-        const formData = new FormData(e.target as HTMLFormElement)
-
-        loginMutation.mutate({
-          password: formData.get('password') as string,
-        })
-      }}
-      className="space-y-4">
+    <Form method="post" className="space-y-4">
       <Flex align="center" justify="center" direction="column" height="100vh">
         <Box width="250px">
           <Flex direction="column" gap="2">
@@ -62,10 +46,10 @@ function RouteComponent() {
 
             <Button type="submit">Login</Button>
 
-            {loginMutation.data?.message && <Text color="red">{loginMutation.data?.message}</Text>}
+            {actionData?.message && <Text color="red">{actionData?.message}</Text>}
           </Flex>
         </Box>
       </Flex>
-    </form>
+    </Form>
   )
 }

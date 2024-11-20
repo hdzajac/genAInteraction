@@ -9,5 +9,5 @@
     "visualFeatures": "Uniform colour, sharp border, size < 6 mm",
     "educationalComments": "Observation, sunscreen"
   },
-  "images": ["./data/images/Lesion_1_clinical.jpg", "./data/images/Lesion_1_dermoscopy.jpg"]
+  "images": ["/images/Lesion_1_clinical.jpg", "/images/Lesion_1_dermoscopy.jpg"]
 }

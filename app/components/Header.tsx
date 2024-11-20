@@ -1,10 +1,10 @@
 import { Flex } from '@radix-ui/themes'
-import { Link, useRouter } from '@tanstack/react-router'
 
 import './Header.css'
+import { Link, useNavigate } from '@remix-run/react'
 
 export default function Header() {
-  const router = useRouter()
+  const navigate = useNavigate()
 
   return (
     <Flex className="header" align="center" p="2">
@@ -40,7 +40,7 @@ export default function Header() {
         className="logout"
         onClick={() => {
           localStorage.removeItem('token')
-          router.navigate({ to: '/login' })
+          navigate('/login')
         }}>
         Logout
       </button>
