@@ -1,4 +1,4 @@
-import { Flex, Grid } from '@radix-ui/themes'
+import { Flex, Grid, Spinner } from '@radix-ui/themes'
 import { useLoaderData } from '@remix-run/react'
 import { LoaderFunctionArgs } from '@remix-run/server-runtime'
 import * as fs from 'node:fs'
@@ -10,6 +10,8 @@ import MainNav from '@/components/MainNav'
 import MedicalRecord from '@/components/MedicalRecord'
 import ReportPreview from '@/components/ReportPreview'
 import { MedicalRecord as TMedicalRecord } from '@/store/types'
+import { useEffect, useState } from 'react'
+import { useEvaluationStore } from '@/store/evaluation'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -25,8 +27,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function Case() {
   const record = useLoaderData() as TMedicalRecord
+  const { evaluation, updateEvaluation } = useEvaluationStore()
+  const [loading, setLoading] = useState(true)
 
   if (!record) return null
+
+  useEffect(() => {
+    updateEvaluation(record.evaluation)
+
+    setLoading(false)
+  }, [])
+
+  if (loading) {
+    return <Spinner />
+  }
 
   return (
     <div style={{ backgroundColor: 'var(--surface)' }}>
@@ -38,7 +52,7 @@ export default function Case() {
         <MedicalRecord record={record} />
 
         <Flex direction="column" p="6" width="100%" gap="3">
-          <EvaluationPanel defaultEvaluation={record.evaluation} />
+          <EvaluationPanel defaultEvaluation={evaluation} />
 
           <ReportPreview />
         </Flex>

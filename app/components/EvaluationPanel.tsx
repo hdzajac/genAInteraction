@@ -1,15 +1,5 @@
-import {
-  Button,
-  Dialog,
-  Flex,
-  Heading,
-  RadioGroup,
-  Text,
-  TextArea,
-  TextField,
-} from '@radix-ui/themes'
-import { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Button, Dialog, Flex, Heading, Text, TextArea } from '@radix-ui/themes'
+import { useForm } from 'react-hook-form'
 
 import { useEvaluationStore } from '@/store/evaluation'
 import { EvaluationReport } from '@/store/types'
@@ -19,15 +9,15 @@ type Props = {
 }
 
 export default function EvaluationPanel({ defaultEvaluation }: Props) {
-  const { evaluation, updateEvaluation, init } = useEvaluationStore()
+  const { evaluation, updateEvaluation } = useEvaluationStore()
 
-  useEffect(() => {
-    init(defaultEvaluation)
-  }, [])
-
-  const { register, handleSubmit, control } = useForm({
-    defaultValues: evaluation,
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: defaultEvaluation,
   })
+
+  const handleCancel = () => {
+    reset(defaultEvaluation)
+  }
 
   return (
     <div className="panel">
@@ -41,7 +31,7 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
             </Button>
           </Dialog.Trigger>
 
-          <Dialog.Content maxWidth="800px">
+          <Dialog.Content maxWidth="800px" aria-describedby={undefined}>
             <Dialog.Title>Edit evaluation</Dialog.Title>
             <form onSubmit={handleSubmit(updateEvaluation)}>
               <Flex direction="column" gap="3">
@@ -79,7 +69,7 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
 
               <Flex gap="3" mt="4" justify="end">
                 <Dialog.Close>
-                  <Button variant="soft" color="gray">
+                  <Button variant="soft" color="gray" onClick={handleCancel}>
                     Cancel
                   </Button>
                 </Dialog.Close>
