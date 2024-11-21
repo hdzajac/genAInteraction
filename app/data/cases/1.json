@@ -1,13 +1,16 @@
 {
   "id": 1,
-  "gender": "Female",
-  "age": 30,
+  "gender": "Male",
+  "age": 62,
+  "skinType": 1,
+  "familyWithMelanoma": false,
+  "previousMelanoma": false,
   "evaluation": {
-    "diagnosis": "Alm venus",
-    "treatment": "Obs.",
-    "imageQuality": "Good",
-    "visualFeatures": "Uniform colour, sharp border, size < 6 mm",
-    "educationalComments": "Observation, sunscreen"
+    "visualFeatures": "Sharp border, no pigment network, milia-like cysts, fat fingers (6 o’clock)",
+    "diagnosis": "Seborrheic keratosis",
+    "treatment": "No treatment",
+    "alternativePlan": "",
+    "followUp": ""
   },
   "images": ["/images/Lesion_1_clinical.jpg", "/images/Lesion_1_dermoscopy.jpg"]
 }

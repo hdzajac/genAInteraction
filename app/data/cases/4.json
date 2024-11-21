@@ -1,0 +1,16 @@
+{
+  "id": 4,
+  "gender": "Female",
+  "age": 27,
+  "skinType": 1,
+  "familyWithMelanoma": false,
+  "previousMelanoma": false,
+  "evaluation": {
+    "visualFeatures": "Diffuse Erythema - cheeks and nose, inflammatory papules and pustules",
+    "diagnosis": "Rosacea",
+    "treatment": "Metronidazol 0.75% gel 1-2 ggr. daily 3 to 4 months, if no effect oracea daily for 3 months, avoid sun, use sunscreen, daily gentle cleanser",
+    "alternativePlan": "Ivermectin 1% creme",
+    "followUp": "Follow-up - 6 to 8 weeks, if no improvement - referral – dermatologists"
+  },
+  "images": ["/images/Rash_1.jpg"]
+}

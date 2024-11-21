@@ -1,0 +1,16 @@
+{
+  "id": 5,
+  "gender": "Female",
+  "age": 13,
+  "skinType": 2,
+  "familyWithMelanoma": false,
+  "previousMelanoma": false,
+  "evaluation": {
+    "visualFeatures": "Eczematous rash, Scattered papules, nasal and mouth area.",
+    "diagnosis": "Perioral dermatitis",
+    "treatment": "Stop facial products, use gentle soap-free cleansers, topical treatment - metronidazole - 0.75% cream - twice a day, if no improvement - doxycycline 100mg daily - 4 to 6 weeks.",
+    "alternativePlan": "If no improvement within 4 weeks - erythromycin 250 mg 4 times a day - 4 to 6 weeks.",
+    "followUp": "Follow-up - 6 weeks, if no improvement - referral – dermatologists"
+  },
+  "images": ["/images/Rash_2.jpg"]
+}

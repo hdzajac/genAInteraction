@@ -9,6 +9,7 @@ import Header from '@/components/Header'
 import MainNav from '@/components/MainNav'
 import MedicalRecord from '@/components/MedicalRecord'
 import ReportPreview from '@/components/ReportPreview'
+import { MedicalRecord as TMedicalRecord } from '@/store/types'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -23,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Case() {
-  const record = useLoaderData()
+  const record = useLoaderData() as TMedicalRecord
 
   if (!record) return null
 

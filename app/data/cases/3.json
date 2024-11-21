@@ -1,0 +1,16 @@
+{
+  "id": 3,
+  "gender": "Male",
+  "age": 44,
+  "skinType": 3,
+  "familyWithMelanoma": false,
+  "previousMelanoma": false,
+  "evaluation": {
+    "visualFeatures": "Irritated, elevated, central ulcer, raised edge, keratosis, no pigment network, blood vessels – small and red",
+    "diagnosis": "Keratoacanthoma",
+    "treatment": "Excision - a few mm around, histology",
+    "alternativePlan": "Referral – dermatologist",
+    "followUp": ""
+  },
+  "images": ["/images/Lesion_3_clinical.jpg", "/images/Lesion_3_dermoscopy.jpg"]
+}

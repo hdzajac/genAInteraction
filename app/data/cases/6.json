@@ -1,0 +1,16 @@
+{
+  "id": 6,
+  "gender": "Male",
+  "age": 16,
+  "skinType": 2,
+  "familyWithMelanoma": false,
+  "previousMelanoma": false,
+  "evaluation": {
+    "visualFeatures": "Erythematous lesions, papulovesicular lesions, location - chest and back, scratching marks",
+    "diagnosis": "Kontaktdermatitis",
+    "treatment": "Mild topical steroid - Betnovat - 2 times a day - up to 2 weeks, fragrance-free hypoallergenic moisturizer several times a day, hypoallergenic products",
+    "alternativePlan": "If no improvement within 1 to 2 weeks - topical calcineurin inhibitor",
+    "followUp": "Follow-up - 2 to 4 weeks, if no improvement - referral - dermatologists"
+  },
+  "images": ["/images/Rash_3.jpg"]
+}

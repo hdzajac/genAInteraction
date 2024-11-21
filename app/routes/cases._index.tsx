@@ -5,6 +5,7 @@ import * as fs from 'node:fs'
 import path from 'node:path'
 
 import Header from '@/components/Header'
+import { MedicalRecord } from '@/store/types'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
@@ -25,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Cases() {
-  const records = useLoaderData()
+  const records = useLoaderData() as MedicalRecord[]
 
   return (
     <Flex style={{ backgroundColor: 'var(--surface)' }} height="100vh" direction="column">

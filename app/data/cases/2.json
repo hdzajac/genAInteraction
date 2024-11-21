@@ -1,0 +1,16 @@
+{
+  "id": 2,
+  "gender": "Male",
+  "age": 41,
+  "skinType": 2,
+  "familyWithMelanoma": false,
+  "previousMelanoma": false,
+  "evaluation": {
+    "visualFeatures": "Uniform reticular pigment network, white centre – uniformly radiating pigment network from the center, elevated, pink/reddish on the overview image.",
+    "diagnosis": "Dermatofibroma",
+    "treatment": "No treatment",
+    "alternativePlan": "",
+    "followUp": ""
+  },
+  "images": ["/images/Lesion_2_clinical.jpg", "/images/Lesion_2_dermoscopic.jpg"]
+}

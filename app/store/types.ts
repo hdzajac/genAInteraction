@@ -2,14 +2,17 @@ export type MedicalRecord = {
   id: number
   gender: string
   age: number
+  skinType: number
+  familyWithMelanoma: boolean
+  previousMelanoma: boolean
   evaluation: EvaluationReport
   images: string[]
 }
 
 export type EvaluationReport = {
+  visualFeatures: string
   diagnosis: string
   treatment: string
-  imageQuality: string
-  visualFeatures: string
-  educationalComments: string
+  alternativePlan: string
+  followUp: string
 }
