@@ -5,6 +5,7 @@ import { Report } from '@/components/useReport'
 type ReportState = {
   report: Report
   updateReport(report: Report): void
+  reset(): void
 }
 
 const defaultReport: Report = {
@@ -40,5 +41,8 @@ export const useReportStore = create<ReportState>((set) => ({
     set((state) => ({
       report: report,
     }))
+  },
+  reset() {
+    set({ report: defaultReport })
   },
 }))

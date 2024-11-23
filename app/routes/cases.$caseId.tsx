@@ -12,6 +12,7 @@ import ReportPreview from '@/components/ReportPreview'
 import { MedicalRecord as TMedicalRecord } from '@/store/types'
 import { useEffect, useState } from 'react'
 import { useEvaluationStore } from '@/store/evaluation'
+import { useReportStore } from '@/store/report'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -28,6 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function Case() {
   const record = useLoaderData() as TMedicalRecord
   const { evaluation, updateEvaluation } = useEvaluationStore()
+  const { reset } = useReportStore()
   const [loading, setLoading] = useState(true)
 
   if (!record) return null
@@ -36,6 +38,8 @@ export default function Case() {
     updateEvaluation(record.evaluation)
 
     setLoading(false)
+
+    reset()
   }, [])
 
   if (loading) {
