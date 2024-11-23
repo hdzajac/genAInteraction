@@ -1,4 +1,4 @@
-import { Button, DropdownMenu, Flex, Heading, Spinner } from '@radix-ui/themes'
+import { Box, Button, DropdownMenu, Flex, Heading, Spinner } from '@radix-ui/themes'
 import { WandSparkles } from 'lucide-react'
 import { useState } from 'react'
 
@@ -31,7 +31,9 @@ export default function ReportSection({ section }: Props) {
   const isEmpty = section.content === '' || section.content === '<p></p>'
 
   const handleSummarize = async () => {
+    setIsLoading(true)
     await summarizeSection(section.type)
+    setIsLoading(false)
   }
 
   const handleShowAlternatives = async () => {
@@ -53,7 +55,9 @@ export default function ReportSection({ section }: Props) {
   }
 
   const handleGenerateSection = async () => {
+    setIsLoading(true)
     await generateSection(section.type)
+    setIsLoading(false)
   }
 
   return (
@@ -74,7 +78,19 @@ export default function ReportSection({ section }: Props) {
         />
       </Flex>
       <Flex direction="column" gap="2" mb="4" position="relative">
-        <Flex className="ReportSection-content" align="start">
+        <Flex className="ReportSection-content" align="start" position="relative">
+          {isLoading && (
+            <Box
+              height="100%"
+              position="absolute"
+              style={{
+                borderRadius: '6px',
+                backgroundColor: 'rgb(255, 255, 255, 0.8)',
+                zIndex: 1,
+              }}>
+              <Spinner ml="3" mt="3" />
+            </Box>
+          )}
           <ContentEditor
             content={section.content}
             onAction={handleAction}
@@ -84,8 +100,6 @@ export default function ReportSection({ section }: Props) {
           />
         </Flex>
       </Flex>
-
-      {isLoading && <Spinner />}
 
       {alternatives && (
         <AlternativesSelection alternatives={alternatives} pickAlternative={handlePick} />
