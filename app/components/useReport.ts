@@ -5,13 +5,7 @@ import { useOpenAI } from '@/hooks/useOpenAI'
 import { useEvaluationStore } from '@/store/evaluation'
 import { useReportStore } from '@/store/report'
 import { ActionTypes } from './ContentEditor'
-
-export const SectionTypes = z.enum([
-  'VISUAL_DESCRIPTION',
-  'ASSESSMENT',
-  'PRIMARY_PLAN',
-  'ALTERNATIVE_PLAN',
-])
+import { SectionKeysMap, SectionTypes } from '@/constants'
 
 export type Report = {
   date: Date
@@ -46,8 +40,10 @@ export function useReport() {
       setIsLoading(true)
 
       const sections = report.sections
-        .filter((s) => s.content === '' || s.content === '<p></p>')
+        .filter((s) => s.content === '' || s.content === '<p></p>') // Don't include sectiosn with content
+        .filter((s) => evaluation[SectionKeysMap[s.type]] !== '') // Filter out sections where the corresponding evaluation is empty
         .map((section) => section.type)
+
       const result = await generateReport({ evaluation, sections })
 
       setIsLoading(false)

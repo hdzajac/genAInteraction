@@ -27,6 +27,10 @@ const defaultReport: Report = {
       type: 'ALTERNATIVE_PLAN',
       content: '',
     },
+    {
+      type: 'FOLLOW_UP',
+      content: '',
+    },
   ],
 }
 
