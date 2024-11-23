@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import { SectionTypes } from '@/components/useReport'
 import { EvaluationReport } from '@/store/types'
 import { openai } from '@/openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
+import { EvaluationLabels, SectionTypes } from '@/constants'
 
 export const sectionInfo = [
   {
@@ -39,6 +39,15 @@ export const sectionInfo = [
       'An alternative to your first suggestion, either because there are possible alternative treatment plans or because of the conditionality of the assessment.',
     examples: [
       'Of note, if the patient/parent feels this rash is consist with prior atopic dermatitis flares she has had, she might benefit from a non-steroid for the face and neck, such as tacrolimus oint 0.1%. ',
+    ],
+  },
+  {
+    type: 'FOLLOW_UP',
+    title: 'Follow-up',
+    description:
+      'Your suggestion of the next steps after the completion of the primary and alternative plans',
+    examples: [
+      'Should the above fail to lead to improvement in the next 4-6 weeks I recommend evaluation by a dermatologist face-to-face. ',
     ],
   },
 ]

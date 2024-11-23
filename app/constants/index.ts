@@ -15,3 +15,11 @@ export const SectionKeysMap = {
   ALTERNATIVE_PLAN: 'alternativePlan',
   FOLLOW_UP: 'followUp',
 } as const
+
+export const EvaluationLabels: Record<string, string> = {
+  visualFeatures: 'Visual Features',
+  diagnosis: 'Diagnostic',
+  treatment: 'Treatment',
+  alternativePlan: 'Alternate Plan',
+  followUp: 'Follow Up',
+}

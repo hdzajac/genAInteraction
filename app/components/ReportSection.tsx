@@ -13,6 +13,7 @@ const reportSection: Record<string, string> = {
   ASSESSMENT: 'Assessment',
   PRIMARY_PLAN: 'Primary plan',
   ALTERNATIVE_PLAN: 'Alternative plan',
+  FOLLOW_UP: 'Follow-up',
 }
 
 type Props = {
