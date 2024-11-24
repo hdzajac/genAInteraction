@@ -9,11 +9,18 @@ import { MedicalRecord } from '@/store/types'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
-    const files = await fs.promises.readdir('./app/data/cases/', 'utf-8').catch(() => [])
+    // const files = await fs.promises.readdir('./app/data/cases/', 'utf-8').catch(() => [])
+    const files = await fs.promises
+      .readdir(path.resolve(process.cwd(), './app/data/cases'))
+      .catch(() => [])
+
     const cases: any[] = []
     for await (const file of files) {
       try {
-        const data = await fs.promises.readFile(path.join('./app/data/cases/', file), 'utf-8')
+        const data = await fs.promises.readFile(
+          path.resolve(process.cwd(), './app/data/cases/', file),
+          'utf-8'
+        )
         cases.push(JSON.parse(data))
       } catch (error) {
         console.log('error', error)

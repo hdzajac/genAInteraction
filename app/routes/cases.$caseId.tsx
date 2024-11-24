@@ -2,7 +2,6 @@ import { Flex, Grid, Spinner } from '@radix-ui/themes'
 import { useLoaderData } from '@remix-run/react'
 import { LoaderFunctionArgs } from '@remix-run/server-runtime'
 import * as fs from 'node:fs'
-import path from 'node:path'
 
 import EvaluationPanel from '@/components/EvaluationPanel'
 import Header from '@/components/Header'
@@ -17,8 +16,8 @@ import { useReportStore } from '@/store/report'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
     const data = await fs.promises.readFile(
-      path.join('./app/data/cases/', params.caseId + '.json'),
-      'utf-8'
+      process.cwd() + `/app/data/cases/${params.caseId}.json`,
+      'utf8'
     )
     return JSON.parse(data)
   } catch (error) {
