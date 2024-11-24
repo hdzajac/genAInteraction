@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 type Flags = {
   showAlternatives: string
@@ -9,13 +10,17 @@ type FeatureFlagState = {
   update: (flags: Flags) => void
 }
 
-export const useFlags = create<FeatureFlagState>((set) => ({
-  flags: {
-    showAlternatives: '2',
-  },
-  update: (flags: Flags) => {
-    set((state) => ({
-      flags,
-    }))
-  },
-}))
+export const useFlags = create<FeatureFlagState>()(
+  persist(
+    (set, get) => ({
+      flags: {
+        showAlternatives: '1',
+      },
+      update: (flags: Flags) => set({ flags }),
+    }),
+    {
+      name: 'feature-flags', // name of item in the storage (must be unique)
+      storage: createJSONStorage(() => sessionStorage), // (optional) by default the 'localStorage' is used
+    }
+  )
+)

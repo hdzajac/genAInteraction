@@ -108,7 +108,13 @@ export default function ReportSection({ section }: Props) {
   )
 }
 
-const DropdownMenuBtn = ({ onDelete, onSummarize, onShowAlternatives }) => {
+type DropdownProps = {
+  onDelete: () => void
+  onSummarize: () => void
+  onShowAlternatives: () => void
+}
+
+const DropdownMenuBtn = ({ onDelete, onSummarize, onShowAlternatives }: DropdownProps) => {
   return (
     <Flex gap="3" align="center">
       <DropdownMenu.Root>
