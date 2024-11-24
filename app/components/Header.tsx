@@ -1,7 +1,8 @@
 import { Flex } from '@radix-ui/themes'
-
-import './Header.css'
 import { Link, useNavigate } from '@remix-run/react'
+
+import FeatureFlagPanel from './FeatureFlag/FeatureFlagPanel'
+import './Header.css'
 
 export default function Header() {
   const navigate = useNavigate()
@@ -36,14 +37,18 @@ export default function Header() {
         <span>Tele-referal</span>
       </Flex>
 
-      <button
-        className="logout"
-        onClick={() => {
-          localStorage.removeItem('token')
-          navigate('/login')
-        }}>
-        Logout
-      </button>
+      <Flex>
+        <FeatureFlagPanel />
+
+        <button
+          className="logout"
+          onClick={() => {
+            localStorage.removeItem('token')
+            navigate('/login')
+          }}>
+          Logout
+        </button>
+      </Flex>
     </Flex>
   )
 }
