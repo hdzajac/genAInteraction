@@ -28,7 +28,7 @@ export default function MedicalRecord({ record }: Props) {
       }}>
       <h2>Overview • Lesion #{record.id}</h2>
 
-      <Grid className="panel MedicalRecord-images" columns="1fr 1fr 1fr" gap="4">
+      <Grid className="panel MedicalRecord-images" columns="1fr 1fr" gap="4">
         {record.images.map((image, index) => (
           <img key={index} src={image} alt="" />
         ))}

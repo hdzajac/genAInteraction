@@ -49,8 +49,8 @@ export default function Case() {
     <div style={{ backgroundColor: 'var(--surface)' }}>
       <Header />
 
-      <Grid columns="200px 2fr 3fr">
-        <MainNav record={record} />
+      <Grid columns=" 2fr 3fr">
+        {/* <MainNav record={record} /> */}
 
         <MedicalRecord record={record} />
 
