@@ -138,24 +138,19 @@ function testingMode() {
         {
           type: 'VISUAL_DESCRIPTION',
           content:
-            'The dermoscopic image presents a well-defined lesion measuring less than  <strong>6 mm with a uniform color</strong>, indicating a consistent morphology. The borders of the lesion are sharp, suggesting a demarcated border indicative of a benign nature. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.',
+            'The lesion presents with a sharp border and lacks a pigment network, characteristic of <strong>seborrheic keratosis</strong>. Notably, the lesion features <strong>milia-like cysts</strong> and appears to be situated at the 6 o’clock position, indicative of possible irritation or friction due to <strong>fat fingers</strong>.',
         },
         {
           type: 'ASSESSMENT',
           content:
-            'The clinical findings are suggestive of an <strong>Alm venus</strong> lesion, which appears benign in appearance based on its characteristics of uniform color, pronounced border, and size. Given the nature of the lesion and the recommendation of observation, I agree with the initial management plan.',
+            'Given the diagnosis of <strong>seborrheic keratosis</strong> and the absence of concerning features, <strong>no treatment</strong> is currently indicated. The lesion appears benign and does not require immediate intervention.',
         },
         {
           type: 'PRIMARY_PLAN',
           content:
-            "Continue with observation to monitor any changes in the lesion's characteristics. Instruct the patient to apply broad-spectrum sunscreen daily to protect against UV damage, which could alter the appearance of the lesion. A follow-up appointment should be scheduled in 6 months to reassess the lesion for any changes in size or color and to ensure ongoing monitoring.",
-        },
-        {
-          type: 'ALTERNATIVE_PLAN',
-          content:
-            'Alternatively, if any changes in the lesion occur before the scheduled follow-up, consider a biopsy to rule out any malignancy or premalignant changes. Also, educate the patient about the signs to watch for, such as changes in size, color, or texture, which would warrant immediate evaluation.',
+            'The recommended plan is to monitor the lesion for any changes in size, shape, or color over time. Patient education regarding the benign nature of <strong>seborrheic keratosis</strong> should be provided, emphasizing that no treatment is necessary unless the lesion becomes symptomatic or cosmetically concerning. A follow-up appointment can be scheduled in 6 to 12 months to reassess the lesion and consider treatment options if warranted.',
         },
       ])
-    }, 200)
+    }, 1000)
   })
 }

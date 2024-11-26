@@ -12,6 +12,7 @@ import { MedicalRecord as TMedicalRecord } from '@/store/types'
 import { useEffect, useState } from 'react'
 import { useEvaluationStore } from '@/store/evaluation'
 import { useReportStore } from '@/store/report'
+import EvaluationValidation from '@/components/EvaluationValidation'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -30,6 +31,7 @@ export default function Case() {
   const { evaluation, updateEvaluation } = useEvaluationStore()
   const { reset } = useReportStore()
   const [loading, setLoading] = useState(true)
+  const [isValid, setValidation] = useState(false)
 
   if (!record) return null
 
@@ -45,6 +47,10 @@ export default function Case() {
     return <Spinner />
   }
 
+  const handleSave = () => {
+    setValidation(true)
+  }
+
   return (
     <div style={{ backgroundColor: 'var(--surface)' }}>
       <Header />
@@ -55,9 +61,14 @@ export default function Case() {
         <MedicalRecord record={record} />
 
         <Flex direction="column" p="6" width="100%" gap="3">
-          <EvaluationPanel defaultEvaluation={evaluation} />
-
-          <ReportPreview />
+          {isValid ? (
+            <>
+              <EvaluationPanel defaultEvaluation={evaluation} />
+              <ReportPreview />
+            </>
+          ) : (
+            <EvaluationValidation defaultEvaluation={evaluation} onSave={handleSave} />
+          )}
         </Flex>
       </Grid>
     </div>

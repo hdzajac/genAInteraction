@@ -4,10 +4,19 @@ import { useReport } from '@/components/useReport'
 import { useFlags } from './FeatureFlag/useFlags'
 import ReportSection from './ReportSection'
 import ReportSectionV2 from './ReportSectionV2'
+import { useEffect } from 'react'
 
 export default function ReportPreview() {
   const { report, isLoading, createReport } = useReport()
   const { flags } = useFlags()
+
+  useEffect(() => {
+    createReport()
+  }, [])
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   const handleAutoGenerate = () => {
     createReport()
@@ -17,7 +26,7 @@ export default function ReportPreview() {
     <Flex direction="column" gap="2">
       <Flex justify="end" gap="2">
         <Button variant="surface" onClick={handleAutoGenerate}>
-          Auto-generate
+          Re-generate
         </Button>
 
         <Button>Approve</Button>
