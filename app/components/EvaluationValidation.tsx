@@ -68,11 +68,3 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
     </Flex>
   )
 }
-
-function displayValue(value: string) {
-  if (value === '') {
-    return 'NA'
-  }
-
-  return value
-}
