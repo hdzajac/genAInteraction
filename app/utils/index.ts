@@ -7,3 +7,7 @@ export function debounce(func, delay) {
     }, delay)
   }
 }
+
+export function cleanContent(str: string) {
+  return str.replace(/<\/?[^>]+(>|$)/g, '')
+}

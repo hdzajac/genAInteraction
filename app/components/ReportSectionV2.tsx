@@ -3,7 +3,7 @@ import { WandSparkles } from 'lucide-react'
 import { useState } from 'react'
 
 import { useOpenAI } from '@/hooks/useOpenAI'
-import { debounce } from '@/utils'
+import { cleanContent } from '@/utils'
 import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportSection.css'
 import { Alternative, ReportSection as TReportSection, useReport } from './useReport'
@@ -43,7 +43,10 @@ export default function ReportSectionV2({ section }: Props) {
   const preloadAlternatives = async () => {
     if (section.content !== '' && !alternatives) {
       setIsLoading(true)
-      const preloadedAlternatives = await getAlternatives({ paragraph: section.content })
+
+      const preloadedAlternatives = await getAlternatives({
+        paragraph: cleanContent(section.content),
+      })
 
       setAlternatives(preloadedAlternatives)
       setIsLoading(false)
