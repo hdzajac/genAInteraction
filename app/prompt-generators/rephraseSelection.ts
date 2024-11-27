@@ -33,7 +33,7 @@ export default async function ({ paragraph, selection, type }: Props) {
       ${paragraph}
 
       Only rewrite the selection and not the entire paragraph.
-      Return the whole paragraph, and put the rephrased selection surrounded by the html tag <strong></strong>.
+      Return the whole paragraph, and put the rephrased selection surrounded by the html tag <span id="{{id}} class="mark-changed"></span>.
     `
 
   console.log('PROMP', prompt)
@@ -43,16 +43,16 @@ export default async function ({ paragraph, selection, type }: Props) {
     messages: [{ role: 'system', content: prompt }],
   })
 
-  console.log('response>>', completion.choices[0].message.content)
-
-  return completion.choices[0].message.content
+  // Generate a random ID
+  const id = Math.random().toString(36).substring(2, 10)
+  return completion.choices[0].message.content?.replace(/\{\{id\}\}/, id)
 }
 
 function testingMode() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(
-        'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are <strong>well-defined, indicating benign characteristics without color irregularities</strong>. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.'
+        'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are <span id="1113322" class="mark-changed">well-defined, indicating benign characteristics without color irregularities</span>. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.'
       )
     }, 200)
   })

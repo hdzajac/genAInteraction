@@ -11,7 +11,6 @@
   }
 
   &:hover {
-    background-color: var(--gray-1);
 
     .ReportParagraph-dropdown {
       opacity: 1;

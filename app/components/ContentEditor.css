@@ -30,6 +30,15 @@
   padding: var(--space-2);
   padding-right: 30px;
 
+  &:hover {
+    background-color: var(--gray-1);
+  }
+
+  &[contenteditable='false'] {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
   p:first-child {
     margin-top: 0;
   }
@@ -37,7 +46,6 @@
   p:last-child {
     margin-bottom: 0;
   }
-
 
   strong {
     font-weight: 500;
@@ -52,4 +60,9 @@
   color: var(--gray-8);
   pointer-events: none;
   height: 0;
+}
+
+.mark-changed {
+  background-color: #f6f6ec;
+  border-bottom: 1px dotted var(--gray-8);
 }
