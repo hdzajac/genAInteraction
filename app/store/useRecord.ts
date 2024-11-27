@@ -1,30 +1,24 @@
 import { create } from 'zustand'
 
-import { MedicalRecord } from './types'
+import { MedicalRecord, EvaluationReport } from './types'
 
 type MedicalRecordState = {
   record: MedicalRecord
   updateRecord(record: MedicalRecord): void
-  updateEvaluation(evaluation: MedicalRecord['evaluation']): void
+  updateEvaluation(evaluation: EvaluationReport): void
 }
 
 export const useRecord = create<MedicalRecordState>((set) => ({
   record: undefined as unknown as MedicalRecord,
-  updateRecord(updatedValues) {
-    set((state) => ({
-      record: {
-        ...state.record,
-        ...updatedValues,
-      },
-    }))
-  },
-  updateEvaluation(updatedValues) {
-    set((state) => ({
-      ...state,
-      evaluation: {
-        ...state.record.evaluation,
-        ...updatedValues,
-      },
-    }))
-  },
+  updateRecord: (record: MedicalRecord) => set({ record }),
+  updateEvaluation: (evaluation: EvaluationReport) =>
+    set((state) => {
+      return {
+        ...state,
+        record: {
+          ...state.record,
+          evaluation,
+        },
+      }
+    }),
 }))
