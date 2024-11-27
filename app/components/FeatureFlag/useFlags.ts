@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 
 type Flags = {
   showAlternatives: string
+  usePatientData: boolean
 }
 
 type FeatureFlagState = {
@@ -15,6 +16,7 @@ export const useFlags = create<FeatureFlagState>()(
     (set, get) => ({
       flags: {
         showAlternatives: '1',
+        usePatientData: true,
       },
       update: (flags: Flags) => set({ flags }),
     }),

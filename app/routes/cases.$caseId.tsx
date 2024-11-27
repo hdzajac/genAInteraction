@@ -4,15 +4,14 @@ import { LoaderFunctionArgs } from '@remix-run/server-runtime'
 import * as fs from 'node:fs'
 
 import EvaluationPanel from '@/components/EvaluationPanel'
+import EvaluationValidation from '@/components/EvaluationValidation'
 import Header from '@/components/Header'
-import MainNav from '@/components/MainNav'
 import MedicalRecord from '@/components/MedicalRecord'
 import ReportPreview from '@/components/ReportPreview'
-import { MedicalRecord as TMedicalRecord } from '@/store/types'
-import { useEffect, useState } from 'react'
-import { useEvaluationStore } from '@/store/evaluation'
 import { useReportStore } from '@/store/report'
-import EvaluationValidation from '@/components/EvaluationValidation'
+import { MedicalRecord as TMedicalRecord } from '@/store/types'
+import { useRecord } from '@/store/useRecord'
+import { useEffect, useState } from 'react'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -27,16 +26,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Case() {
-  const record = useLoaderData() as TMedicalRecord
-  const { evaluation, updateEvaluation } = useEvaluationStore()
+  const defaultRecord = useLoaderData() as TMedicalRecord
+  const { record, updateRecord } = useRecord()
   const { reset } = useReportStore()
   const [loading, setLoading] = useState(true)
   const [isValid, setValidation] = useState(false)
 
-  if (!record) return null
+  if (!defaultRecord) return null
 
   useEffect(() => {
-    updateEvaluation(record.evaluation)
+    updateRecord(defaultRecord)
 
     setLoading(false)
 
@@ -63,11 +62,11 @@ export default function Case() {
         <Flex direction="column" p="6" width="100%" gap="3">
           {isValid ? (
             <>
-              <EvaluationPanel defaultEvaluation={evaluation} />
+              <EvaluationPanel defaultEvaluation={record.evaluation} />
               <ReportPreview />
             </>
           ) : (
-            <EvaluationValidation defaultEvaluation={evaluation} onSave={handleSave} />
+            <EvaluationValidation defaultEvaluation={record.evaluation} onSave={handleSave} />
           )}
         </Flex>
       </Grid>

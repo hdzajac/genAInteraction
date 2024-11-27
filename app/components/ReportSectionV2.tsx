@@ -77,8 +77,6 @@ export default function ReportSectionV2({ section }: Props) {
     setIsLoading(false)
   }
 
-  console.log('showAlternatives', section.content !== '', showAlternatives)
-
   return (
     <div className="ReportSection">
       <Flex justify="between" pr="2" mt="3">

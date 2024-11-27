@@ -16,3 +16,11 @@ export type EvaluationReport = {
   alternativePlan: string
   followUp: string
 }
+
+export type Patient = {
+  gender: string
+  age: number
+  skinType: number
+  familyWithMelanoma: boolean
+  previousMelanoma: boolean
+}

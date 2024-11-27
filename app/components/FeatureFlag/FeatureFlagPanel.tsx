@@ -1,4 +1,4 @@
-import { Button, Dialog, Flex, RadioGroup, Text } from '@radix-ui/themes'
+import { Button, Dialog, Flex, RadioGroup, Switch, Text } from '@radix-ui/themes'
 import { Settings } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -25,7 +25,7 @@ export default function FeatureFlagPanel({}: Props) {
         <Dialog.Title>Feature flags</Dialog.Title>
 
         <form onSubmit={handleSubmit(update)}>
-          <Flex direction="column" gap="3">
+          <Flex direction="column" gap="5">
             <label>
               <Text as="div" size="2" mb="1" weight="bold">
                 Alternatives selection
@@ -38,6 +38,18 @@ export default function FeatureFlagPanel({}: Props) {
                     <RadioGroup.Item value="1">From dropdown menu</RadioGroup.Item>
                     <RadioGroup.Item value="2">Click on paragraph</RadioGroup.Item>
                   </RadioGroup.Root>
+                )}
+              />
+            </label>
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Include patient data
+              </Text>
+              <Controller
+                name="usePatientData"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Switch variant="surface" checked={value} onCheckedChange={onChange} />
                 )}
               />
             </label>

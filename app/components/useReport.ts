@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { z } from 'zod'
 
-import { useOpenAI } from '@/hooks/useOpenAI'
-import { useEvaluationStore } from '@/store/evaluation'
-import { useReportStore } from '@/store/report'
-import { ActionTypes } from './ContentEditor'
 import { SectionKeysMap, SectionTypes } from '@/constants'
+import { useOpenAI } from '@/hooks/useOpenAI'
+import { useReportStore } from '@/store/report'
+import { useRecord } from '@/store/useRecord'
+import { ActionTypes } from './ContentEditor'
+import { useFlags } from './FeatureFlag/useFlags'
+import { Patient } from '@/store/types'
 
 export type Report = {
   date: Date
@@ -25,8 +27,9 @@ export type Alternative = {
 export type SectionType = z.infer<typeof SectionTypes>
 
 export function useReport() {
+  const { flags } = useFlags()
   const { report, updateReport } = useReportStore()
-  const { evaluation } = useEvaluationStore()
+  const { record } = useRecord()
   const { generateReport, summarizeParagraph, rephraseSelection } = useOpenAI()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,13 +41,18 @@ export function useReport() {
      */
     createReport: async () => {
       setIsLoading(true)
+      console.log('RECORD>>', record)
 
       const sections = report.sections
         .filter((s) => s.content === '' || s.content === '<p></p>') // Don't include sectiosn with content
-        .filter((s) => evaluation[SectionKeysMap[s.type]] !== '') // Filter out sections where the corresponding evaluation is empty
+        .filter((s) => record.evaluation[SectionKeysMap[s.type]] !== '') // Filter out sections where the corresponding evaluation is empty
         .map((section) => section.type)
 
-      const result = await generateReport({ evaluation, sections })
+      const result = await generateReport({
+        evaluation: record.evaluation,
+        patient: generatePatient(record, flags.usePatientData),
+        sections,
+      })
 
       setIsLoading(false)
 
@@ -81,7 +89,7 @@ export function useReport() {
       })
     },
     generateSection: async (id: SectionType) => {
-      const section = await generateReport({ evaluation, sections: [id] })
+      const section = await generateReport({ evaluation: record.evaluation, sections: [id] })
       const newSection = section.find((s) => s.type === id)
 
       updateReport({
@@ -138,5 +146,19 @@ export function useReport() {
         }),
       })
     },
+  }
+}
+
+function generatePatient(record: Patient, usePatientData: boolean) {
+  if (!usePatientData) {
+    return undefined
+  }
+
+  return {
+    age: record.age,
+    gender: record.gender,
+    skinType: record.skinType,
+    familyWithMelanoma: record.familyWithMelanoma,
+    previousMelanoma: record.previousMelanoma,
   }
 }

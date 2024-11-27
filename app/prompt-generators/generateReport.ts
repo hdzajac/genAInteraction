@@ -1,9 +1,9 @@
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 
-import { EvaluationLabels, SectionTypes } from '@/constants'
+import { EvaluationLabels, SectionTypes, SkinTypes } from '@/constants'
 import { openai } from '@/openai'
-import { EvaluationReport } from '@/store/types'
+import { EvaluationReport, Patient } from '@/store/types'
 
 export const sectionInfo = [
   {
@@ -64,10 +64,11 @@ const ReportFormat = z.object({
 type Props = {
   evaluation: EvaluationReport
   sections: string[]
+  patient: Patient
 }
 
-export default async function ({ evaluation, sections }: Props) {
-  console.log('PAYLOAD>>', evaluation, sections)
+export default async function ({ evaluation, patient, sections }: Props) {
+  console.log('PAYLOAD>>', patient)
 
   if (process.env.TESTING_MODE === 'true') {
     return testingMode()
@@ -107,13 +108,13 @@ export default async function ({ evaluation, sections }: Props) {
   const prompt = `
       You are a dermatologist.
       You are writing a report to be sent to a general practitioner.
-      The report should be written in a professional tone, using appropriate medical terminology and providing detailed information where necessary.
-      
+      The report should be written in a professional tone, using appropriate medical terminology and providing detailed information where necessary. 
+
       The report should include the following sections:
       ${sectionsPrompt}
 
-      You receive the following input, which describes the patient's condition:
-      ${evaluationPrompt}
+      ${generatePatientPrompt(patient)}
+      The patient' condition is as follows: ${evaluationPrompt}
 
       Use the patient condition when creating the report, and put the input data that is used in the report surrounded by the html tag <strong></strong>.
 
@@ -153,4 +154,22 @@ function testingMode() {
       ])
     }, 1000)
   })
+}
+
+function generatePatientPrompt(patient: Patient) {
+  if (!patient) return ''
+
+  let patientPrompt = `The patient is ${patient.gender}, ${patient.age} years old, and skin type ${
+    SkinTypes[patient.skinType]
+  }.`
+
+  if (patient.familyWithMelanoma) {
+    patientPrompt += ' The patient has a family history of melanoma.'
+  }
+
+  if (patient.previousMelanoma) {
+    patientPrompt += ' The patient has had a previous malignant melanoma or skin cancer.'
+  }
+
+  return patientPrompt + '\n'
 }

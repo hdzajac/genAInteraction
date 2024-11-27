@@ -1,6 +1,6 @@
 import { ActionTypes } from '@/components/ContentEditor'
 import { ReportSection } from '@/components/useReport'
-import { EvaluationReport } from '@/store/types'
+import { EvaluationReport, Patient } from '@/store/types'
 
 type Payload = {
   action?: string
@@ -9,6 +9,7 @@ type Payload = {
 
 type GeneratePayload = {
   evaluation: EvaluationReport
+  patient: Patient | undefined
   sections: ReportSection['type'][]
 }
 

@@ -1,8 +1,8 @@
-import { Button, Dialog, Flex, Heading, Text, TextArea } from '@radix-ui/themes'
+import { Button, Flex, Heading, Text, TextArea } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 
-import { useEvaluationStore } from '@/store/evaluation'
 import { EvaluationReport } from '@/store/types'
+import { useRecord } from '@/store/useRecord'
 
 type Props = {
   defaultEvaluation: EvaluationReport
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function EvaluationValidation({ defaultEvaluation, onSave }: Props) {
-  const { updateEvaluation } = useEvaluationStore()
+  const { updateEvaluation } = useRecord()
 
   const { register, handleSubmit } = useForm({
     defaultValues: defaultEvaluation,
