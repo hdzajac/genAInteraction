@@ -41,7 +41,6 @@ export function useReport() {
      */
     createReport: async () => {
       setIsLoading(true)
-      console.log('RECORD>>', record)
 
       const sections = report.sections
         .filter((s) => s.content === '' || s.content === '<p></p>') // Don't include sectiosn with content
@@ -89,7 +88,12 @@ export function useReport() {
       })
     },
     generateSection: async (id: SectionType) => {
-      const section = await generateReport({ evaluation: record.evaluation, sections: [id] })
+      const section = await generateReport({
+        evaluation: record.evaluation,
+        sections: [id],
+        patient: generatePatient(record, flags.usePatientData),
+      })
+
       const newSection = section.find((s) => s.type === id)
 
       updateReport({
