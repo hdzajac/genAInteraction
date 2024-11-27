@@ -43,7 +43,7 @@ export default function FeatureFlagPanel({}: Props) {
             </label>
             <label>
               <Text as="div" size="2" mb="1" weight="bold">
-                Include patient data
+                Include medical record
               </Text>
               <Controller
                 name="usePatientData"
