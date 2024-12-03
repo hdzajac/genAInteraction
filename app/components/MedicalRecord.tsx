@@ -20,6 +20,12 @@ export default function MedicalRecord({ record }: Props) {
       }}>
       <h2>Overview • Lesion #{record.id}</h2>
 
+      <Flex className="panel MedicalRecord-images" direction="column" gap="4">
+        {record.images.map((image, index) => (
+          <img key={index} src={image} alt="" />
+        ))}
+      </Flex>
+
       <Box className="panel MedicalRecord">
         <h3>Medical record</h3>
         <p>
@@ -32,12 +38,6 @@ export default function MedicalRecord({ record }: Props) {
         <h4>Previous malignant melanoma or skin cancer</h4>
         <p>{getValueFromBoolean(record.previousMelanoma)}</p>
       </Box>
-
-      <Flex className="panel MedicalRecord-images" direction="column" gap="4">
-        {record.images.map((image, index) => (
-          <img key={index} src={image} alt="" />
-        ))}
-      </Flex>
     </Flex>
   )
 }

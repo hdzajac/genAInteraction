@@ -24,12 +24,12 @@ export default function ReportPreview() {
 
   return (
     <Flex direction="column" gap="2">
-      <Flex justify="end" gap="2">
+      <Flex justify="start" gap="2">
         <Button variant="surface" onClick={handleAutoGenerate}>
           Re-generate
         </Button>
 
-        <Button>Approve</Button>
+        <Button>Sign report</Button>
       </Flex>
       <Flex className="panel" direction="column" gap="4">
         {report && (

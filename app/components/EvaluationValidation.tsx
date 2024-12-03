@@ -61,8 +61,8 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
           </label>
         </Flex>
 
-        <Flex gap="3" mt="4" justify="end">
-          <Button type="submit">Validate</Button>
+        <Flex gap="3" mt="4" justify="start">
+          <Button type="submit">Approve diagnosis</Button>
         </Flex>
       </form>
     </Flex>
