@@ -50,6 +50,7 @@ export function useReport() {
       const result = await generateReport({
         evaluation: record.evaluation,
         patient: generatePatient(record, flags.usePatientData),
+        includeExamplesInPrompts: flags.includeExamplesInPrompts,
         sections,
       })
 

@@ -7,10 +7,11 @@ type Payload = {
   payload: Record<string, unknown>
 }
 
-type GeneratePayload = {
+export type GeneratePayload = {
   evaluation: EvaluationReport
   patient: Patient | undefined
   sections: ReportSection['type'][]
+  includeExamplesInPrompts: boolean
 }
 
 type GetAlternativesPayload = {

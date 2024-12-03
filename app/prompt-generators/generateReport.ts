@@ -5,6 +5,8 @@ import { EvaluationLabels, SectionTypes, SkinTypes } from '@/constants'
 import { openai } from '@/openai'
 import { EvaluationReport, Patient } from '@/store/types'
 import sectionsInfo from './helpers/sections-info'
+import { GeneratePayload } from '@/hooks/useOpenAI'
+import { ReportSection } from '@/components/useReport'
 
 const ReportFormat = z.object({
   report: z.array(
@@ -15,13 +17,12 @@ const ReportFormat = z.object({
   ),
 })
 
-type Props = {
-  evaluation: EvaluationReport
-  sections: string[]
-  patient: Patient
-}
-
-export default async function ({ evaluation, patient, sections }: Props) {
+export default async function ({
+  evaluation,
+  patient,
+  sections,
+  includeExamplesInPrompts,
+}: GeneratePayload) {
   console.log('PAYLOAD', sections)
 
   if (process.env.TESTING_MODE === 'true') {
@@ -46,19 +47,6 @@ export default async function ({ evaluation, patient, sections }: Props) {
     })
     .join('\n')
 
-  const examplesPrompt = sections
-    .map((section) => {
-      const sec = sectionsInfo.find((info) => info.type === section)
-
-      if (!sec) return ''
-
-      return `
-        ### ${sec.title}
-        - ${sec.examples.join('\n -')}
-      `
-    })
-    .join('\n')
-
   const prompt = `
       You are a dermatologist.
       You are writing a report to be sent to a general practitioner.
@@ -71,7 +59,7 @@ export default async function ({ evaluation, patient, sections }: Props) {
       The patient' condition is as follows: ${evaluationPrompt}
 
       Use the patient condition when creating the report, and put the input data that is used in the report surrounded by the html tag <strong></strong>.
-
+      ${generateExamplesPrompt(sections, includeExamplesInPrompts)}
     `
   console.log('PROMPT', prompt)
 
@@ -110,7 +98,7 @@ function testingMode() {
   })
 }
 
-function generatePatientPrompt(patient: Patient) {
+function generatePatientPrompt(patient: Patient | undefined) {
   if (!patient) return ''
 
   let patientPrompt = `The patient is ${patient.gender}, ${patient.age} years old, and skin type ${
@@ -126,4 +114,27 @@ function generatePatientPrompt(patient: Patient) {
   }
 
   return patientPrompt + '\n'
+}
+
+function generateExamplesPrompt(
+  sections: ReportSection['type'][],
+  includeExamplesInPrompts: boolean
+) {
+  if (!includeExamplesInPrompts) return ''
+
+  const examplesPrompt = sections
+    .map((section) => {
+      const sec = sectionsInfo.find((info) => info.type === section)
+
+      if (!sec) return ''
+
+      return `
+      ### ${sec.title}
+      - ${sec.examples.join('\n -')}
+    `
+    })
+    .join('\n')
+
+  return `Here are some examples of reports:
+      ${examplesPrompt}`
 }

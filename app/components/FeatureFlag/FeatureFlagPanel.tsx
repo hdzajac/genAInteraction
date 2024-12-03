@@ -53,6 +53,18 @@ export default function FeatureFlagPanel({}: Props) {
                 )}
               />
             </label>
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Include examples in prompt
+              </Text>
+              <Controller
+                name="includeExamplesInPrompts"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Switch variant="surface" checked={value} onCheckedChange={onChange} />
+                )}
+              />
+            </label>
           </Flex>
 
           <Flex gap="3" mt="4" justify="end">
