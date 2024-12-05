@@ -7,7 +7,7 @@ import ReportSectionV2 from './ReportSectionV2'
 import { useEffect } from 'react'
 
 export default function ReportPreview() {
-  const { report, isLoading, createReport } = useReport()
+  const { report, isLoading, createReport, regenerate } = useReport()
   const { flags } = useFlags()
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function ReportPreview() {
   }
 
   const handleAutoGenerate = () => {
-    createReport()
+    regenerate()
   }
 
   return (

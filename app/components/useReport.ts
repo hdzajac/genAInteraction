@@ -62,6 +62,25 @@ export function useReport() {
         sections: result,
       })
     },
+    regenerate: async () => {
+      setIsLoading(true)
+
+      const result = await generateReport({
+        evaluation: record.evaluation,
+        patient: generatePatient(record, flags.usePatientData),
+        includeExamplesInPrompts: flags.includeExamplesInPrompts,
+        sections: report.sections.map((s) => s.type),
+      })
+
+      setIsLoading(false)
+
+      updateReport({
+        date: new Date(),
+        author: 'Dr. John Doe',
+        sections: result,
+      })
+    },
+
     /**
      * Deletes a section from the report
      */
