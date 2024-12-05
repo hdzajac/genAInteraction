@@ -13,10 +13,6 @@ const defaultReport: Report = {
   author: 'Dr. John Doe',
   sections: [
     {
-      type: 'VISUAL_DESCRIPTION',
-      content: '',
-    },
-    {
       type: 'ASSESSMENT',
       content: '',
     },

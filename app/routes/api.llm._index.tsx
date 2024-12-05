@@ -6,6 +6,7 @@ import generateAlternatives from '@/prompt-generators/generateAlternatives'
 import generateReport from '@/prompt-generators/generateReport'
 import rephraseSelection from '@/prompt-generators/rephraseSelection'
 import summarizeParagraph from '@/prompt-generators/summarizeParagraph'
+import convertToList from '@/prompt-generators/convertToList'
 import { authMiddleware } from '@/auth'
 
 export const config = { runtime: 'nodejs' }
@@ -15,6 +16,7 @@ const GeneratorActions = z.enum([
   'GET_ALTERNATIVES',
   'SUMMARIZE_PARAGRAPH',
   'REPHRASE_SELECTION',
+  'CONVERT_TO_LIST',
 ])
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -39,6 +41,9 @@ export async function action({ request }: ActionFunctionArgs) {
         break
       case GeneratorActions.Enum.REPHRASE_SELECTION:
         result = await rephraseSelection(body.payload)
+        break
+      case GeneratorActions.Enum.CONVERT_TO_LIST:
+        result = await convertToList(body.payload)
         break
       default:
         return json({ error: 'Invalid action' }, { status: 400 })

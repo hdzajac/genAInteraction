@@ -9,10 +9,10 @@ type Props = {
 
 const typeInstructions = {
   SIMPLIFY: 'Rephrase the selection to use a simpler language',
-  MAKE_SHORTER:
-    'Rephrase the selection to be shorter. It should be half the length of the original selection.',
-  MAKE_LONGER:
-    'Expand the selection to be longer, giving a more detailed explanation. It should be twice the length of the original selection.',
+  // MAKE_SHORTER:
+  //   'Rephrase the selection to be shorter. It should be half the length of the original selection.',
+  // MAKE_LONGER:
+  //   'Expand the selection to be longer, giving a more detailed explanation. It should be twice the length of the original selection.',
 }
 export default async function ({ paragraph, selection, type }: Props) {
   console.log('PAYLOAD', paragraph, selection, type)
@@ -42,6 +42,8 @@ export default async function ({ paragraph, selection, type }: Props) {
     model: 'gpt-4o-mini',
     messages: [{ role: 'system', content: prompt }],
   })
+
+  console.log('RESULT', completion.choices[0].message.content)
 
   // Generate a random ID
   const id = Math.random().toString(36).substring(2, 10)

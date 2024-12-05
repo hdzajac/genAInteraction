@@ -9,7 +9,6 @@ import './ReportSection.css'
 import { Alternative, ReportSection as TReportSection, useReport } from './useReport'
 
 const reportSection: Record<string, string> = {
-  VISUAL_DESCRIPTION: 'Visual description',
   ASSESSMENT: 'Assessment',
   PRIMARY_PLAN: 'Primary plan',
   ALTERNATIVE_PLAN: 'Alternative plan',
@@ -21,8 +20,14 @@ type Props = {
 }
 
 export default function ReportSection({ section }: Props) {
-  const { pickAlternative, summarizeSection, rephraseSelection, generateSection, updateContent } =
-    useReport()
+  const {
+    pickAlternative,
+    summarizeSection,
+    rephraseSelection,
+    generateSection,
+    updateContent,
+    convertToList,
+  } = useReport()
   const { getAlternatives } = useOpenAI()
   const { deleteSection } = useReport()
   const [alternatives, setAlternatives] = useState<any[] | undefined>(undefined)
@@ -61,6 +66,12 @@ export default function ReportSection({ section }: Props) {
     setIsLoading(false)
   }
 
+  const handleConvertToList = async () => {
+    setIsLoading(true)
+    await convertToList(section.type)
+    setIsLoading(false)
+  }
+
   return (
     <div className="ReportSection">
       <Flex justify="between" pr="2" mt="3">
@@ -76,6 +87,7 @@ export default function ReportSection({ section }: Props) {
           onDelete={() => deleteSection(section.type)}
           onShowAlternatives={handleShowAlternatives}
           onSummarize={handleSummarize}
+          onConvertToList={handleConvertToList}
         />
       </Flex>
       <Flex direction="column" gap="2" mb="4" position="relative">
@@ -113,9 +125,15 @@ type DropdownProps = {
   onDelete: () => void
   onSummarize: () => void
   onShowAlternatives: () => void
+  onConvertToList: () => void
 }
 
-const DropdownMenuBtn = ({ onDelete, onSummarize, onShowAlternatives }: DropdownProps) => {
+const DropdownMenuBtn = ({
+  onDelete,
+  onSummarize,
+  onShowAlternatives,
+  onConvertToList,
+}: DropdownProps) => {
   return (
     <Flex gap="3" align="center">
       <DropdownMenu.Root>
@@ -126,6 +144,7 @@ const DropdownMenuBtn = ({ onDelete, onSummarize, onShowAlternatives }: Dropdown
         </DropdownMenu.Trigger>
         <DropdownMenu.Content size="1">
           <DropdownMenu.Item onClick={onSummarize}>Summarize</DropdownMenu.Item>
+          <DropdownMenu.Item onClick={onConvertToList}>Convert to list</DropdownMenu.Item>
           <DropdownMenu.Item onClick={onShowAlternatives}>Show alternatives</DropdownMenu.Item>
           <DropdownMenu.Separator />
           <DropdownMenu.Item color="red" onClick={onDelete}>

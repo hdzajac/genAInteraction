@@ -79,11 +79,6 @@ function testingMode() {
     setTimeout(() => {
       resolve([
         {
-          type: 'VISUAL_DESCRIPTION',
-          content:
-            'The lesion presents with a sharp border and lacks a pigment network, characteristic of <strong>seborrheic keratosis</strong>. Notably, the lesion features <strong>milia-like cysts</strong> and appears to be situated at the 6 o’clock position, indicative of possible irritation or friction due to <strong>fat fingers</strong>.',
-        },
-        {
           type: 'ASSESSMENT',
           content:
             'Given the diagnosis of <strong>seborrheic keratosis</strong> and the absence of concerning features, <strong>no treatment</strong> is currently indicated. The lesion appears benign and does not require immediate intervention.',
@@ -94,7 +89,7 @@ function testingMode() {
             'The recommended plan is to monitor the lesion for any changes in size, shape, or color over time. Patient education regarding the benign nature of <strong>seborrheic keratosis</strong> should be provided, emphasizing that no treatment is necessary unless the lesion becomes symptomatic or cosmetically concerning. A follow-up appointment can be scheduled in 6 to 12 months to reassess the lesion and consider treatment options if warranted.',
         },
       ])
-    }, 1000)
+    }, 200)
   })
 }
 

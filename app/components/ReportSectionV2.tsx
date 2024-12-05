@@ -3,13 +3,12 @@ import { WandSparkles } from 'lucide-react'
 import { useState } from 'react'
 
 import { useOpenAI } from '@/hooks/useOpenAI'
-import { cleanContent } from '@/utils'
+import { cleanContent, debounce } from '@/utils'
 import ContentEditor, { ActionTypes } from './ContentEditor'
 import './ReportSection.css'
 import { Alternative, ReportSection as TReportSection, useReport } from './useReport'
 
 const reportSection: Record<string, string> = {
-  VISUAL_DESCRIPTION: 'Visual description',
   ASSESSMENT: 'Assessment',
   PRIMARY_PLAN: 'Primary plan',
   ALTERNATIVE_PLAN: 'Alternative plan',

@@ -30,7 +30,7 @@ export function useReport() {
   const { flags } = useFlags()
   const { report, updateReport } = useReportStore()
   const { record } = useRecord()
-  const { generateReport, summarizeParagraph, rephraseSelection } = useOpenAI()
+  const { generateReport, summarizeParagraph, rephraseSelection, convertToList } = useOpenAI()
   const [isLoading, setIsLoading] = useState(false)
 
   return {
@@ -73,6 +73,23 @@ export function useReport() {
     },
     summarizeSection: async (id: SectionType) => {
       const newText = await summarizeParagraph({
+        paragraph: report.sections.find((s) => s.type === id)?.content ?? '',
+      })
+
+      updateReport({
+        ...report,
+        sections: report.sections.map((section) => {
+          if (section.type !== id) return section
+
+          return {
+            ...section,
+            content: newText,
+          }
+        }),
+      })
+    },
+    convertToList: async (id: SectionType) => {
+      const newText = await convertToList({
         paragraph: report.sections.find((s) => s.type === id)?.content ?? '',
       })
 

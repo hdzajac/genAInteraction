@@ -14,7 +14,7 @@ import { CheckCheck, RotateCcw, Undo2 } from 'lucide-react'
 
 import './ContentEditor.css'
 
-export type ActionTypes = 'SIMPLIFY' | 'MAKE_SHORTER' | 'MAKE_LONGER'
+export type ActionTypes = 'SIMPLIFY'
 
 type Props = {
   content: string
@@ -137,14 +137,6 @@ export default function ContentEditor({ content, onAction, onUpdate }: Props) {
             <>
               <div className="ContentEditor-bubbleItem" onClick={() => handleAction('SIMPLIFY')}>
                 Simplify
-              </div>
-              <div
-                className="ContentEditor-bubbleItem"
-                onClick={() => handleAction('MAKE_SHORTER')}>
-                Make shorter
-              </div>
-              <div className="ContentEditor-bubbleItem" onClick={() => handleAction('MAKE_LONGER')}>
-                Make longer
               </div>
             </>
           )}

@@ -11,14 +11,10 @@ export type GeneratePayload = {
   evaluation: EvaluationReport
   patient: Patient | undefined
   sections: ReportSection['type'][]
-  includeExamplesInPrompts: boolean
+  includeExamplesInPrompts?: boolean
 }
 
-type GetAlternativesPayload = {
-  paragraph: string
-}
-
-type SummarizePayload = {
+type ParagrahPayload = {
   paragraph: string
 }
 
@@ -49,15 +45,21 @@ export function useOpenAI() {
         payload,
       })
     },
-    async getAlternatives(payload: GetAlternativesPayload) {
+    async getAlternatives(payload: ParagrahPayload) {
       return request({
         action: 'GET_ALTERNATIVES',
         payload,
       })
     },
-    async summarizeParagraph(payload: SummarizePayload) {
+    async summarizeParagraph(payload: ParagrahPayload) {
       return request({
         action: 'SUMMARIZE_PARAGRAPH',
+        payload,
+      })
+    },
+    async convertToList(payload: ParagrahPayload) {
+      return request({
+        action: 'CONVERT_TO_LIST',
         payload,
       })
     },
