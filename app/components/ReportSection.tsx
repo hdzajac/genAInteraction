@@ -115,7 +115,11 @@ export default function ReportSection({ section }: Props) {
       </Flex>
 
       {alternatives && (
-        <AlternativesSelection alternatives={alternatives} pickAlternative={handlePick} />
+        <AlternativesSelection
+          alternatives={alternatives}
+          pickAlternative={handlePick}
+          setAlternatives={setAlternatives}
+        />
       )}
     </div>
   )
@@ -159,11 +163,21 @@ const DropdownMenuBtn = ({
 type AlternativesProps = {
   alternatives: Alternative[]
   pickAlternative: (alternative: Alternative) => void
+  setAlternatives: (alternative: any) => void
 }
 
-function AlternativesSelection({ alternatives, pickAlternative }: AlternativesProps) {
+function AlternativesSelection({
+  alternatives,
+  pickAlternative,
+  setAlternatives,
+}: AlternativesProps) {
   return (
     <Flex direction="column" gap="2">
+      <Flex>
+        <Button variant="outline" onClick={() => setAlternatives(undefined)}>
+          Cancel
+        </Button>
+      </Flex>
       {alternatives?.map((alternative, index) => (
         <div key={index}>
           <Flex gap="2" align="start" direction="column" className="ReportSection-alt">
