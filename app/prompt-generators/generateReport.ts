@@ -50,7 +50,7 @@ export default async function ({
   const prompt = `
       You are a dermatologist.
       You are writing a report to be sent to a general practitioner.
-      The report should be written in a professional tone, using appropriate medical terminology and providing detailed information where necessary. 
+      The report should be written in a professional tone, using appropriate medical terminology. The report should be concise but providing detailed information when necessary. 
 
       The report should include the following sections:
       ${sectionsPrompt}

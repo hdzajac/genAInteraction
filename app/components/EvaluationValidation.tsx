@@ -1,8 +1,9 @@
-import { Button, Flex, Heading, Text, TextArea } from '@radix-ui/themes'
+import { Button, Flex, Heading, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 
 import { EvaluationReport } from '@/store/types'
 import { useRecord } from '@/store/useRecord'
+import { TextArea } from './TextArea'
 
 type Props = {
   defaultEvaluation: EvaluationReport

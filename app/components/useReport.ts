@@ -110,6 +110,7 @@ export function useReport() {
         evaluation: record.evaluation,
         sections: [id],
         patient: generatePatient(record, flags.usePatientData),
+        includeExamplesInPrompts: flags.includeExamplesInPrompts,
       })
 
       const newSection = section.find((s) => s.type === id)

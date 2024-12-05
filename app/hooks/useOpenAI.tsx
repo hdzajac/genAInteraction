@@ -11,7 +11,7 @@ export type GeneratePayload = {
   evaluation: EvaluationReport
   patient: Patient | undefined
   sections: ReportSection['type'][]
-  includeExamplesInPrompts?: boolean
+  includeExamplesInPrompts: boolean
 }
 
 type ParagrahPayload = {
