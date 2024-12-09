@@ -1,8 +1,9 @@
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Button, Dialog, Flex } from '@radix-ui/themes'
 
 import { SkinTypes } from '@/constants'
 import { MedicalRecord as TMedicalRecord } from '@/store/types'
 import './MedicalRecord.css'
+import { X } from 'lucide-react'
 
 type Props = {
   record: TMedicalRecord
@@ -22,7 +23,7 @@ export default function MedicalRecord({ record }: Props) {
 
       <Flex className="panel MedicalRecord-images" direction="column" gap="4">
         {record.images.map((image, index) => (
-          <img key={index} src={image} alt="" />
+          <ImageViewer key={index} image={image} />
         ))}
       </Flex>
 
@@ -44,4 +45,41 @@ export default function MedicalRecord({ record }: Props) {
 
 function getValueFromBoolean(value: boolean) {
   return value ? 'Yes' : 'No'
+}
+
+type ImageViewerProps = {
+  image: string
+}
+
+function ImageViewer({ image }: ImageViewerProps) {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>
+        <img src={image} alt="" />
+      </Dialog.Trigger>
+
+      <Dialog.Content
+        height="85vh"
+        maxWidth="auto"
+        aria-describedby={undefined}
+        style={{ padding: 0 }}>
+        <Dialog.Close>
+          <Button
+            variant="soft"
+            color="gray"
+            style={{
+              position: 'absolute',
+              top: 20,
+              right: 20,
+              zIndex: 9,
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            }}>
+            <X />
+          </Button>
+        </Dialog.Close>
+
+        <img className="MedicalRecord-fullscreenImg" src={image} alt="" />
+      </Dialog.Content>
+    </Dialog.Root>
+  )
 }
