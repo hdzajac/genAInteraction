@@ -3,7 +3,7 @@ export default [
     type: 'ASSESSMENT',
     title: 'Assessment',
     description:
-      'Your first suggestion for immediate next steps (treatment, patient care, dismissal). It includes a description of objective and visual features',
+      'Your interpretation of the visual findings in the light of the referral and your problem understanding',
     examples: [
       'The dermoscopic image reveals a 4-5mm irregular blue papule. There are shiny white structures present. The blue color is not homogeneous, and the presence of shiny white structures would not be typical for a blue nevus',
       "The clinical presentation is consistent with rosacea, a chronic inflammatory skin condition. The patient's symptoms, including facial erythema, flushing, and the presence of papules and pustules, are consistent with a diagnosis of papulopustular rosacea",
