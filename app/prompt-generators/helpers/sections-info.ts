@@ -12,8 +12,7 @@ export default [
   {
     type: 'PRIMARY_PLAN',
     title: 'Primary plan',
-    description:
-      'The recommended treatment plan, including any necessary follow-up appointments or instructions',
+    description: 'The recommended treatment plan, including any necessary  instructions',
     examples: [
       'I would recommend topical treatment with metronidazole 0.75% gel 1-2 times. daily for 3-4 months, can be extended in case of positive effect and relapse. In the event of a lack of effect, consider starting for the time being. in oral treatment with oracea (doxycycline 40 mg) once daily for 3 months. Recommend a daily mild cleanser and a broad-spectrum sunscreen (SPF 30 or higher) to protect against UV-induced flare-ups.',
     ],
