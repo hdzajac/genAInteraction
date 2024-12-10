@@ -3,7 +3,7 @@ import { Button, Flex, Spinner } from '@radix-ui/themes'
 import { useReport } from '@/components/useReport'
 import { useOpenAI } from '@/hooks/useOpenAI'
 import { useEffect } from 'react'
-import ContentEditor, { ActionTypes } from './ContentEditor'
+import { ContentEditor, ActionTypes } from './ContentEditor'
 
 export default function ReportPreview() {
   const { report, isLoading, createReport, regenerate } = useReport()
@@ -45,13 +45,7 @@ export default function ReportPreview() {
             {isLoading ? (
               <Spinner />
             ) : (
-              <ContentEditor
-                content={report.content}
-                onAction={handleAction}
-                onUpdate={({ editor }) => {
-                  // debounce(updateContent(section.type, editor.getHTML()), 200)
-                }}
-              />
+              <ContentEditor content={report.content} onAction={handleAction} />
             )}
           </div>
         )}

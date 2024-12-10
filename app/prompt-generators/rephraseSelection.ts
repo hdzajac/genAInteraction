@@ -30,7 +30,7 @@ export default async function ({ paragraph, selection, rewriteText, type }: Prop
         ${paragraph}
 
         Only rewrite the selection and not the entire paragraph.
-        Return the whole paragraph, and put the rephrased selection surrounded by the html tag <span id="{{id}}" class="mark-changed"></span>.
+        Return the whole paragraph, and put the rephrased selection surrounded by the html tag <span id="{{id}}" class="text-modified"></span>.
         `
       break
 
@@ -51,7 +51,7 @@ export default async function ({ paragraph, selection, rewriteText, type }: Prop
         ${paragraph}
 
         Only rewrite the selection and not the entire paragraph.
-        Return the whole paragraph, and put the new text surrounded by the html tag <span id="{{id}}" class="mark-changed"></span>.`
+        Return the whole paragraph, and put the new text surrounded by the html tag <span id="{{id}}" class="text-modified"></span>.`
       break
   }
 
@@ -85,7 +85,7 @@ function testingMode() {
         //     <li>Denies: Pain or bleeding</li>
         //     <li>Previous procedures: No biopsies or treatments for this lesion</li>
         // </ul>`
-        // 'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are <span id="1113322" class="mark-changed">well-defined, indicating benign characteristics without color irregularities</span>. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.'
+        // 'The dermoscopic image presents a well-defined lesion measuring less than 6 mm with a uniform color, indicating a consistent morphology. The borders of the lesion are <span id="1113322" class="text-modified">well-defined, indicating benign characteristics without color irregularities</span>. There are no irregularities in color or texture observed, which is consistent with a stable and non-suspicious appearance.'
       )
     }, 200)
   })

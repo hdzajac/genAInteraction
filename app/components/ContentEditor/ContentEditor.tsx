@@ -1,12 +1,13 @@
 import { Flex } from '@radix-ui/themes'
 import Placeholder from '@tiptap/extension-placeholder'
-import { BubbleMenu, EditorContent, Mark, mergeAttributes, useEditor } from '@tiptap/react'
+import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { CheckCheck, RotateCcw, Undo2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import AlternativeSelection from './AlternativeSelection'
 import './ContentEditor.css'
+import { TextModifiedMark } from './TextModifiedMark'
 import RewritePrompt from './RewritePrompt'
 
 export type ActionTypes = 'SIMPLIFY' | 'CONVERT_TO_LIST' | 'REWRITE_TO_INCLUDE'
@@ -24,28 +25,8 @@ type Props = {
   ) => void
 }
 
-export default function ContentEditor({ content, onAction }: Props) {
+export function ContentEditor({ content, onAction }: Props) {
   const [lastAction, setLastAction] = useState<ActionTypes | null>(null)
-
-  const HighlightedText = Mark.create({
-    name: 'mark-changed',
-    addAttributes() {
-      return {
-        id: {
-          default: null,
-        },
-      }
-    },
-    toDOM: (node) => {
-      return ['span', { class: 'mark-changed', 'data-comment-id': node.attrs.id }, 0]
-    },
-    renderHTML({ HTMLAttributes }) {
-      return ['span', mergeAttributes({ class: 'mark-changed' }, HTMLAttributes), 0]
-    },
-    parseHTML() {
-      return [{ tag: 'span.mark-changed' }]
-    },
-  })
 
   const editor = useEditor({
     extensions: [
@@ -53,7 +34,7 @@ export default function ContentEditor({ content, onAction }: Props) {
       Placeholder.configure({
         placeholder: 'Write report here …',
       }),
-      HighlightedText,
+      TextModifiedMark,
       RewritePrompt.configure({
         onRewrite: (rewriteText: string, selection: string, paragraph: string, pos) => {
           onAction('REWRITE_TO_INCLUDE', {
@@ -153,7 +134,7 @@ export default function ContentEditor({ content, onAction }: Props) {
   const handleMarkedTextClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement
 
-    if (target.classList.contains('mark-changed')) {
+    if (target.classList.contains('text-modified')) {
       const commentId = target.getAttribute('id')
 
       if (commentId && editor) {
@@ -176,7 +157,7 @@ export default function ContentEditor({ content, onAction }: Props) {
   }
 
   const handleAcceptChange = () => {
-    editor?.commands.unsetMark('mark-changed')
+    editor?.commands.unsetMark('text-modified')
   }
 
   return (
@@ -185,7 +166,7 @@ export default function ContentEditor({ content, onAction }: Props) {
 
       <BubbleMenu editor={editor} tippyOptions={{ maxWidth: 400 }}>
         <div className="ContentEditor-bubbleMenu">
-          {editor?.isActive('mark-changed') ? (
+          {editor?.isActive('text-modified') ? (
             <>
               <Flex
                 align="center"

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { useOpenAI } from '@/hooks/useOpenAI'
 import { cleanContent } from '@/utils'
-import { Alternative } from './useReport'
+import { Alternative } from '../useReport'
 
 type AlternativesProps = {
   onPickAlternative: (alternative: string) => void

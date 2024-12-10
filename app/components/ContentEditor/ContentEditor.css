@@ -71,7 +71,7 @@
   height: 0;
 }
 
-.mark-changed {
+.text-modified {
   background-color: #f6f6ec;
   border-bottom: 1px dotted var(--gray-8);
 }
