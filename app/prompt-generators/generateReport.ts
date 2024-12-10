@@ -1,21 +1,9 @@
-import { zodResponseFormat } from 'openai/helpers/zod'
-import { z } from 'zod'
-
-import { EvaluationLabels, SectionTypes, SkinTypes } from '@/constants'
+import { ReportSection } from '@/components/useReport'
+import { EvaluationLabels, SkinTypes } from '@/constants'
+import { GeneratePayload } from '@/hooks/useOpenAI'
 import { openai } from '@/openai'
 import { EvaluationReport, Patient } from '@/store/types'
 import sectionsInfo from './helpers/sections-info'
-import { GeneratePayload } from '@/hooks/useOpenAI'
-import { ReportSection } from '@/components/useReport'
-
-const ReportFormat = z.object({
-  report: z.array(
-    z.object({
-      type: SectionTypes,
-      content: z.string(),
-    })
-  ),
-})
 
 export default async function ({
   evaluation,
@@ -43,7 +31,7 @@ export default async function ({
       if (!sec) return ''
 
       return `
-      - ${sec.title} (${sec.type}): ${sec.description}`
+      - ${sec.title}: ${sec.description}`
     })
     .join('\n')
 
@@ -52,43 +40,38 @@ export default async function ({
       You are writing a report to be sent to a general practitioner.
       The report should be written in a professional tone, using appropriate medical terminology. The report should be concise but providing detailed information when necessary. 
 
-      The report should include the following sections:
+      The report should include the following sections. And avoid repeating yourself in the sections:
       ${sectionsPrompt}
 
       ${generatePatientPrompt(patient)}
       The patient' condition is as follows: ${evaluationPrompt}
 
-      Use the patient condition when creating the report, and put the input data that is used in the report surrounded by the html tag <strong></strong>.
-      ${generateExamplesPrompt(sections, includeExamplesInPrompts)}
-    `
+      Write the report using the html tag <h2> for sections and <p> for paragraphs. 
+      Put the input data that is used in the report surrounded by the html tag <strong></strong>.
+      
+      ${generateExamplesPrompt(sections, includeExamplesInPrompts)}`
   console.log('PROMPT', prompt)
 
   const completion = await openai.beta.chat.completions.parse({
     model: 'gpt-4o-mini',
     messages: [{ role: 'system', content: prompt }],
-    response_format: zodResponseFormat(ReportFormat, 'report'),
   })
 
-  console.log('response>>', completion.choices[0].message.parsed?.report)
+  console.log('response>>', completion.choices[0].message.content)
 
-  return completion.choices[0].message.parsed?.report
+  return completion.choices[0].message.content
 }
 
 function testingMode() {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve([
-        {
-          type: 'ASSESSMENT',
-          content:
-            'Given the diagnosis of <strong>seborrheic keratosis</strong> and the absence of concerning features, <strong>no treatment</strong> is currently indicated. The lesion appears benign and does not require immediate intervention.',
-        },
-        {
-          type: 'PRIMARY_PLAN',
-          content:
-            'The recommended plan is to monitor the lesion for any changes in size, shape, or color over time. Patient education regarding the benign nature of <strong>seborrheic keratosis</strong> should be provided, emphasizing that no treatment is necessary unless the lesion becomes symptomatic or cosmetically concerning. A follow-up appointment can be scheduled in 6 to 12 months to reassess the lesion and consider treatment options if warranted.',
-        },
-      ])
+      resolve(
+        `<h2>Assessment</h2>
+          <p>The patient is a <strong>62-year-old male</strong> with a <strong>skin type I</strong>. Upon examination, the lesion displays a <strong>sharp border</strong>, lacks a <strong>pigment network</strong>, and presents with <strong>milia-like cysts</strong>. Additionally, there are noted <strong>fat fingers (6 o’clock)</strong>. Based on these objective findings, the diagnostic evaluation supports the clinical impression of <strong>seborrheic keratosis</strong>.</p>
+          <p>Given the benign nature of <strong>seborrheic keratosis</strong> and the absence of symptoms, I suggest no immediate treatment is necessary. The lesion's characteristics are consistent with common presentations and do not indicate malignancy.</p>
+          <h2>Primary Plan</h2>
+          <p>The primary plan involves <strong>no treatment</strong> at this time for the <strong>seborrheic keratosis</strong>. The patient should be advised to monitor the lesion for any changes, such as increased size, change in color, or any irritation. A follow-up appointment should be scheduled in <strong>6 to 12 months</strong> for re-evaluation or sooner if any concerning changes occur. Additionally, educating the patient on skin cancer awareness and encouraging regular skin examinations will be beneficial for ongoing skin health.</p>`
+      )
     }, 200)
   })
 }

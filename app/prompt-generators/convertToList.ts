@@ -15,7 +15,7 @@ export default async function ({ paragraph }: Props) {
   const prompt = `
       You are a dermatologist.
       You are writing a report to be sent to a general practitioner.
-      Convert a text for a bullet list. The text should be outputed with an  <ul> tag. The text is following:
+      Convert a text for a bullet list. The text should be outputed with an <ul> tag. The text is following:
       ${paragraph}
     `
 

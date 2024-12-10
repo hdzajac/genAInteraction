@@ -9,7 +9,6 @@ import { MedicalRecord } from '@/store/types'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
-    // const files = await fs.promises.readdir('./app/data/cases/', 'utf-8').catch(() => [])
     const files = await fs.promises
       .readdir(path.resolve(process.cwd(), './app/data/cases'))
       .catch(() => [])

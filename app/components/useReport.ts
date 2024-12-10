@@ -12,7 +12,7 @@ import { Patient } from '@/store/types'
 export type Report = {
   date: Date
   author: string
-  sections: ReportSection[]
+  content: string
 }
 
 export type ReportSection = {
@@ -42,10 +42,9 @@ export function useReport() {
     createReport: async () => {
       setIsLoading(true)
 
-      const sections = report.sections
-        .filter((s) => s.content === '' || s.content === '<p></p>') // Don't include sectiosn with content
-        .filter((s) => record.evaluation[SectionKeysMap[s.type]] !== '') // Filter out sections where the corresponding evaluation is empty
-        .map((section) => section.type)
+      const sections = Object.keys(SectionKeysMap).filter(
+        (s) => record.evaluation[SectionKeysMap[s as keyof typeof SectionKeysMap]] !== ''
+      ) // Filter out sections where the corresponding evaluation is empty
 
       const result = await generateReport({
         evaluation: record.evaluation,
@@ -59,7 +58,7 @@ export function useReport() {
       updateReport({
         date: new Date(),
         author: 'Dr. John Doe',
-        sections: result,
+        content: result,
       })
     },
     regenerate: async () => {
@@ -77,53 +76,10 @@ export function useReport() {
       updateReport({
         date: new Date(),
         author: 'Dr. John Doe',
-        sections: result,
+        content: result,
       })
     },
 
-    /**
-     * Deletes a section from the report
-     */
-    deleteSection: (key: string) => {
-      updateReport({
-        ...report,
-        sections: report.sections.filter((section) => section.type !== key),
-      })
-    },
-    summarizeSection: async (id: SectionType) => {
-      const newText = await summarizeParagraph({
-        paragraph: report.sections.find((s) => s.type === id)?.content ?? '',
-      })
-
-      updateReport({
-        ...report,
-        sections: report.sections.map((section) => {
-          if (section.type !== id) return section
-
-          return {
-            ...section,
-            content: newText,
-          }
-        }),
-      })
-    },
-    convertToList: async (id: SectionType) => {
-      const newText = await convertToList({
-        paragraph: report.sections.find((s) => s.type === id)?.content ?? '',
-      })
-
-      updateReport({
-        ...report,
-        sections: report.sections.map((section) => {
-          if (section.type !== id) return section
-
-          return {
-            ...section,
-            content: newText,
-          }
-        }),
-      })
-    },
     generateSection: async (id: SectionType) => {
       const section = await generateReport({
         evaluation: record.evaluation,
@@ -172,20 +128,13 @@ export function useReport() {
         }),
       })
     },
-    rephraseSelection: async (id: SectionType, selection: string, type: ActionTypes) => {
-      const paragraph = report.sections.find((s) => s.type === id)?.content ?? ''
+    rephraseSelection: async (type: ActionTypes, selection: string, paragraph: string) => {
+      // const paragraph = report.sections.find((s) => s.type === id)?.content ?? ''
       const newText = await rephraseSelection({ paragraph, selection, type })
 
       updateReport({
         ...report,
-        sections: report.sections.map((section) => {
-          if (section.type !== id) return section
-
-          return {
-            ...section,
-            content: newText,
-          }
-        }),
+        content: report.content.replace(paragraph, newText),
       })
     },
   }

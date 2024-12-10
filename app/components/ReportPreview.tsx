@@ -1,14 +1,13 @@
 import { Button, Flex, Spinner } from '@radix-ui/themes'
 
 import { useReport } from '@/components/useReport'
-import { useFlags } from './FeatureFlag/useFlags'
-import ReportSection from './ReportSection'
-import ReportSectionV2 from './ReportSectionV2'
+import { useOpenAI } from '@/hooks/useOpenAI'
 import { useEffect } from 'react'
+import ContentEditor, { ActionTypes } from './ContentEditor'
 
 export default function ReportPreview() {
   const { report, isLoading, createReport, regenerate } = useReport()
-  const { flags } = useFlags()
+  const { rephraseSelection } = useOpenAI()
 
   useEffect(() => {
     createReport()
@@ -20,6 +19,15 @@ export default function ReportPreview() {
 
   const handleAutoGenerate = () => {
     regenerate()
+  }
+
+  const handleAction = async (
+    type: ActionTypes,
+    args: { selection: string; paragraph: string; onUpdateText: (text: string) => void }
+  ) => {
+    const newText = await rephraseSelection({ type, ...args })
+
+    args.onUpdateText(newText)
   }
 
   return (
@@ -37,13 +45,13 @@ export default function ReportPreview() {
             {isLoading ? (
               <Spinner />
             ) : (
-              report.sections.map((section) => {
-                if (flags.showAlternatives === '1') {
-                  return <ReportSection key={section.type} section={section} />
-                } else if (flags.showAlternatives === '2') {
-                  return <ReportSectionV2 key={section.type} section={section} />
-                }
-              })
+              <ContentEditor
+                content={report.content}
+                onAction={handleAction}
+                onUpdate={({ editor }) => {
+                  // debounce(updateContent(section.type, editor.getHTML()), 200)
+                }}
+              />
             )}
           </div>
         )}

@@ -11,24 +11,7 @@ type ReportState = {
 const defaultReport: Report = {
   date: new Date(),
   author: 'Dr. John Doe',
-  sections: [
-    {
-      type: 'ASSESSMENT',
-      content: '',
-    },
-    {
-      type: 'PRIMARY_PLAN',
-      content: '',
-    },
-    {
-      type: 'ALTERNATIVE_PLAN',
-      content: '',
-    },
-    {
-      type: 'FOLLOW_UP',
-      content: '',
-    },
-  ],
+  content: '',
 }
 
 export const useReportStore = create<ReportState>((set) => ({

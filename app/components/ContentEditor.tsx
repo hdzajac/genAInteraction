@@ -1,28 +1,30 @@
-import Placeholder from '@tiptap/extension-placeholder'
-import {
-  BubbleMenu,
-  EditorContent,
-  EditorEvents,
-  Mark,
-  mergeAttributes,
-  useEditor,
-} from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
+import Placeholder from '@tiptap/extension-placeholder'
+import { BubbleMenu, EditorContent, Mark, mergeAttributes, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 import { CheckCheck, RotateCcw, Undo2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
+import AlternativeSelection from './AlternativeSelection'
 import './ContentEditor.css'
+import RewritePrompt from './RewritePrompt'
 
-export type ActionTypes = 'SIMPLIFY'
+export type ActionTypes = 'SIMPLIFY' | 'CONVERT_TO_LIST' | 'REWRITE_TO_INCLUDE'
 
 type Props = {
   content: string
-  onAction: (type: ActionTypes, selection: string) => void
-  onUpdate?: (ev: EditorEvents['update']) => void
+  onAction: (
+    type: ActionTypes,
+    args: {
+      selection: string
+      paragraph: string
+      rewriteText?: string
+      onUpdateText: (text: string) => void
+    }
+  ) => void
 }
 
-export default function ContentEditor({ content, onAction, onUpdate }: Props) {
+export default function ContentEditor({ content, onAction }: Props) {
   const [lastAction, setLastAction] = useState<ActionTypes | null>(null)
 
   const HighlightedText = Mark.create({
@@ -46,13 +48,22 @@ export default function ContentEditor({ content, onAction, onUpdate }: Props) {
   })
 
   const editor = useEditor({
-    onUpdate: onUpdate ?? onUpdate,
     extensions: [
       StarterKit,
       Placeholder.configure({
         placeholder: 'Write report here …',
       }),
       HighlightedText,
+      RewritePrompt.configure({
+        onRewrite: (rewriteText: string, selection: string, paragraph: string, pos) => {
+          onAction('REWRITE_TO_INCLUDE', {
+            selection,
+            paragraph,
+            rewriteText,
+            onUpdateText: (text) => handleTextUpdate(text, pos),
+          })
+        },
+      }),
     ],
     content,
   })
@@ -69,9 +80,74 @@ export default function ContentEditor({ content, onAction, onUpdate }: Props) {
     const { from, to } = editor?.state.selection
     const selection = editor?.state.doc.textBetween(from, to, ' ')
 
-    onAction(type, selection)
+    const parentNode = editor?.state.selection.$head
+    const paragraph = parentNode.parent.textContent
 
+    function onUpdateText(text: string) {
+      const paragraphStart = editor?.state.selection.$head.start(1) ?? 0
+      const paragraphEnd = paragraphStart + (parentNode.parent.nodeSize ?? 0) - 2
+
+      editor
+        ?.chain()
+        .focus()
+        .deleteRange({ from: paragraphStart, to: paragraphEnd })
+        .insertContent(text)
+        .run()
+    }
+
+    onAction(type, { selection, paragraph, onUpdateText })
     setLastAction(type)
+  }
+
+  /**
+   * Handles the rewrite prompt
+   */
+
+  function handleStartRewrite() {
+    if (!editor) return
+
+    const { $from } = editor.state.selection
+    const { from, to } = editor?.state.selection
+    const endOfParagraph = $from.end($from.depth)
+    const selection = editor?.state.doc.textBetween(from, to, ' ')
+
+    editor
+      .chain()
+      .focus()
+      .insertContentAt(endOfParagraph, {
+        type: 'rewritePrompt',
+        attrs: {
+          nodePos: editor.state.selection.$from.pos,
+          selection: selection,
+          paragraph: editor.state.doc.textBetween($from.start($from.depth), endOfParagraph),
+        },
+        content: [],
+      })
+      .run()
+  }
+
+  /**
+   * Handles the selection of an alternative
+   */
+  const handelPickAlternative = (alternative: string) => {
+    if (!editor) return
+
+    const from = editor?.state.selection.$head.start()
+    const to = editor?.state.selection.$head.end()
+
+    editor?.chain().focus().insertContentAt({ from, to }, alternative).run()
+  }
+
+  /**
+   * Handles the update of the text
+   */
+  function handleTextUpdate(text: string, pos: number) {
+    if (!editor) return
+
+    const from = editor.state.doc.resolve(pos).start()
+    const to = editor.state.doc.resolve(pos).end()
+
+    editor?.chain().focus().insertContentAt({ from, to }, text).run()
   }
 
   const handleMarkedTextClick = (event: React.MouseEvent) => {
@@ -107,7 +183,7 @@ export default function ContentEditor({ content, onAction, onUpdate }: Props) {
     <EditorContent editor={editor} onClick={handleMarkedTextClick} data-editable={true}>
       {/* <FloatingMenu editor={null}>This is the floating menu</FloatingMenu> */}
 
-      <BubbleMenu editor={editor}>
+      <BubbleMenu editor={editor} tippyOptions={{ maxWidth: 400 }}>
         <div className="ContentEditor-bubbleMenu">
           {editor?.isActive('mark-changed') ? (
             <>
@@ -138,6 +214,16 @@ export default function ContentEditor({ content, onAction, onUpdate }: Props) {
               <div className="ContentEditor-bubbleItem" onClick={() => handleAction('SIMPLIFY')}>
                 Simplify
               </div>
+              <div
+                className="ContentEditor-bubbleItem"
+                onClick={() => handleAction('CONVERT_TO_LIST')}>
+                Convert to list
+              </div>
+              <div className="ContentEditor-bubbleItem" onClick={() => handleStartRewrite()}>
+                Rewrite to include
+              </div>
+
+              <AlternativeSelection onPickAlternative={handelPickAlternative} />
             </>
           )}
         </div>
