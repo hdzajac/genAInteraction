@@ -2,12 +2,13 @@ import type { ActionFunctionArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { z } from 'zod'
 
+import { authMiddleware } from '@/auth'
+import convertToList from '@/prompt-generators/convertToList'
 import generateAlternatives from '@/prompt-generators/generateAlternatives'
 import generateReport from '@/prompt-generators/generateReport'
 import rephraseSelection from '@/prompt-generators/rephraseSelection'
+import rewriteToInclude from '@/prompt-generators/rewriteToInclude'
 import summarizeParagraph from '@/prompt-generators/summarizeParagraph'
-import convertToList from '@/prompt-generators/convertToList'
-import { authMiddleware } from '@/auth'
 
 export const config = { runtime: 'nodejs' }
 
@@ -17,6 +18,7 @@ const GeneratorActions = z.enum([
   'SUMMARIZE_PARAGRAPH',
   'REPHRASE_SELECTION',
   'CONVERT_TO_LIST',
+  'REWRITE_TO_INCLUDE',
 ])
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -44,6 +46,9 @@ export async function action({ request }: ActionFunctionArgs) {
         break
       case GeneratorActions.Enum.CONVERT_TO_LIST:
         result = await convertToList(body.payload)
+        break
+      case GeneratorActions.Enum.REWRITE_TO_INCLUDE:
+        result = await rewriteToInclude(body.payload)
         break
       default:
         return json({ error: 'Invalid action' }, { status: 400 })

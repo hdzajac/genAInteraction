@@ -5,24 +5,17 @@ import StarterKit from '@tiptap/starter-kit'
 import { CheckCheck, RotateCcw, Undo2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import { ReportActionProps } from '../ReportPreview'
 import AlternativeSelection from './AlternativeSelection'
 import './ContentEditor.css'
-import { TextModifiedMark } from './TextModifiedMark'
 import RewritePrompt from './RewritePrompt'
+import { TextModifiedMark } from './TextModifiedMark'
 
 export type ActionTypes = 'SIMPLIFY' | 'CONVERT_TO_LIST' | 'REWRITE_TO_INCLUDE'
 
 type Props = {
   content: string
-  onAction: (
-    type: ActionTypes,
-    args: {
-      selection: string
-      paragraph: string
-      rewriteText?: string
-      onUpdateText: (text: string) => void
-    }
-  ) => void
+  onAction: (type: ActionTypes, args: ReportActionProps) => void
 }
 
 export function ContentEditor({ content, onAction }: Props) {

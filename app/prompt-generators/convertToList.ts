@@ -6,7 +6,7 @@ type Props = {
 }
 
 export default async function ({ paragraph }: Props) {
-  console.log('PAYLOAD', paragraph)
+  console.log('CONVERT TO LIST > PAYLOAD >', paragraph)
 
   if (process.env.TESTING_MODE === 'true') {
     return testingMode()
@@ -15,7 +15,8 @@ export default async function ({ paragraph }: Props) {
   const prompt = `
       You are a dermatologist.
       You are writing a report to be sent to a general practitioner.
-      Convert a text for a bullet list. The text should be outputed with an <ul> tag. The text is following:
+      
+      Convert the following text to bullet list. Each item should start with a dash (-):
       ${paragraph}
     `
 
@@ -35,15 +36,11 @@ function testingMode() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(
-        `
-        <ul>
-            <li>Monitor the lesion for changes in size, shape, or color over time.</li>
-            <li>Provide patient education on the benign nature of <strong>seborrheic keratosis</strong>.</li>
-            <li>Emphasize that no treatment is necessary unless the lesion becomes symptomatic or cosmetically concerning.</li>
-            <li>Schedule a follow-up appointment in 6 to 12 months to reassess the lesion.</li>
-            <li>Consider treatment options if warranted during the follow-up visit.</li>
-        </ul>
-        `
+        `- The lesion is diagnosed as seborrheic keratosis, which is benign in nature.  
+- There are no symptoms associated with the lesion.  
+- Immediate treatment is not necessary at this time.  
+- The characteristics of the lesion are consistent with common presentations of seborrheic keratosis.  
+- There are no indications of malignancy associated with the lesion.`
       )
     }, 200)
   })

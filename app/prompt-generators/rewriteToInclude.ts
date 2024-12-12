@@ -3,27 +3,21 @@ import { openai } from '@/openai'
 
 type Props = {
   paragraph: string
-  selection: string
+  rewriteText: string
   type: ActionTypes
 }
 
-export default async function ({ paragraph, selection, type }: Props) {
-  console.log('REPHRASE > PAYLOAD >', paragraph, selection, type)
+export default async function ({ paragraph, rewriteText, type }: Props) {
+  console.log('REWRITE > PAYLOAD >', type, paragraph, rewriteText)
 
   const prompt = `
     You are a dermatologist.
     You are writing a report to be sent to a general practitioner.
 
-    Rephrase the selection to be shorter and use simpler language. It should be half the length of the original selection.
-    The selection to be rephrased is following:
-    ${selection}
-
-    That selection is part of the following paragraph:
-    ${paragraph}
-
-    Only rewrite the selection and not the entire paragraph.
-    Return the whole paragraph, and put the rephrased selection surrounded by the html tag <span id="{{id}}" class="text-modified"></span>.
-    `
+    Rewrite the provided paragraph to include the following text: "${rewriteText}"
+    
+    Return the whole paragraph, and put the new text surrounded by the html tag <span id="{{id}}" class="text-modified"></span>.
+    ${paragraph}`
 
   console.log('PROMP', prompt)
 
@@ -36,7 +30,7 @@ export default async function ({ paragraph, selection, type }: Props) {
     messages: [{ role: 'system', content: prompt }],
   })
 
-  console.log('RESULT', completion.choices[0].message.content)
+  console.log('RESULT:\n', completion.choices[0].message.content)
 
   // Generate a random ID
   const id = Math.random().toString(36).substring(2, 10)

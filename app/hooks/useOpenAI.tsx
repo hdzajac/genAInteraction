@@ -24,6 +24,11 @@ type RephrasePayload = {
   type: ActionTypes
 }
 
+type RewritePayload = {
+  paragraph: string
+  rewriteText: string
+}
+
 const request = async (payload: Payload) => {
   const token = localStorage.getItem('token') ?? ''
 
@@ -66,6 +71,12 @@ export function useOpenAI() {
     async rephraseSelection(payload: RephrasePayload) {
       return request({
         action: 'REPHRASE_SELECTION',
+        payload,
+      })
+    },
+    async rewriteToInclude(payload: RewritePayload) {
+      return request({
+        action: 'REWRITE_TO_INCLUDE',
         payload,
       })
     },

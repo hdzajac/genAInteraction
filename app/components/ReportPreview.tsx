@@ -5,9 +5,16 @@ import { useOpenAI } from '@/hooks/useOpenAI'
 import { useEffect } from 'react'
 import { ContentEditor, ActionTypes } from './ContentEditor'
 
+export type ReportActionProps = {
+  selection: string
+  paragraph: string
+  rewriteText: string
+  onUpdateText: (text: string) => void
+}
+
 export default function ReportPreview() {
   const { report, isLoading, createReport, regenerate } = useReport()
-  const { rephraseSelection } = useOpenAI()
+  const { rephraseSelection, convertToList, rewriteToInclude } = useOpenAI()
 
   useEffect(() => {
     createReport()
@@ -21,13 +28,24 @@ export default function ReportPreview() {
     regenerate()
   }
 
-  const handleAction = async (
-    type: ActionTypes,
-    args: { selection: string; paragraph: string; onUpdateText: (text: string) => void }
-  ) => {
-    const newText = await rephraseSelection({ type, ...args })
+  const handleAction = async (type: ActionTypes, { onUpdateText, ...args }: ReportActionProps) => {
+    let newText
+    switch (type) {
+      case 'CONVERT_TO_LIST':
+        newText = await convertToList({ paragraph: args.paragraph })
+        break
+      case 'REWRITE_TO_INCLUDE':
+        newText = await rewriteToInclude({
+          paragraph: args.paragraph,
+          rewriteText: args.rewriteText,
+        })
+        break
+      case 'SIMPLIFY':
+        newText = await rephraseSelection({ type: 'SIMPLIFY', ...args })
+        break
+    }
 
-    args.onUpdateText(newText)
+    onUpdateText(newText)
   }
 
   return (
