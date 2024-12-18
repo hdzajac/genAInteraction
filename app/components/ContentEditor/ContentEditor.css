@@ -24,6 +24,22 @@
   }
 }
 
+.ContentEditor-dictate {
+  font-size: var(--font-size-1);
+  line-height: var(--line-height-1);
+  letter-spacing: var(--letter-spacing-1);
+  border-radius: var(--radius-1);
+  padding-inline: var(--space-2);
+  padding-block: var(--space-1);
+  cursor: pointer;
+  border: 1px solid var(--gray-3);
+
+  &[data-dictate='true'] {
+    background-color: var(--accent-9);
+    color: #fff;
+  }
+}
+
 .ProseMirror {
   width: 100%;
   min-height: 100px;

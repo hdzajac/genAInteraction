@@ -6,8 +6,8 @@ import { CheckCheck, RotateCcw, Undo2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { ReportActionProps } from '../ReportPreview'
-import AlternativeSelection from './AlternativeSelection'
 import './ContentEditor.css'
+import Dictation from './Dictation'
 import RewritePrompt from './RewritePrompt'
 import { TextModifiedMark } from './TextModifiedMark'
 
@@ -154,54 +154,58 @@ export function ContentEditor({ content, onAction }: Props) {
   }
 
   return (
-    <EditorContent editor={editor} onClick={handleMarkedTextClick} data-editable={true}>
-      {/* <FloatingMenu editor={null}>This is the floating menu</FloatingMenu> */}
+    <Flex position="relative">
+      <Dictation editor={editor} />
 
-      <BubbleMenu editor={editor} tippyOptions={{ maxWidth: 400 }}>
-        <div className="ContentEditor-bubbleMenu">
-          {editor?.isActive('text-modified') ? (
-            <>
-              <Flex
-                align="center"
-                gap="1"
-                className="ContentEditor-bubbleItem"
-                onClick={() => editor.commands.undo()}>
-                <Undo2 size={14} /> Undo
-              </Flex>
-              <Flex
-                align="center"
-                gap="1"
-                className="ContentEditor-bubbleItem"
-                onClick={() => handleRegenerate()}>
-                <RotateCcw size={14} /> Regenerate
-              </Flex>
-              <Flex
-                align="center"
-                gap="1"
-                className="ContentEditor-bubbleItem"
-                onClick={() => handleAcceptChange()}>
-                <CheckCheck size={14} /> Accept
-              </Flex>
-            </>
-          ) : (
-            <>
-              <div className="ContentEditor-bubbleItem" onClick={() => handleAction('SIMPLIFY')}>
-                Simplify
-              </div>
-              <div
-                className="ContentEditor-bubbleItem"
-                onClick={() => handleAction('CONVERT_TO_LIST')}>
-                Convert to list
-              </div>
-              <div className="ContentEditor-bubbleItem" onClick={() => handleStartRewrite()}>
-                Rewrite to include
-              </div>
+      <EditorContent editor={editor} onClick={handleMarkedTextClick} data-editable={true}>
+        {/* <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>*/}
 
-              <AlternativeSelection onPickAlternative={handelPickAlternative} />
-            </>
-          )}
-        </div>
-      </BubbleMenu>
-    </EditorContent>
+        <BubbleMenu editor={editor} tippyOptions={{ maxWidth: 400 }}>
+          <div className="ContentEditor-bubbleMenu">
+            {editor?.isActive('text-modified') ? (
+              <>
+                <Flex
+                  align="center"
+                  gap="1"
+                  className="ContentEditor-bubbleItem"
+                  onClick={() => editor.commands.undo()}>
+                  <Undo2 size={14} /> Undo
+                </Flex>
+                <Flex
+                  align="center"
+                  gap="1"
+                  className="ContentEditor-bubbleItem"
+                  onClick={() => handleRegenerate()}>
+                  <RotateCcw size={14} /> Regenerate
+                </Flex>
+                <Flex
+                  align="center"
+                  gap="1"
+                  className="ContentEditor-bubbleItem"
+                  onClick={() => handleAcceptChange()}>
+                  <CheckCheck size={14} /> Accept
+                </Flex>
+              </>
+            ) : (
+              <>
+                <div className="ContentEditor-bubbleItem" onClick={() => handleAction('SIMPLIFY')}>
+                  Simplify
+                </div>
+                <div
+                  className="ContentEditor-bubbleItem"
+                  onClick={() => handleAction('CONVERT_TO_LIST')}>
+                  Convert to list
+                </div>
+                <div className="ContentEditor-bubbleItem" onClick={() => handleStartRewrite()}>
+                  Rewrite to include
+                </div>
+
+                {/* <AlternativeSelection onPickAlternative={handelPickAlternative} /> */}
+              </>
+            )}
+          </div>
+        </BubbleMenu>
+      </EditorContent>
+    </Flex>
   )
 }
