@@ -36,12 +36,15 @@ export default async function ({
     .join('\n')
 
   const prompt = `
-      You are a dermatologist.
-      You are writing a report to be sent to a general practitioner.
-      The report should be written in a professional tone, using appropriate medical terminology. The report should be concise but providing detailed information when necessary. 
+      You are an experienced dermatologist preparing a professional medical report for a general practitioner referral.
+      
+      Context and Expectations:
+        - Use precise, concise medical language
+        - Demonstrate clear clinical reasoning
+        - Ensure all information is clinically relevant
+        - Write in a professional tone, using appropriate medical terminology.
 
-      The report should include the following sections. And avoid repeating yourself in the sections:
-      ${sectionsPrompt}
+      The report should include the following sections ${sectionsPrompt}
 
       ${generatePatientPrompt(patient)}
       The patient' condition is as follows: ${evaluationPrompt}

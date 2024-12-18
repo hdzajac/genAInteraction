@@ -11,18 +11,25 @@ export default async function ({ paragraph, selection, type }: Props) {
   console.log('REPHRASE > PAYLOAD >', paragraph, selection, type)
 
   const prompt = `
-    You are a dermatologist.
-    You are writing a report to be sent to a general practitioner.
+    You are a dermatologist writing a report to be sent to a general practitioner.
 
-    Rephrase the selection to be shorter and use simpler language. It should be half the length of the original selection.
+    Prompt Details:
+    - Rephrase the specified text to be more concise
+    - Use simpler, more direct language
+    - Reduce the length by approximately 50%
+    - Maintain clinical accuracy and clarity
+
+    
     The selection to be rephrased is following:
     ${selection}
 
     That selection is part of the following paragraph:
     ${paragraph}
 
-    Only rewrite the selection and not the entire paragraph.
-    Return the whole paragraph, and put the rephrased selection surrounded by the html tag <span id="{{id}}" class="text-modified"></span>.
+    Requirements:
+    - Only modify the specified selection within the paragraph
+    - Return the whole paragraph
+    - Wrap the modified text with the html tag <span id="{{id}}" class="text-modified"></span>.
     `
 
   console.log('PROMP', prompt)
