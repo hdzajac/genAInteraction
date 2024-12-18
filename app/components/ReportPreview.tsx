@@ -25,7 +25,7 @@ export default function ReportPreview() {
   }
 
   const handleAutoGenerate = () => {
-    regenerate()
+    createReport()
   }
 
   const handleAction = async (type: ActionTypes, { onUpdateText, ...args }: ReportActionProps) => {
