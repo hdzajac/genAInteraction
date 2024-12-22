@@ -1,9 +1,10 @@
-import { Box, Button, Dialog, Flex } from '@radix-ui/themes'
+import { Box, Button, Flex } from '@radix-ui/themes'
+import { Undo, ZoomIn, ZoomOut } from 'lucide-react'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 
 import { SkinTypes } from '@/constants'
 import { MedicalRecord as TMedicalRecord } from '@/store/types'
 import './MedicalRecord.css'
-import { X } from 'lucide-react'
 
 type Props = {
   record: TMedicalRecord
@@ -53,33 +54,27 @@ type ImageViewerProps = {
 
 function ImageViewer({ image }: ImageViewerProps) {
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <img src={image} alt="" />
-      </Dialog.Trigger>
-
-      <Dialog.Content
-        height="85vh"
-        maxWidth="auto"
-        aria-describedby={undefined}
-        style={{ padding: 0 }}>
-        <Dialog.Close>
-          <Button
-            variant="soft"
-            color="gray"
-            style={{
-              position: 'absolute',
-              top: 20,
-              right: 20,
-              zIndex: 9,
-              backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            }}>
-            <X />
-          </Button>
-        </Dialog.Close>
-
-        <img className="MedicalRecord-fullscreenImg" src={image} alt="" />
-      </Dialog.Content>
-    </Dialog.Root>
+    <Box position="relative">
+      <TransformWrapper>
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <>
+            <Flex gap="1" position="absolute" top="4" right="4" style={{ zIndex: 1 }}>
+              <Button variant="soft" onClick={() => zoomIn()} color="gray">
+                <ZoomIn color="white" size={18} />
+              </Button>
+              <Button variant="soft" onClick={() => zoomOut()} color="gray">
+                <ZoomOut color="white" size={18} />
+              </Button>
+              <Button variant="soft" onClick={() => resetTransform()} color="gray">
+                <Undo color="white" size={18} />
+              </Button>
+            </Flex>
+            <TransformComponent>
+              <img src={image} alt="" />
+            </TransformComponent>
+          </>
+        )}
+      </TransformWrapper>
+    </Box>
   )
 }
