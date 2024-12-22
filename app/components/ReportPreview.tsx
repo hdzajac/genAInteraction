@@ -1,9 +1,10 @@
 import { Button, Flex, Spinner } from '@radix-ui/themes'
+import { RefreshCcw } from 'lucide-react'
+import { useEffect } from 'react'
 
 import { useReport } from '@/components/useReport'
 import { useOpenAI } from '@/hooks/useOpenAI'
-import { useEffect } from 'react'
-import { ContentEditor, ActionTypes } from './ContentEditor'
+import { ActionTypes, ContentEditor } from './ContentEditor'
 
 export type ReportActionProps = {
   selection: string
@@ -22,6 +23,18 @@ export default function ReportPreview() {
 
   if (isLoading) {
     return <Spinner />
+  }
+
+  if (report.content.error) {
+    return (
+      <Flex justify="between">
+        There was a problem generating the report. Please try again
+        <Button variant="soft" onClick={createReport}>
+          <RefreshCcw size={18} />
+          Refresh
+        </Button>
+      </Flex>
+    )
   }
 
   const handleAutoGenerate = () => {
