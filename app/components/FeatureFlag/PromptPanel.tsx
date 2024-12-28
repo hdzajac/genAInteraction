@@ -15,13 +15,19 @@ export default function PromptPanel({ control }: Props) {
           Model
         </Text>
 
-        <Select.Root defaultValue="gpt-4o-mini">
-          <Select.Trigger />
-          <Select.Content>
-            <Select.Item value="gpt-4o-mini">gpt-4o-mini</Select.Item>
-            <Select.Item value="gpt-4o">gpt-4o</Select.Item>
-          </Select.Content>
-        </Select.Root>
+        <Controller
+          name="model"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select.Root defaultValue={value ?? 'gpt-4o-mini'} onValueChange={onChange}>
+              <Select.Trigger />
+              <Select.Content>
+                <Select.Item value="gpt-4o-mini">gpt-4o-mini</Select.Item>
+                <Select.Item value="gpt-4o">gpt-4o</Select.Item>
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
       </label>
       <label>
         <Text as="div" size="2" mb="1" weight="bold">

@@ -1,11 +1,12 @@
 import { ActionTypes } from '@/components/ContentEditor'
 import { openai } from '@/openai'
+import type { Flags } from '@/components/FeatureFlag/useFlags'
 
 type Props = {
   paragraph: string
 }
 
-export default async function ({ paragraph }: Props) {
+export default async function ({ paragraph }: Props, flags: Flags) {
   console.log('CONVERT TO LIST > PAYLOAD >', paragraph)
 
   if (process.env.TESTING_MODE === 'true') {
@@ -23,7 +24,7 @@ export default async function ({ paragraph }: Props) {
   console.log('PROMP', prompt)
 
   const completion = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: flags.model,
     messages: [{ role: 'system', content: prompt }],
   })
 

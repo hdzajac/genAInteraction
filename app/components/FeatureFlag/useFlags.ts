@@ -5,6 +5,7 @@ export type Flags = {
   // Prompt
   usePatientData: boolean
   includeExamplesInPrompts: boolean
+  model: 'gpt-4o-mini' | 'gpt-4o'
   // UI
   showAlternatives: string
   streamData: boolean
@@ -22,6 +23,7 @@ export const useFlags = create<FeatureFlagState>()(
         // Prompt
         usePatientData: true,
         includeExamplesInPrompts: false,
+        model: 'gpt-4o-mini',
         // UI
         showAlternatives: '1',
         streamData: false,

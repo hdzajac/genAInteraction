@@ -1,12 +1,13 @@
 import { openai } from '@ai-sdk/openai'
 import { generateText, streamText } from 'ai'
 
+import type { Flags } from '@/components/FeatureFlag/useFlags'
 import { EvaluationLabels, SkinTypes } from '@/constants'
 import { GeneratePayload } from '@/hooks/useOpenAI'
 import { EvaluationReport, Patient } from '@/store/types'
 import sectionsInfo from './helpers/sections-info'
 
-export default async function ({ evaluation, patient, sections, flags }: GeneratePayload) {
+export default async function ({ evaluation, patient, sections }: GeneratePayload, flags: Flags) {
   console.log('PAYLOAD', flags)
 
   if (process.env.TESTING_MODE === 'true') {
@@ -54,14 +55,14 @@ export default async function ({ evaluation, patient, sections, flags }: Generat
 
   if (flags.streamData) {
     const result = streamText({
-      model: openai('gpt-4o'),
+      model: openai(flags.model),
       messages: [{ role: 'system', content: prompt }],
     })
 
     return result.toTextStreamResponse()
   } else {
     const result = generateText({
-      model: openai('gpt-4o'),
+      model: openai(flags.model),
       messages: [{ role: 'system', content: prompt }],
     })
 

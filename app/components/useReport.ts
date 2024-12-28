@@ -38,7 +38,6 @@ export function useReport() {
       const response = await generateReport({
         evaluation: record.evaluation,
         patient: generatePatient(record, flags.usePatientData),
-        flags,
         sections,
       })
 

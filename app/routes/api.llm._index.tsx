@@ -33,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
       let result
       switch (body.action) {
         case GeneratorActions.Enum.GENERATE_REPORT:
-          return generateReport(body.payload)
+          return generateReport(body.payload, body.flags)
         case GeneratorActions.Enum.GET_ALTERNATIVES:
           result = await generateAlternatives(body.payload)
           break
@@ -41,13 +41,13 @@ export async function action({ request }: ActionFunctionArgs) {
           result = await summarizeParagraph(body.payload)
           break
         case GeneratorActions.Enum.REPHRASE_SELECTION:
-          result = await rephraseSelection(body.payload)
+          result = await rephraseSelection(body.payload, body.flags)
           break
         case GeneratorActions.Enum.CONVERT_TO_LIST:
-          result = await convertToList(body.payload)
+          result = await convertToList(body.payload, body.flags)
           break
         case GeneratorActions.Enum.REWRITE_TO_INCLUDE:
-          result = await rewriteToInclude(body.payload)
+          result = await rewriteToInclude(body.payload, body.flags)
           break
         default:
           return json({ error: 'Invalid action' }, { status: 400 })
