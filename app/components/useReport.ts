@@ -46,6 +46,8 @@ export function useReport() {
       if (flags.streamData) {
         if (!response || !response.body) return null
 
+        updateReport({ content: '' })
+
         const reader = response.body.getReader()
         const decoder = new TextDecoder()
 
