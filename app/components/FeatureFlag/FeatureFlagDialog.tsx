@@ -4,16 +4,26 @@ import { useForm } from 'react-hook-form'
 
 import InterfacePanel from './InterfacePanel'
 import PromptPanel from './PromptPanel'
-import { useFlags } from './useFlags'
+import { defaultFlags, useFlags } from './useFlags'
 
 type Props = {}
 
 export default function FeatureFlagDialog({}: Props) {
-  const { update, flags } = useFlags()
+  const { update, reset, flags } = useFlags()
 
-  const { register, handleSubmit, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset: RHFReset,
+  } = useForm({
     defaultValues: flags,
   })
+
+  const handleReset = () => {
+    reset()
+    RHFReset(defaultFlags)
+  }
 
   return (
     <Dialog.Root>
@@ -23,7 +33,7 @@ export default function FeatureFlagDialog({}: Props) {
         </Button>
       </Dialog.Trigger>
 
-      <Dialog.Content maxWidth="450px" aria-describedby={undefined}>
+      <Dialog.Content maxWidth="650px" aria-describedby={undefined}>
         <Dialog.Title>Feature flags</Dialog.Title>
 
         <form onSubmit={handleSubmit(update)}>
@@ -43,15 +53,22 @@ export default function FeatureFlagDialog({}: Props) {
               </Tabs.Content>
             </Box>
           </Tabs.Root>
-          <Flex gap="3" mt="4" justify="end">
+          <Flex justify="between" mt="4">
             <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Cancel
+              <Button variant="soft" color="gray" onClick={handleReset}>
+                Reset
               </Button>
             </Dialog.Close>
-            <Dialog.Close>
-              <Button type="submit">Save</Button>
-            </Dialog.Close>
+            <Flex gap="3" justify="end">
+              <Dialog.Close>
+                <Button variant="soft" color="gray">
+                  Cancel
+                </Button>
+              </Dialog.Close>
+              <Dialog.Close>
+                <Button type="submit">Save</Button>
+              </Dialog.Close>
+            </Flex>
           </Flex>
         </form>
       </Dialog.Content>

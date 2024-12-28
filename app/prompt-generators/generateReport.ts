@@ -6,6 +6,7 @@ import { EvaluationLabels, SkinTypes } from '@/constants'
 import { GeneratePayload } from '@/hooks/useOpenAI'
 import { EvaluationReport, Patient } from '@/store/types'
 import sectionsInfo from './helpers/sections-info'
+import systemPrompt from './helpers/system-prompt'
 
 export default async function ({ evaluation, patient, sections }: GeneratePayload, flags: Flags) {
   console.log('PAYLOAD', flags)
@@ -33,14 +34,6 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
     .join('\n')
 
   const prompt = `
-      You are an experienced dermatologist preparing a professional medical report for a general practitioner referral.
-      
-      Context and Expectations:
-        - Use precise, concise medical language
-        - Demonstrate clear clinical reasoning
-        - Ensure all information is clinically relevant
-        - Write in a professional tone, using appropriate medical terminology.
-
       The report should include the following sections ${sectionsPrompt}
 
       ${generatePatientPrompt(patient)}
@@ -51,19 +44,23 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       
       ${generateExamplesPrompt(sections, flags.includeExamplesInPrompts)}`
 
-  console.log('PROMPT', prompt)
-
   if (flags.streamData) {
     const result = streamText({
       model: openai(flags.model),
-      messages: [{ role: 'system', content: prompt }],
+      messages: [
+        { role: 'system', content: flags.systemPrompt ?? systemPrompt },
+        { role: 'user', content: prompt },
+      ],
     })
 
     return result.toTextStreamResponse()
   } else {
     const result = generateText({
       model: openai(flags.model),
-      messages: [{ role: 'system', content: prompt }],
+      messages: [
+        { role: 'system', content: flags.systemPrompt ?? systemPrompt },
+        { role: 'user', content: prompt },
+      ],
     })
 
     return (await result).text
@@ -102,10 +99,7 @@ function generatePatientPrompt(patient: Patient | undefined) {
   return patientPrompt + '\n'
 }
 
-function generateExamplesPrompt(
-  sections: ReportSection['type'][],
-  includeExamplesInPrompts: boolean
-) {
+function generateExamplesPrompt(sections: string[], includeExamplesInPrompts: boolean) {
   if (!includeExamplesInPrompts) return ''
 
   const examplesPrompt = sections
