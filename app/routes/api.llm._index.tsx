@@ -33,8 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
       let result
       switch (body.action) {
         case GeneratorActions.Enum.GENERATE_REPORT:
-          result = await generateReport(body.payload)
-          break
+          return generateReport(body.payload)
         case GeneratorActions.Enum.GET_ALTERNATIVES:
           result = await generateAlternatives(body.payload)
           break

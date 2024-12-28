@@ -14,7 +14,7 @@ export type ReportActionProps = {
 }
 
 export default function ReportPreview() {
-  const { report, isLoading, createReport, regenerate } = useReport()
+  const { report, isLoading, createReport } = useReport()
   const { rephraseSelection, convertToList, rewriteToInclude } = useOpenAI()
 
   useEffect(() => {

@@ -1,17 +1,13 @@
-import { ReportSection } from '@/components/useReport'
+import { openai } from '@ai-sdk/openai'
+import { generateText, streamText } from 'ai'
+
 import { EvaluationLabels, SkinTypes } from '@/constants'
 import { GeneratePayload } from '@/hooks/useOpenAI'
-import { openai } from '@/openai'
 import { EvaluationReport, Patient } from '@/store/types'
 import sectionsInfo from './helpers/sections-info'
 
-export default async function ({
-  evaluation,
-  patient,
-  sections,
-  includeExamplesInPrompts,
-}: GeneratePayload) {
-  console.log('PAYLOAD', sections)
+export default async function ({ evaluation, patient, sections, flags }: GeneratePayload) {
+  console.log('PAYLOAD', flags)
 
   if (process.env.TESTING_MODE === 'true') {
     return testingMode()
@@ -52,17 +48,25 @@ export default async function ({
       Write the report using the html tag <h2> for sections and <p> for paragraphs. 
       Put the input data that is used in the report surrounded by the html tag <strong></strong>.
       
-      ${generateExamplesPrompt(sections, includeExamplesInPrompts)}`
+      ${generateExamplesPrompt(sections, flags.includeExamplesInPrompts)}`
+
   console.log('PROMPT', prompt)
 
-  const completion = await openai.beta.chat.completions.parse({
-    model: 'gpt-4o-mini',
-    messages: [{ role: 'system', content: prompt }],
-  })
+  if (flags.streamData) {
+    const result = streamText({
+      model: openai('gpt-4o'),
+      messages: [{ role: 'system', content: prompt }],
+    })
 
-  console.log('response>>', completion.choices[0].message.content)
+    return result.toTextStreamResponse()
+  } else {
+    const result = generateText({
+      model: openai('gpt-4o'),
+      messages: [{ role: 'system', content: prompt }],
+    })
 
-  return completion.choices[0].message.content
+    return (await result).text
+  }
 }
 
 function testingMode() {

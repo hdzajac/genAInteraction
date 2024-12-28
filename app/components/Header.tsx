@@ -1,7 +1,7 @@
 import { Flex } from '@radix-ui/themes'
 import { Link, useNavigate } from '@remix-run/react'
 
-import FeatureFlagPanel from './FeatureFlag/FeatureFlagPanel'
+import FeatureFlagDialog from './FeatureFlag/FeatureFlagDialog'
 import './Header.css'
 
 export default function Header() {
@@ -38,7 +38,7 @@ export default function Header() {
       </Flex>
 
       <Flex>
-        <FeatureFlagPanel />
+        <FeatureFlagDialog />
 
         <button
           className="logout"

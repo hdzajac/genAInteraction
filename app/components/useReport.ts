@@ -4,23 +4,12 @@ import { z } from 'zod'
 import { SectionKeysMap, SectionTypes } from '@/constants'
 import { useOpenAI } from '@/hooks/useOpenAI'
 import { useReportStore } from '@/store/report'
+import { Patient } from '@/store/types'
 import { useRecord } from '@/store/useRecord'
 import { ActionTypes } from './ContentEditor'
 import { useFlags } from './FeatureFlag/useFlags'
-import { Patient } from '@/store/types'
 
 export type Report = {
-  date: Date
-  author: string
-  content: string
-}
-
-export type ReportSection = {
-  type: SectionType
-  content: string
-}
-
-export type Alternative = {
   content: string
 }
 
@@ -28,7 +17,7 @@ export type SectionType = z.infer<typeof SectionTypes>
 
 export function useReport() {
   const { flags } = useFlags()
-  const { report, updateReport } = useReportStore()
+  const { report, appendToReport, updateReport } = useReportStore()
   const { record } = useRecord()
   const { generateReport, summarizeParagraph, rephraseSelection, convertToList } = useOpenAI()
   const [isLoading, setIsLoading] = useState(false)
@@ -46,62 +35,38 @@ export function useReport() {
         (s) => record.evaluation[SectionKeysMap[s as keyof typeof SectionKeysMap]] !== ''
       ) // Filter out sections where the corresponding evaluation is empty
 
-      const result = await generateReport({
+      const response = await generateReport({
         evaluation: record.evaluation,
         patient: generatePatient(record, flags.usePatientData),
-        includeExamplesInPrompts: flags.includeExamplesInPrompts,
+        flags,
         sections,
       })
 
       setIsLoading(false)
 
-      updateReport({
-        date: new Date(),
-        author: 'Dr. John Doe',
-        content: result,
-      })
-    },
-    regenerate: async () => {
-      setIsLoading(true)
+      if (flags.streamData) {
+        if (!response || !response.body) return null
 
-      const result = await generateReport({
-        evaluation: record.evaluation,
-        patient: generatePatient(record, flags.usePatientData),
-        includeExamplesInPrompts: flags.includeExamplesInPrompts,
-        sections: report.sections.map((s) => s.type),
-      })
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
 
-      setIsLoading(false)
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) break
 
-      updateReport({
-        date: new Date(),
-        author: 'Dr. John Doe',
-        content: result,
-      })
+          const chunk = decoder.decode(value)
+
+          appendToReport(chunk)
+        }
+      } else {
+        const content = await response.json()
+
+        updateReport({
+          content: content,
+        })
+      }
     },
 
-    generateSection: async (id: SectionType) => {
-      const section = await generateReport({
-        evaluation: record.evaluation,
-        sections: [id],
-        patient: generatePatient(record, flags.usePatientData),
-        includeExamplesInPrompts: flags.includeExamplesInPrompts,
-      })
-
-      const newSection = section.find((s) => s.type === id)
-
-      updateReport({
-        ...report,
-        sections: report.sections.map((section) => {
-          if (section.type !== id) return section
-
-          return {
-            ...section,
-            content: newSection.content,
-          }
-        }),
-      })
-    },
     updateContent: async (id: SectionType, content: string) => {
       updateReport({
         ...report,

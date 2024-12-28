@@ -5,12 +5,11 @@ import { Report } from '@/components/useReport'
 type ReportState = {
   report: Report
   updateReport(report: Report): void
+  appendToReport(chunk: string): void
   reset(): void
 }
 
 const defaultReport: Report = {
-  date: new Date(),
-  author: 'Dr. John Doe',
   content: '',
 }
 
@@ -19,6 +18,14 @@ export const useReportStore = create<ReportState>((set) => ({
   updateReport(report: Report) {
     set((state) => ({
       report: report,
+    }))
+  },
+  appendToReport(chunk: string) {
+    set((state) => ({
+      report: {
+        ...state.report,
+        content: state.report.content + chunk,
+      },
     }))
   },
   reset() {

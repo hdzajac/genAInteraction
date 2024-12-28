@@ -1,4 +1,5 @@
 import { ActionTypes } from '@/components/ContentEditor'
+import type { Flags } from '@/components/FeatureFlag/useFlags'
 import { ReportSection } from '@/components/useReport'
 import { EvaluationReport, Patient } from '@/store/types'
 
@@ -11,10 +12,10 @@ export type GeneratePayload = {
   evaluation: EvaluationReport
   patient: Patient | undefined
   sections: ReportSection['type'][]
-  includeExamplesInPrompts: boolean
+  flags: Flags
 }
 
-type ParagrahPayload = {
+type ParagraphPayload = {
   paragraph: string
 }
 
@@ -39,7 +40,7 @@ const request = async (payload: Payload) => {
       authorization: token,
     },
     body: JSON.stringify(payload),
-  }).then((res) => res.json())
+  })
 }
 
 export function useOpenAI() {
@@ -50,19 +51,19 @@ export function useOpenAI() {
         payload,
       })
     },
-    async getAlternatives(payload: ParagrahPayload) {
+    async getAlternatives(payload: ParagraphPayload) {
       return request({
         action: 'GET_ALTERNATIVES',
         payload,
       })
     },
-    async summarizeParagraph(payload: ParagrahPayload) {
+    async summarizeParagraph(payload: ParagraphPayload) {
       return request({
         action: 'SUMMARIZE_PARAGRAPH',
         payload,
       })
     },
-    async convertToList(payload: ParagrahPayload) {
+    async convertToList(payload: ParagraphPayload) {
       return request({
         action: 'CONVERT_TO_LIST',
         payload,

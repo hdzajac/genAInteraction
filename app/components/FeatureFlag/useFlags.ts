@@ -1,10 +1,13 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-type Flags = {
-  showAlternatives: string
+export type Flags = {
+  // Prompt
   usePatientData: boolean
   includeExamplesInPrompts: boolean
+  // UI
+  showAlternatives: string
+  streamData: boolean
 }
 
 type FeatureFlagState = {
@@ -16,9 +19,12 @@ export const useFlags = create<FeatureFlagState>()(
   persist(
     (set, get) => ({
       flags: {
-        showAlternatives: '1',
+        // Prompt
         usePatientData: true,
         includeExamplesInPrompts: false,
+        // UI
+        showAlternatives: '1',
+        streamData: false,
       },
       update: (flags: Flags) => set({ flags }),
     }),
