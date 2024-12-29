@@ -75,10 +75,18 @@ export default function PromptPanel({ control }: Props) {
           Include examples in prompt
         </Text>
         <Controller
-          name="includeExamplesInPrompts"
+          name="includeExamples"
           control={control}
           render={({ field: { onChange, value } }) => (
-            <Switch variant="surface" checked={value} onCheckedChange={onChange} />
+            <RadioGroup.Root
+              value={value}
+              name="includeExamples"
+              onValueChange={onChange}
+              style={{ flexDirection: 'row', gap: 10 }}>
+              <RadioGroup.Item value="1">Don't include</RadioGroup.Item>
+              <RadioGroup.Item value="2">Short</RadioGroup.Item>
+              <RadioGroup.Item value="3">Long</RadioGroup.Item>
+            </RadioGroup.Root>
           )}
         />
       </label>

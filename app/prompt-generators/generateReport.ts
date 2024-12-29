@@ -11,10 +11,6 @@ import systemPrompt from './helpers/system-prompt'
 export default async function ({ evaluation, patient, sections }: GeneratePayload, flags: Flags) {
   console.log('PAYLOAD', flags)
 
-  if (process.env.TESTING_MODE === 'true') {
-    return testingMode()
-  }
-
   const evaluationPrompt = (Object.keys(evaluation) as Array<keyof EvaluationReport>)
     .filter((key) => evaluation[key] !== '')
     .map((key) => {
@@ -42,7 +38,13 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       Write the report using the html tag <h2> for sections and <p> for paragraphs. 
       Put the input data that is used in the report surrounded by the html tag <strong></strong>.
       
-      ${generateExamplesPrompt(sections, flags.includeExamplesInPrompts)}`
+      ${generateExamplesPrompt(sections, flags.includeExamples)}`
+
+  console.log('PROMPT>>>', prompt)
+
+  if (process.env.TESTING_MODE === 'true') {
+    return testingMode()
+  }
 
   if (flags.streamData) {
     const result = streamText({
@@ -99,8 +101,10 @@ function generatePatientPrompt(patient: Patient | undefined) {
   return patientPrompt + '\n'
 }
 
-function generateExamplesPrompt(sections: string[], includeExamplesInPrompts: boolean) {
-  if (!includeExamplesInPrompts) return ''
+function generateExamplesPrompt(sections: string[], includeExamples: string = '1') {
+  if (includeExamples === '1') return ''
+
+  const examplesKey = includeExamples === '2' ? 'examplesShort' : 'examplesLong'
 
   const examplesPrompt = sections
     .map((section) => {
@@ -110,7 +114,7 @@ function generateExamplesPrompt(sections: string[], includeExamplesInPrompts: bo
 
       return `
       ### ${sec.title}
-      - ${sec.examples.join('\n -')}
+      - ${sec[examplesKey].join('\n -')}
     `
     })
     .join('\n')

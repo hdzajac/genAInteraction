@@ -5,7 +5,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export type Flags = {
   // Prompt
   usePatientData: boolean
-  includeExamplesInPrompts: boolean
+  includeExamples: '1' | '2' | '3'
   model: 'gpt-4o-mini' | 'gpt-4o'
   temperature: 1
   systemPrompt: string
@@ -17,7 +17,7 @@ export type Flags = {
 export const defaultFlags: Flags = {
   // Prompt
   usePatientData: true,
-  includeExamplesInPrompts: false,
+  includeExamples: '1',
   model: 'gpt-4o-mini',
   temperature: 1,
   systemPrompt,
