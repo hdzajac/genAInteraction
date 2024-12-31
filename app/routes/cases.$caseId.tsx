@@ -12,6 +12,8 @@ import { useReportStore } from '@/store/report'
 import { MedicalRecord as TMedicalRecord } from '@/store/types'
 import { useRecord } from '@/store/useRecord'
 import { useEffect, useState } from 'react'
+import EvaluationLiveRefresh from '@/components/EvaluationLiveRefresh'
+import { useFlags } from '@/components/FeatureFlag/useFlags'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
@@ -31,6 +33,7 @@ export default function Case() {
   const { reset } = useReportStore()
   const [loading, setLoading] = useState(true)
   const [isValid, setValidation] = useState(false)
+  const { flags } = useFlags()
 
   if (!defaultRecord) return null
 
@@ -59,16 +62,23 @@ export default function Case() {
 
         <MedicalRecord record={record} />
 
-        <Flex direction="column" p="6" width="100%" gap="3">
-          {isValid ? (
-            <>
-              <EvaluationPanel defaultEvaluation={record.evaluation} />
-              <ReportPreview />
-            </>
-          ) : (
-            <EvaluationValidation defaultEvaluation={record.evaluation} onSave={handleSave} />
-          )}
-        </Flex>
+        {flags.liveRegeneration ? (
+          <Flex direction="column" p="6" width="100%" gap="3">
+            <EvaluationLiveRefresh defaultEvaluation={record.evaluation} onSave={handleSave} />
+            {isValid && <ReportPreview />}
+          </Flex>
+        ) : (
+          <Flex direction="column" p="6" width="100%" gap="3">
+            {isValid ? (
+              <>
+                <EvaluationPanel defaultEvaluation={record.evaluation} />
+                <ReportPreview />
+              </>
+            ) : (
+              <EvaluationValidation defaultEvaluation={record.evaluation} onSave={handleSave} />
+            )}
+          </Flex>
+        )}
       </Grid>
     </div>
   )

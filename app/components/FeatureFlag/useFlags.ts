@@ -12,6 +12,7 @@ export type Flags = {
   // UI
   showAlternatives: string
   streamData: boolean
+  liveRegeneration: boolean
 }
 
 export const defaultFlags: Flags = {
@@ -24,6 +25,7 @@ export const defaultFlags: Flags = {
   // UI
   showAlternatives: '1',
   streamData: false,
+  liveRegeneration: false,
 }
 
 type FeatureFlagState = {

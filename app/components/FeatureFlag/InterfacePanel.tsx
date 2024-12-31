@@ -23,6 +23,20 @@ export default function InterfacePanel({ control }: Props) {
           )}
         />
       </label>
+
+      <label>
+        <Text as="div" size="2" mb="1" weight="bold">
+          Live regeneration
+        </Text>
+
+        <Controller
+          name="liveRegeneration"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Switch variant="surface" checked={value} onCheckedChange={onChange} />
+          )}
+        />
+      </label>
     </Flex>
   )
 }

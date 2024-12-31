@@ -19,7 +19,7 @@ export function useReport() {
   const { flags } = useFlags()
   const { report, appendToReport, updateReport } = useReportStore()
   const { record } = useRecord()
-  const { generateReport, summarizeParagraph, rephraseSelection, convertToList } = useOpenAI()
+  const { generateReport, regenerateReport, rephraseSelection } = useOpenAI()
   const [isLoading, setIsLoading] = useState(false)
 
   return {
@@ -39,6 +39,42 @@ export function useReport() {
         evaluation: record.evaluation,
         patient: generatePatient(record, flags.usePatientData),
         sections,
+      })
+
+      setIsLoading(false)
+
+      if (flags.streamData) {
+        if (!response || !response.body) return null
+
+        updateReport({ content: '' })
+
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) break
+
+          const chunk = decoder.decode(value)
+
+          appendToReport(chunk)
+        }
+      } else {
+        const content = await response.json()
+
+        updateReport({
+          content: content,
+        })
+      }
+    },
+
+    regenerateReport: async (updatedSection: string, sectionName: string) => {
+      setIsLoading(true)
+
+      const response = await regenerateReport({
+        originalReport: report.content,
+        sectionName,
+        updatedSection,
       })
 
       setIsLoading(false)

@@ -14,6 +14,12 @@ export type GeneratePayload = {
   sections: string[]
 }
 
+export type RegeneratePayload = {
+  originalReport: string
+  sectionName: string
+  updatedSection: string
+}
+
 type ParagraphPayload = {
   paragraph: string
 }
@@ -49,6 +55,13 @@ export function useOpenAI() {
     async generateReport(payload: GeneratePayload) {
       return request({
         action: 'GENERATE_REPORT',
+        payload,
+        flags,
+      })
+    },
+    async regenerateReport(payload: RegeneratePayload) {
+      return request({
+        action: 'REGENERATE_REPORT',
         payload,
         flags,
       })

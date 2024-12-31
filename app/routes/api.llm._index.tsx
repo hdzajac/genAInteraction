@@ -6,6 +6,7 @@ import { authMiddleware } from '@/auth'
 import convertToList from '@/prompt-generators/convertToList'
 import generateAlternatives from '@/prompt-generators/generateAlternatives'
 import generateReport from '@/prompt-generators/generateReport'
+import regenerateReport from '@/prompt-generators/regenerateReport'
 import rephraseSelection from '@/prompt-generators/rephraseSelection'
 import rewriteToInclude from '@/prompt-generators/rewriteToInclude'
 import summarizeParagraph from '@/prompt-generators/summarizeParagraph'
@@ -19,6 +20,7 @@ const GeneratorActions = z.enum([
   'REPHRASE_SELECTION',
   'CONVERT_TO_LIST',
   'REWRITE_TO_INCLUDE',
+  'REGENERATE_REPORT',
 ])
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -34,6 +36,8 @@ export async function action({ request }: ActionFunctionArgs) {
       switch (body.action) {
         case GeneratorActions.Enum.GENERATE_REPORT:
           return generateReport(body.payload, body.flags)
+        case GeneratorActions.Enum.REGENERATE_REPORT:
+          return regenerateReport(body.payload, body.flags)
         case GeneratorActions.Enum.GET_ALTERNATIVES:
           result = await generateAlternatives(body.payload)
           break
