@@ -32,9 +32,15 @@ export default function Dictation({ editor }: Props) {
       const lastResult = event.results[event.results.length - 1]
 
       if (lastResult.isFinal) {
-        const transcript = lastResult[0].transcript
+        let transcript = lastResult[0].transcript
         if (editor) {
           const { from } = editor.state.selection
+
+          const past = editor.state.doc.textBetween(0, from, ' ')
+          if (isFullSentence(past)) {
+            transcript = capitalizeFirstLetter(transcript)
+          }
+
           editor.chain().focus().insertContentAt(from, transcript).run()
         }
       }
@@ -87,4 +93,38 @@ export default function Dictation({ editor }: Props) {
       {isListening ? 'Stop Dictation' : 'Dictate'}
     </Flex>
   )
+}
+
+function isFullSentence(text: string) {
+  if (!text || text.trim().length === 0) {
+    return false // Empty or whitespace-only string is not a sentence
+  }
+
+  text = text.trim()
+
+  // Check if it ends with a sentence terminator (. ! ?)
+  if (!/[.?!]$/.test(text)) {
+    return false
+  }
+
+  //Check if the sentence is just a punctuation mark
+  if (text.length === 1) {
+    return false
+  }
+
+  // Check if the first character is uppercase or a number
+  if (!/^[A-Z0-9'"‘“]/.test(text[0])) {
+    //Added quotes to allowed first characters
+    return false
+  }
+
+  return true
+}
+
+function capitalizeFirstLetter(str: string) {
+  if (!str || str.length === 0) {
+    return str // Return empty string if input is empty or null
+  }
+
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
