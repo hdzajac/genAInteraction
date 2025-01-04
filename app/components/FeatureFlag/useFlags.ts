@@ -18,13 +18,13 @@ export type Flags = {
 export const defaultFlags: Flags = {
   // Prompt
   usePatientData: true,
-  includeExamples: '1',
+  includeExamples: '2',
   model: 'gpt-4o-mini',
   temperature: 1,
   systemPrompt,
   // UI
   showAlternatives: '1',
-  streamData: false,
+  streamData: true,
   liveRegeneration: false,
 }
 

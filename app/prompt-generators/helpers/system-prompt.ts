@@ -5,4 +5,5 @@ Context and Expectations:
   - Demonstrate clear clinical reasoning
   - Ensure all information is clinically relevant
   - Write in a professional tone, using appropriate medical terminology.
-  - Write in the first person`
+  - Write in the first person
+  - Don't include skin type if not relevant`

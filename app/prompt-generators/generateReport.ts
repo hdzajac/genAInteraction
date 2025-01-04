@@ -5,7 +5,7 @@ import type { Flags } from '@/components/FeatureFlag/useFlags'
 import { EvaluationLabels, SkinTypes } from '@/constants'
 import { GeneratePayload } from '@/hooks/useOpenAI'
 import { EvaluationReport, Patient } from '@/store/types'
-import sectionsInfo from './helpers/sections-info'
+import sectionsInfo from './helpers/sections-info.js'
 import systemPrompt from './helpers/system-prompt'
 
 export default async function ({ evaluation, patient, sections }: GeneratePayload, flags: Flags) {
@@ -15,7 +15,7 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
     .filter((key) => evaluation[key] !== '')
     .map((key) => {
       return `
-    - ${EvaluationLabels[key]}: ${evaluation[key]}`
+      - ${EvaluationLabels[key]}: ${evaluation[key]}`
     })
 
   const sectionsPrompt = sections
@@ -30,13 +30,15 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
     .join('\n')
 
   const prompt = `
-      The report should include the following sections ${sectionsPrompt}
-
+      ## Report structure
+      The report must include the following sections:${sectionsPrompt}
       ${generatePatientPrompt(patient)}
-      The patient' condition is as follows: ${evaluationPrompt}
+      
+      ## Condition details: ${evaluationPrompt}
 
-      Write the report using the html tag <h2> for sections and <p> for paragraphs. 
-      Put the input data that is used in the report surrounded by the html tag <strong></strong>.
+      ## Formatting requirements
+      - Use <h2> tags for section headings and <p> tags for paragraphs.
+      - Highlight input data used in the report with <strong> tags.
       
       ${generateExamplesPrompt(sections, flags.includeExamples)}`
 
@@ -86,19 +88,22 @@ function testingMode() {
 function generatePatientPrompt(patient: Patient | undefined) {
   if (!patient) return ''
 
-  let patientPrompt = `The patient is ${patient.gender}, ${patient.age} years old, and skin type ${
-    SkinTypes[patient.skinType]
-  }.`
+  let patientPrompt = `
+      ## Patient data
+      - Gender: ${patient.gender}
+      - Age: ${patient.age} years old
+      - Skin type: ${SkinTypes[patient.skinType]}
+      `
 
   if (patient.familyWithMelanoma) {
-    patientPrompt += ' The patient has a family history of melanoma.'
+    patientPrompt += '- The patient has a family history of melanoma.'
   }
 
   if (patient.previousMelanoma) {
-    patientPrompt += ' The patient has had a previous malignant melanoma or skin cancer.'
+    patientPrompt += '- The patient has had a previous malignant melanoma or skin cancer.'
   }
 
-  return patientPrompt + '\n'
+  return patientPrompt
 }
 
 function generateExamplesPrompt(sections: string[], includeExamples: string = '1') {
@@ -113,12 +118,13 @@ function generateExamplesPrompt(sections: string[], includeExamples: string = '1
       if (!sec) return ''
 
       return `
-      ### ${sec.title}
-      - ${sec[examplesKey].join('\n -')}
+      ### ${sec.title} examples
+      - ${sec[examplesKey].join('\n      - ')}
     `
     })
     .join('\n')
 
-  return `Here are some examples of reports:
+  return `## Writing style
+      - Write the report in the style of the following examples:
       ${examplesPrompt}`
 }

@@ -48,14 +48,14 @@ export default [
     description:
       'An alternative to your first suggestion, either because there are possible alternative treatment plans or because of the conditionality of the assessment.',
     examplesShort: [
-      'Hvis du ikke er tryg ved dette så send til PP dermatolog',
-      'Ved manglende effekt prøv ivermectin 1% creme.',
-      'Ved allergi/intolerans overfor doxycyclin, skift til erythromycin 250 mg X4 dgl. I 4-6 uger.',
+      'If you are not comfortable with this, send to a PP dermatologist',
+      'If there is no effect, try ivermectin 1% cream.',
+      'In case of allergy/intolerance to doxycycline, switch to erythromycin 250 mg X4 daily. For 4-6 weeks.',
     ],
     examplesLong: [
-      'Hvis dette føles utrygt foreslår jeg at du sender pt. videre til privat praktiserende dermatolog mhp. excision og videre behandling.',
-      'Hvis patienten ikke tolererer eller responderer tilstrækkeligt på den indledende behandling, overvej at tilføje eller skifte til ivermectin 1% creme til topikal behandling.',
-      'Hvis patienten ikke tolererer doxycyclin, eller hvis der ikke er nogen forbedring inden for 4 uger, overvej at skifte til oral erythromycin 250 mg fire gange dagligt i 4-6 uger.',
+      'If this feels unsafe, I suggest you send pt. further to private practicing dermatologist etc. excision and further treatment.',
+      'If the patient does not tolerate or respond adequately to the initial treatment, consider adding or switching to ivermectin 1% cream for topical treatment.',
+      'If the patient does not tolerate doxycycline or if there is no improvement within 4 weeks, consider switching to oral erythromycin 250 mg four times daily for 4-6 weeks.',
     ],
   },
   {
