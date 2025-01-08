@@ -42,23 +42,27 @@ export default function ReportPreview() {
   }
 
   const handleAction = async (type: ActionTypes, { onUpdateText, ...args }: ReportActionProps) => {
-    let newText
+    let response
     switch (type) {
       case 'CONVERT_TO_LIST':
-        newText = await convertToList({ paragraph: args.paragraph })
+        response = await convertToList({ paragraph: args.paragraph })
         break
       case 'REWRITE_TO_INCLUDE':
-        newText = await rewriteToInclude({
+        response = await rewriteToInclude({
           paragraph: args.paragraph,
           rewriteText: args.rewriteText,
         })
         break
       case 'SIMPLIFY':
-        newText = await rephraseSelection({ type: 'SIMPLIFY', ...args })
+        response = await rephraseSelection({ type: 'SIMPLIFY', ...args })
         break
     }
 
-    onUpdateText(newText)
+    if (!response || !response.body) return null
+
+    const content = await response.json()
+
+    onUpdateText(content)
   }
 
   return (

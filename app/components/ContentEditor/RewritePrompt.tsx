@@ -5,7 +5,6 @@ import {
   NodeViewWrapper,
   ReactNodeViewRenderer,
 } from '@tiptap/react'
-import React, { ComponentType } from 'react'
 import { NodeViewProps } from '@tiptap/core'
 import { Button, Flex } from '@radix-ui/themes'
 
