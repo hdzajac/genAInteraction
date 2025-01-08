@@ -1,6 +1,7 @@
 import { ActionTypes } from '@/components/ContentEditor'
 import type { Flags } from '@/components/FeatureFlag/useFlags'
 import { openai } from '@/openai'
+import systemPrompt from './helpers/system-prompt'
 
 type Props = {
   paragraph: string
@@ -12,15 +13,12 @@ export default async function ({ paragraph, selection, type }: Props, flags: Fla
   console.log('REPHRASE > PAYLOAD >', paragraph, selection, type)
 
   const prompt = `
-    You are a dermatologist writing a report to be sent to a general practitioner.
-
     Prompt Details:
     - Rephrase the specified text to be more concise
     - Use simpler, more direct language
     - Reduce the length by approximately 50%
     - Maintain clinical accuracy and clarity
 
-    
     The selection to be rephrased is following:
     ${selection}
 
@@ -41,7 +39,10 @@ export default async function ({ paragraph, selection, type }: Props, flags: Fla
 
   const completion = await openai.chat.completions.create({
     model: flags.model,
-    messages: [{ role: 'system', content: prompt }],
+    messages: [
+      { role: 'system', content: flags.systemPrompt ?? systemPrompt },
+      { role: 'user', content: prompt },
+    ],
   })
 
   console.log('RESULT', completion.choices[0].message.content)
