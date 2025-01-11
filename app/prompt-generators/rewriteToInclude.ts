@@ -1,5 +1,7 @@
+import { createOpenAI } from '@ai-sdk/openai'
+import { generateText } from 'ai'
+
 import { ActionTypes } from '@/components/ContentEditor'
-import { openai } from '@/openai'
 import type { Flags } from '@/components/FeatureFlag/useFlags'
 
 type Props = {
@@ -7,6 +9,10 @@ type Props = {
   rewriteText: string
   type: ActionTypes
 }
+
+const openai = createOpenAI({
+  fetch: fetch,
+})
 
 export default async function ({ paragraph, rewriteText, type }: Props, flags: Flags) {
   console.log('REWRITE > PAYLOAD >', type, paragraph, rewriteText)
@@ -26,16 +32,13 @@ export default async function ({ paragraph, rewriteText, type }: Props, flags: F
     return testingMode()
   }
 
-  const completion = await openai.chat.completions.create({
-    model: flags.model,
-    messages: [{ role: 'system', content: prompt }],
+  const result = generateText({
+    model: openai(flags.model),
+    messages: [{ role: 'user', content: prompt }],
   })
 
-  console.log('RESULT:\n', completion.choices[0].message.content)
-
-  // Generate a random ID
   const id = Math.random().toString(36).substring(2, 10)
-  return completion.choices[0].message.content?.replace(/\{\{id\}\}/, id)
+  return (await result).text.replace(/\{\{id\}\}/, id)
 }
 
 function testingMode() {

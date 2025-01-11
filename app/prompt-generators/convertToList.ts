@@ -1,10 +1,15 @@
-import { ActionTypes } from '@/components/ContentEditor'
-import { openai } from '@/openai'
+import { createOpenAI } from '@ai-sdk/openai'
+import { generateText } from 'ai'
+
 import type { Flags } from '@/components/FeatureFlag/useFlags'
 
 type Props = {
   paragraph: string
 }
+
+const openai = createOpenAI({
+  fetch: fetch,
+})
 
 export default async function ({ paragraph }: Props, flags: Flags) {
   console.log('CONVERT TO LIST > PAYLOAD >', paragraph)
@@ -21,16 +26,12 @@ export default async function ({ paragraph }: Props, flags: Flags) {
       ${paragraph}
     `
 
-  console.log('PROMP', prompt)
-
-  const completion = await openai.chat.completions.create({
-    model: flags.model,
-    messages: [{ role: 'system', content: prompt }],
+  const result = generateText({
+    model: openai(flags.model),
+    messages: [{ role: 'user', content: prompt }],
   })
 
-  console.log('RESULT', completion.choices[0].message.content)
-
-  return completion.choices[0].message.content
+  return (await result).text
 }
 
 function testingMode() {

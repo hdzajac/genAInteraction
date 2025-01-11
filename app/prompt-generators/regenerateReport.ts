@@ -1,10 +1,14 @@
-import { openai } from '@ai-sdk/openai'
+import { createOpenAI } from '@ai-sdk/openai'
 import { generateText, streamText } from 'ai'
 
 import type { Flags } from '@/components/FeatureFlag/useFlags'
 import { EvaluationLabels } from '@/constants'
 import { RegeneratePayload } from '@/hooks/useOpenAI'
 import systemPrompt from './helpers/system-prompt'
+
+const openai = createOpenAI({
+  fetch: fetch,
+})
 
 export default async function (
   { originalReport, updatedSection, sectionName }: RegeneratePayload,

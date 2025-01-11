@@ -1,13 +1,18 @@
 import { ActionTypes } from '@/components/ContentEditor'
 import type { Flags } from '@/components/FeatureFlag/useFlags'
-import { openai } from '@/openai'
 import systemPrompt from './helpers/system-prompt'
+import { generateText, streamText } from 'ai'
+import { createOpenAI } from '@ai-sdk/openai'
 
 type Props = {
   paragraph: string
   selection: string
   type: ActionTypes
 }
+
+const openai = createOpenAI({
+  fetch: fetch,
+})
 
 export default async function ({ paragraph, selection, type }: Props, flags: Flags) {
   console.log('REPHRASE > PAYLOAD >', paragraph, selection, type)
@@ -37,19 +42,13 @@ export default async function ({ paragraph, selection, type }: Props, flags: Fla
     return testingMode()
   }
 
-  const completion = await openai.chat.completions.create({
-    model: flags.model,
-    messages: [
-      { role: 'system', content: flags.systemPrompt ?? systemPrompt },
-      { role: 'user', content: prompt },
-    ],
+  const result = generateText({
+    model: openai(flags.model),
+    messages: [{ role: 'user', content: prompt }],
   })
 
-  console.log('RESULT', completion.choices[0].message.content)
-
-  // Generate a random ID
   const id = Math.random().toString(36).substring(2, 10)
-  return completion.choices[0].message.content?.replace(/\{\{id\}\}/, id)
+  return (await result).text.replace(/\{\{id\}\}/, id)
 }
 
 function testingMode() {
