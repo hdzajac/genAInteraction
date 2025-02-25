@@ -1,4 +1,4 @@
-export const token = process.env.AUTH_TOKEN
+export const token = process.env.OPENAI_API_KEY
 export const password = process.env.AUTH_PASSWORD
 
 export async function authMiddleware(request: Request, cb: any): Promise<Response> {
