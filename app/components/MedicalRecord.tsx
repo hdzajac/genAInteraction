@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from '@radix-ui/themes'
+import { Box, Button, CheckboxCards, Flex, Theme, Text } from '@radix-ui/themes'
 import { Undo, ZoomIn, ZoomOut } from 'lucide-react'
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 
@@ -22,12 +22,14 @@ export default function MedicalRecord({ record }: Props) {
       }}>
       <h2>Overview • Lesion #{record.id}</h2>
 
+      
+
       <Flex className="panel MedicalRecord-images" direction="column" gap="4">
         {record.images.map((image, index) => (
           <ImageViewer key={index} image={image} />
         ))}
       </Flex>
-
+        
       <Box className="panel MedicalRecord">
         <h3>Medical record</h3>
         <p>
@@ -40,6 +42,7 @@ export default function MedicalRecord({ record }: Props) {
         <h4>Previous malignant melanoma or skin cancer</h4>
         <p>{getValueFromBoolean(record.previousMelanoma)}</p>
       </Box>
+      
     </Flex>
   )
 }

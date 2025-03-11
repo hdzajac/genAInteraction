@@ -1,4 +1,4 @@
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, CheckboxCards, Flex, Theme } from '@radix-ui/themes'
 
 import { MedicalRecord } from '@/store/types'
 import './MainNav.css'
@@ -31,6 +31,7 @@ export default function MainNav({ record }: Props) {
       <Box p="3" className="MainNav-separator">
         Male <span>010180-1234</span>
       </Box>
+      
       <Box p="3">
         <div>
           <h4>Familie-historik med melanom</h4>
@@ -45,6 +46,7 @@ export default function MainNav({ record }: Props) {
           <h4>Risikofaktorer</h4>
           <p>Hyppige solforbrandinger, immunhæmmende behandling</p>
         </div>
+      
       </Box>
 
       <Box p="3" className="MainNav-separator">
