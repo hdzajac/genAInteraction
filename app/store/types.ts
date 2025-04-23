@@ -10,12 +10,34 @@ export type MedicalRecord = {
 }
 
 export type EvaluationReport = {
-  visualFeatures: string
+  visualFeatures: VisualFeatures[]
   diagnosis: string
   treatment: string
   alternativePlan: string
   followUp: string
 }
+
+export type VisualFeatures = {
+  cardname: string
+  smartphrase: string
+}
+
+export type Diagnosis = {
+  cardname: string
+}
+
+export type Treatment = {
+  cardname: string
+}
+
+export type AlternativePlan = {
+  
+}
+
+export type Followup = {
+
+}
+
 
 export type Patient = {
   gender: string

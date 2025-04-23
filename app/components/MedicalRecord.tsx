@@ -1,4 +1,4 @@
-import { Box, Button, CheckboxCards, Flex, Theme, Text } from '@radix-ui/themes'
+import { Box, Button, Flex} from '@radix-ui/themes'
 import { Undo, ZoomIn, ZoomOut } from 'lucide-react'
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 
