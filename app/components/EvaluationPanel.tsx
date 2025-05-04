@@ -22,6 +22,9 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
   const handleCancel = () => {
     reset(defaultEvaluation)
   }
+  console.log(evaluation.visualFeatures)
+  console.log(evaluation.diagnosis)
+  console.log(evaluation.treatment)
 
   return (
     <div className="panel">
@@ -93,15 +96,16 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
             Visual features
           </Heading>
           <Text as="p" size="2">
-            {displayValue(evaluation.visualFeatures)}
+            {displayValue(evaluation.visualFeatures.map((f) => f.cardname).join(', '))}
           </Text>
+          
         </div>
         <div>
           <Heading as="h4" size="2">
             Diagnosis
           </Heading>
           <Text as="p" size="2">
-            {displayValue(evaluation.diagnosis)}
+            {displayValue(evaluation.diagnosis.map((f) => f.cardname).join(', '))}
           </Text>
         </div>
         <div>
@@ -109,7 +113,7 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
             Treatment plan
           </Heading>
           <Text as="p" size="2">
-            {displayValue(evaluation.treatment)}
+            {displayValue(evaluation.treatment.map((f) => f.cardname).join(', '))}
           </Text>
         </div>
         <div>

@@ -23,14 +23,34 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
   })
 
   const handleSave = (formData: EvaluationReport) => {
-    updateEvaluation(formData)
+    const selectedFeatures = filteredFeatures.filter(feature =>
+      selectedCardnames.includes(feature.cardname)
+    )
+    const selectedDiag = cardDiagnosis.filter(diag =>
+      selectedDiagnosis.includes(diag.cardname)
+    )
+    const selectedTreat = cardTreatment.filter(treat =>
+      selectedPlan.includes(treat.cardname)
+    )
+    
+    
+    const updatedEvaluation: EvaluationReport = {
+      ...formData,
+      visualFeatures: selectedFeatures,
+      diagnosis: selectedDiag,
+      treatment: selectedTreat,
+    }
+    updateEvaluation(updatedEvaluation)
     onSave()
   }
 
-  const [query, setQuery] = useState('')
-  const [filteredFeatures, setFilteredFeatures] = useState<VisualFeatures[]>([])
-
-  const cardFeatures = defaultEvaluation.visualFeatures;
+  const [query, setQuery] = useState('');
+  const [filteredFeatures, setFilteredFeatures] = useState<VisualFeatures[]>([]);
+  
+  const [selectedCardnames, setSelectedCardnames] = useState<string[]>([]);
+  const [selectedDiagnosis, setSelectedDiagnosis] = useState<string[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<string[]>([]);
+  
   const cardDiagnosis = defaultEvaluation.diagnosis;
   const cardTreatment = defaultEvaluation.treatment;
   
@@ -57,7 +77,6 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
     setFeatures(updated)
     setFilteredFeatures(updated)
     setNewFeature("")
-
   }
 
   useEffect(() => {
@@ -68,13 +87,6 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
   }, [query, features])
   
 
-    
-
-  
-
-
-
-  
 
   return (
     <Flex className="panel" direction="column">
@@ -92,65 +104,57 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
               Visual features
             </Text>
             <Flex gap="2" mb="3">
-            <TextField.Root
-              placeholder="Add new feature"
-              value={newFeature}
-              onChange={(e) => setNewFeature(e.target.value)}>
-            </TextField.Root>
-            
-            <Button type="button" onClick={addCard}>
-              Add feature
-            </Button>
-          </Flex>
+              <TextField.Root
+                placeholder="Add new feature"
+                value={newFeature}
+                onChange={(e) => setNewFeature(e.target.value)}>
+              </TextField.Root>
+              
+              <Button type="button" onClick={addCard}>
+                Add feature
+              </Button>
+            </Flex>
 
-          <Flex direction="row" mb="3">
-          <TextField.Root 
-            placeholder="Search for features" 
-            value={query} 
-            onChange={(e) => setQuery(e.target.value)}>
-          </TextField.Root>
-          </Flex>
+            <Flex direction="row" mb="3">
+              <TextField.Root 
+                placeholder="Search for features" 
+                value={query} 
+                onChange={(e) => setQuery(e.target.value)}>
+              </TextField.Root>
+            </Flex>
+            
           
-        
-          <CheckboxCards.Root>
-            {filteredFeatures.map((feature) => (
-              <CheckboxCards.Item
-                key={feature.cardname}
-                value={feature.cardname}>
-                <Text>{feature.cardname}</Text>
-              </CheckboxCards.Item>
-            ))}
-          </CheckboxCards.Root>
+            <CheckboxCards.Root
+              value={selectedCardnames}
+              onValueChange={setSelectedCardnames}
+            >
+              {filteredFeatures.map((feature) => (
+                <CheckboxCards.Item
+                  key={feature.cardname}
+                  value={feature.cardname}>
+                  <Text>{feature.cardname}</Text>
+                </CheckboxCards.Item>
+              ))}
+            </CheckboxCards.Root>
           </label>
 
-          
-            
-          
-
-
-
-
-
-
-
-
-          
-          
-        
           
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
               Diagnosis
             </Text>
-            <CheckboxCards.Root>
-            {cardDiagnosis.map((feature) => (
+            <CheckboxCards.Root
+              value={selectedDiagnosis}
+              onValueChange={setSelectedDiagnosis}
+            >
+            {cardDiagnosis.map((diag) => (
               <CheckboxCards.Item
-                key={feature.cardname}
-                value={feature.cardname}>
-                <Text>{feature.cardname}</Text>
+                key={diag.cardname}
+                value={diag.cardname}>
+                <Text>{diag.cardname}</Text>
               </CheckboxCards.Item>
-            ))}
-          </CheckboxCards.Root>
+            )) }
+            </CheckboxCards.Root>
           </label>
           
           
@@ -159,12 +163,15 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
             <Text as="div" size="2" mb="1" weight="bold">
               Treatment plan
             </Text>
-            <CheckboxCards.Root>
-            {cardTreatment.map((feature) => (
+            <CheckboxCards.Root
+              value={selectedPlan}
+              onValueChange={setSelectedPlan}
+              >
+            {cardTreatment.map((treat) => (
               <CheckboxCards.Item
-                key={feature.cardname}
-                value={feature.cardname}>
-                <Text>{feature.cardname}</Text>
+                key={treat.cardname}
+                value={treat.cardname}>
+                <Text>{treat.cardname}</Text>
               </CheckboxCards.Item>
             ))}
           </CheckboxCards.Root>
