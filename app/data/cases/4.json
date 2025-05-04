@@ -6,11 +6,53 @@
   "familyWithMelanoma": false,
   "previousMelanoma": false,
   "evaluation": {
-    "visualFeatures": "Diffuse Erythema - cheeks and nose, inflammatory papules and pustules",
-    "diagnosis": "Rosacea",
-    "treatment": "Metronidazol 0.75% gel 1-2 ggr. daily 3 to 4 months, if no effect oracea daily for 3 months, avoid sun, use sunscreen, daily gentle cleanser",
-    "alternativePlan": "Ivermectin 1% creme",
-    "followUp": "Follow-up - 6 to 8 weeks, if no improvement - referral – dermatologists"
+    "visualFeatures": [
+      {"cardname": "Globules with hairpin vessels and white halos","smartphrase": ""},
+      {"cardname": "Brain-like pattern (soft surface)", "smartphrase": ""},
+      {"cardname": "Brain-like pattern (rocky surface)", "smartphrase": ""},
+      {"cardname": "Dot-like crusts (from perforated hairpin vessels)", "smartphrase": "Pin-crusts from perforated hairpin fractures are typically seen when the patient has scratched the lesion or if it is located in a place where there is friction against clothing or the like."},
+      {"cardname": "Absence of pigment patterns", "smartphrase": "Absence of pigment patterns is a good way to differentiate between melanocytic lesions (nevus/melanoma) and sebaceous cysts. Pigment patterns will almost always be present when it comes to a nevus or melanoma."},
+      {"cardname": "Yellowish-gray color", "smartphrase": "The yellowish-gray color is most evident clinically, but can often be found in dermoscopy."},
+      {"cardname": "Sharp border", "smartphrase": "A sharp border to the surrounding skin is very typical for Seb.k. In nevus/melanoma, a less sharp border is seen as they typically have a pigment network that decreases towards the surrounding skin."},
+      {"cardname": "Pattern of dark pigmented rings", "smartphrase": ""},
+      {"cardname": "Homogeneous brown color with sharp borders", "smartphrase": "Homogeneous brown color with sharp edges and possibly moth-like edges is a sign of Lentigo solaris (liver spots), but can also be seen in seb. k. when these have developed from a Lentigo solaris (liver spots)"},
+      {"cardname": "Moth-eaten edges", "smartphrase": "The moth-eaten edges are very classic for Lentigo solaris (liver spots), but can also be seen in seb. k. when these have developed from a Lentigo solaris (liver spots)"},
+      {"cardname": "Dark globules with white halos", "smartphrase": ""},
+      {"cardname": "Globules with white halos", "smartphrase": ""},
+      {"cardname": "Fingerprint-like pattern", "smartphrase": "The fingerprint-like patterns correspond to an early version of the brain-like pattern and it differs from the reticular pigment pattern by being longer continuous pigmented lines rather than a brown net."},
+      {"cardname": "Comedo-like openings", "smartphrase": ""},
+      {"cardname": "Milia-like cysts", "smartphrase": ""},
+      {"cardname": "Hyperkeratosis", "smartphrase": "Hyperkeratoses typically form crusts that make it impossible to see what is going on under the crust. It is usually possible to scrape off the crust, especially if it has first been softened with salt water."},
+      {"cardname": "Hairpin vessels", "smartphrase": ""},
+      {"cardname": "Fat finger", "smartphrase": "The thick fingers are found at the periphery of the lesion and these differ from pseudopodia in melanomas by being thicker, slightly elevated and more demarcated from the surrounding skin."},
+      {"cardname": "Black/brown regular dots", "smartphrase": ""},
+      {"cardname": "Overall uniform pigment pattern throughout the lesion", "smartphrase": "A uniform pigment pattern is seen when looking across the entire lesion, imagine dividing the lesion into four quadrants and comparing them all."},
+      {"cardname": "Globules", "smartphrase": ""},
+      {"cardname": "Reticular pigment pattern", "smartphrase": "The reticular pigment pattern resembles a brown net on a dark background and gradually fades towards the surrounding skin."},
+      {"cardname": "Regularly distributed peripheral globules around the lesion", "smartphrase": "Regularly distributed globules around a lesion indicate growth. This is normal in patients under 40 years of age, as nevi typically grow and become more numerous until the age of 30-40. After 40 years of age, the number and size of nevi decrease, so signs of growth thereafter may indicate melanoma."},
+      {"cardname": "Homogeneous pigment pattern", "smartphrase": "The homogeneous pigment network is typically seen on the face where the transition between the epidermis and dermis is almost flat and therefore does not give rise to a reticular pigment network. Note that the edges gradually blend into the surrounding skin color, unlike the sharp edges of a lentigo or the brown scales of some actinic keratoses."},
+      {"cardname": "Pseudonetwork", "smartphrase": "The pseudonetwork is seen almost exclusively on the face where it forms a homogeneous pigment network that is broken by the hair follicles (white follicles)"},
+      {"cardname": "Homogeneous blue", "smartphrase": "A homogeneous blue color is often seen in blue nevi. These are more common in patients of Asian descent. Note that it is important that the lesion is not new and that the patient has no previous history of melanoma as melanoma metastases can also be structureless and blue."},
+      {"cardname": "Reticular pigment pattern with white holes", "smartphrase": "The white holes in the reticular pigment network correspond to hair follicles that break the pigment network."},
+      {"cardname": "Lobulated surface", "smartphrase": "The lobulated surface may resemble a \"brain-like pattern\", but the lobules are larger and more cushion-like. Underlying pigment and central blood vessels are visible, which is not present in seb. k. The tumor is soft with a positive \"wobble sign\" (dances) on lateral manipulation, in contrast to the rigid seb. k., which does not dance, but rather \"pushes\" back and forth."},
+      {"cardname": "Cobblestone pigment pattern", "smartphrase": ""},
+      {"cardname": "Comma-shaped violet vessels", "smartphrase": "The comma-shaped violet blood vessels typically disappear when you press hard on the tumor with the dermoscope."}
+    ],
+    "diagnosis": [{"cardname": "Seborrheic keratosis"}, 
+    {"cardname": "Unspecified nevus"}, {"cardname": "Dermal nevus"}],
+
+    
+    "treatment": [
+    {"cardname": "No treatment", "smartphrase": "No follow-up is required. The patient should be informed that the lesion is likely to grow and become rougher. It is common for seb. k. to be rubbed off when drying after bathing. However, the patient should be aware of changes in shape or color, as this may indicate a new lesion. In such cases, the patient should contact their doctor to rule out malignancy."}, 
+    {"cardname": "Refer to physical examination", "smartphrase": "Although the most likely diagnosis is Seb. k, this is a difficult lesion that should be physically seen by a dermatologist."}, 
+    {"cardname": "Curettage", "smartphrase": "I would suggest that the lesion be removed by scraping with a sharp spoon (curretage) as it appears to be functionally bothersome. Histology is not necessary as there is no evidence of a diagnosis other than seb. k."}, 
+    {"cardname": "Image follow-up", "smartphrase": "The patient describes growth that cannot be found on the images that are consistent with seb k. For the sake of good order, I suggest that new images be taken in 3 months to ensure that there is no growth to the sides. Send a new teleassessment in case of growth."}, 
+    {"cardname": "Biopsy", "smartphrase": "Presumed diagnosis is seb. k but it is a difficult lesion and a biopsy should be taken to exclude malignant differential diagnosis."}, 
+    {"cardname": "Send new pictures", "smartphrase": "I am very sorry, but unfortunately I cannot \"put my head on the block\" based on the current pictures. Please send new pictures if I want to make a diagnosis with certainty, or refer for a physical examination if it is too much trouble. I apologize for the inconvenience!"}, 
+    {"cardname": "Refer to examination of lesion", "smartphrase": "It looks like a nevus at first glance, but it is a difficult lesion and I would therefore recommend that the patient be referred for a physical examination by a dermatologist."}, 
+    {"cardname": "Refer to full body examination", "smartphrase": "There is no cause for concern regarding this lesion, but the patient appears to have many dysplastic nevi and I would therefore suggest that the patient be referred to a dermatologist for a full body examination."}],
+    "alternativePlan": "",
+    "followUp": ""
   },
   "images": ["/images/Rash_1.jpg"]
 }

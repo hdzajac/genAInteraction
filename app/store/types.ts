@@ -11,8 +11,8 @@ export type MedicalRecord = {
 
 export type EvaluationReport = {
   visualFeatures: VisualFeatures[]
-  diagnosis: string
-  treatment: string
+  diagnosis: Diagnosis[]
+  treatment: Treatment[]
   alternativePlan: string
   followUp: string
 }
@@ -24,10 +24,12 @@ export type VisualFeatures = {
 
 export type Diagnosis = {
   cardname: string
+  smartphrase: string
 }
 
 export type Treatment = {
   cardname: string
+  smartphrase: string
 }
 
 export type AlternativePlan = {

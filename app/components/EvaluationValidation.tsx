@@ -30,8 +30,9 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
   const [query, setQuery] = useState('')
   const [filteredFeatures, setFilteredFeatures] = useState<VisualFeatures[]>([])
 
-  const cardFeatures = defaultEvaluation.visualFeatures
-
+  const cardFeatures = defaultEvaluation.visualFeatures;
+  const cardDiagnosis = defaultEvaluation.diagnosis;
+  const cardTreatment = defaultEvaluation.treatment;
   
 
   const [newFeature, setNewFeature] = useState('')
@@ -90,25 +91,23 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
             <Text as="div" size="2" mb="1" weight="bold">
               Visual features
             </Text>
-          </label>
-
-          <Flex gap="2" mb="3">
+            <Flex gap="2" mb="3">
             <TextField.Root
               placeholder="Add new feature"
               value={newFeature}
-              onChange={(e) => setNewFeature(e.target.value)}
-            />
+              onChange={(e) => setNewFeature(e.target.value)}>
+            </TextField.Root>
+            
             <Button type="button" onClick={addCard}>
               Add feature
             </Button>
           </Flex>
 
           <Flex direction="row" mb="3">
-          <TextField.Root placeholder="Search for features" 
-                          value={query} 
-                          onChange={(e) => setQuery(e.target.value)}>
-            <TextField.Slot>
-            </TextField.Slot>
+          <TextField.Root 
+            placeholder="Search for features" 
+            value={query} 
+            onChange={(e) => setQuery(e.target.value)}>
           </TextField.Root>
           </Flex>
           
@@ -122,6 +121,9 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
               </CheckboxCards.Item>
             ))}
           </CheckboxCards.Root>
+          </label>
+
+          
             
           
 
@@ -140,41 +142,34 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
             <Text as="div" size="2" mb="1" weight="bold">
               Diagnosis
             </Text>
+            <CheckboxCards.Root>
+            {cardDiagnosis.map((feature) => (
+              <CheckboxCards.Item
+                key={feature.cardname}
+                value={feature.cardname}>
+                <Text>{feature.cardname}</Text>
+              </CheckboxCards.Item>
+            ))}
+          </CheckboxCards.Root>
           </label>
-          <Box maxWidth="800px">
-            <CheckboxCards.Root columns={{ initial: "3", sm: "3" }} color='blue' size='2'>
-              <CheckboxCards.Item value="1">
-                <Flex direction="column" width="100%">
-                  <Text weight="bold" color='blue'>Seborrheic keratosis</Text>
-                </Flex>
-              </CheckboxCards.Item>
-            </CheckboxCards.Root>
-          </Box>
-          <Box maxWidth="800px">
-            <CheckboxCards.Root columns={{ initial: "3", sm: "3" }} color='red' size='2'>
-              <CheckboxCards.Item value="1">
-                <Flex direction="column" width="100%">
-                  <Text weight="bold" color='red'>Unspecified Nevus</Text>
-                </Flex>
-              </CheckboxCards.Item>
-            </CheckboxCards.Root>
-          </Box>
-          <Box maxWidth="800px">
-            <CheckboxCards.Root columns={{ initial: "3", sm: "3" }} color='green' size='2'>
-              <CheckboxCards.Item value="1">
-                <Flex direction="column" width="100%">
-                  <Text weight="bold" color='green'>Dermal nevus</Text>
-                </Flex>
-              </CheckboxCards.Item>
-            </CheckboxCards.Root>
-          </Box>
+          
+          
         
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
               Treatment plan
             </Text>
-            <TextArea {...register("treatment")}/>
+            <CheckboxCards.Root>
+            {cardTreatment.map((feature) => (
+              <CheckboxCards.Item
+                key={feature.cardname}
+                value={feature.cardname}>
+                <Text>{feature.cardname}</Text>
+              </CheckboxCards.Item>
+            ))}
+          </CheckboxCards.Root>
           </label>
+          
 
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
