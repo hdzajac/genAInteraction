@@ -1,9 +1,9 @@
-import { Box, Button, CheckboxCards, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Button, CheckboxCards, Flex, Heading, Text, TextField } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
-import { EvaluationReport, VisualFeatures} from '@/store/types'
+import { EvaluationReport, VisualFeatures } from '@/store/types'
 import { useRecord } from '@/store/useRecord'
 import { TextArea } from './TextArea'
-import React from 'react'
+import { useEffect, useState } from 'react'
 
 
 
@@ -13,12 +13,12 @@ type Props = {
   onSave: () => void
 }
 
- 
+
 
 export default function EvaluationValidation({ defaultEvaluation, onSave }: Props) {
   const { updateEvaluation } = useRecord()
 
-  const { register, handleSubmit, formState, setValue } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: defaultEvaluation,
   })
 
@@ -27,17 +27,26 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
     onSave()
   }
 
-  const onSubmit = (data: EvaluationReport) => console.log(data);
+  const [query, setQuery] = useState('')
+  const [filteredFeatures, setFilteredFeatures] = useState<VisualFeatures[]>([])
+
+  const cardFeatures = defaultEvaluation.visualFeatures
+
+  useEffect(() => {
+    const filtered = cardFeatures.filter(feature => 
+      feature.cardname.toLowerCase().includes(query.toLowerCase())
+    )
+    setFilteredFeatures(filtered)
+  }, [query, cardFeatures])
 
   
-  React.useEffect(() => {
-    console.log("touchedFields", formState.touchedFields);
-  }, [formState]);
-
-  setValue('treatment', 'string')
-
-  const cardFeatures = defaultEvaluation.visualFeatures;
   
+
+    
+
+  
+
+
 
   
 
@@ -48,10 +57,7 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
       </Heading>
 
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("diagnosis")} />
-        <input type="submit" />
-      </form>
+      
       
       <form onSubmit={handleSubmit(handleSave)}>
         <Flex direction="column" gap="3">
@@ -60,10 +66,18 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
               Visual features
             </Text>
           </label>
+
+          <TextField.Root placeholder="Search for features" 
+                          value={query} 
+                          onChange={(e) => setQuery(e.target.value)}>
+            <TextField.Slot>
+              
+            </TextField.Slot>
+          </TextField.Root>
           
         
           <CheckboxCards.Root>
-            {cardFeatures.map((feature) => (
+            {filteredFeatures.map((feature) => (
               <CheckboxCards.Item
                 key={feature.cardname}
                 value={feature.cardname}>
