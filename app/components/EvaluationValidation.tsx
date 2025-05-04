@@ -32,14 +32,39 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
 
   const cardFeatures = defaultEvaluation.visualFeatures
 
+  
+
+  const [newFeature, setNewFeature] = useState('')
+  const [features, setFeatures] = useState<VisualFeatures[]>(defaultEvaluation.visualFeatures)
+
+  const addCard = () => {
+    const trimmed = newFeature.trim()
+    if (!trimmed) return
+
+    const exists = features.some(f => f.cardname.toLowerCase() === trimmed.toLowerCase())
+    if (exists) {
+      alert ("Feature already exists")
+      return
+    }
+
+    const newEntry: VisualFeatures = {
+      cardname: trimmed,
+      smartphrase: ""
+    }
+
+    const updated = [...features, newEntry]
+    setFeatures(updated)
+    setFilteredFeatures(updated)
+    setNewFeature("")
+
+  }
+
   useEffect(() => {
-    const filtered = cardFeatures.filter(feature => 
+    const filtered = features.filter(feature => 
       feature.cardname.toLowerCase().includes(query.toLowerCase())
     )
     setFilteredFeatures(filtered)
-  }, [query, cardFeatures])
-
-  
+  }, [query, features])
   
 
     
@@ -67,13 +92,25 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
             </Text>
           </label>
 
+          <Flex gap="2" mb="3">
+            <TextField.Root
+              placeholder="Add new feature"
+              value={newFeature}
+              onChange={(e) => setNewFeature(e.target.value)}
+            />
+            <Button type="button" onClick={addCard}>
+              Add feature
+            </Button>
+          </Flex>
+
+          <Flex direction="row" mb="3">
           <TextField.Root placeholder="Search for features" 
                           value={query} 
                           onChange={(e) => setQuery(e.target.value)}>
             <TextField.Slot>
-              
             </TextField.Slot>
           </TextField.Root>
+          </Flex>
           
         
           <CheckboxCards.Root>
