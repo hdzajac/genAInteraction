@@ -15,11 +15,27 @@ const openai = createOpenAI({
 export default async function ({ evaluation, patient, sections }: GeneratePayload, flags: Flags) {
   console.log('PAYLOAD', flags)
 
+  function formatEvaluationValue(value: any): string {
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') {
+    return Object.entries(value)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(', ')
+  }
+  return String(value)
+}
+
   const evaluationPrompt = (Object.keys(evaluation) as Array<keyof EvaluationReport>)
     .filter((key) => evaluation[key] !== '')
     .map((key) => {
+      const value = evaluation[key]
+      const formatted = typeof value === 'object'
+        ? Array.isArray(value)
+          ? value.map((v) => formatEvaluationValue(v)).join(', ')
+          : formatEvaluationValue(value)
+        : value
       return `
-      - ${EvaluationLabels[key]}: ${evaluation[key]}`
+      - ${EvaluationLabels[key]}: ${formatted}`
     })
 
   const sectionsPrompt = sections
@@ -43,6 +59,8 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       ## Formatting requirements
       - Use <h2> tags for section headings and <p> tags for paragraphs.
       - Highlight input data used in the report with <strong> tags.
+      
+       
       
       ${generateExamplesPrompt(sections, flags.includeExamples)}`
 

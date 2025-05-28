@@ -53,7 +53,6 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
   
   const cardDiagnosis = defaultEvaluation.diagnosis;
   const cardTreatment = defaultEvaluation.treatment;
-  
 
   const [newFeature, setNewFeature] = useState('')
   const [features, setFeatures] = useState<VisualFeatures[]>(defaultEvaluation.visualFeatures)
@@ -93,9 +92,6 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
       <Heading as="h2" mb="4">
         Evaluation overview
       </Heading>
-
-
-      
       
       <form onSubmit={handleSubmit(handleSave)}>
         <Flex direction="column" gap="3">

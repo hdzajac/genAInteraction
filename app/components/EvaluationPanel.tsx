@@ -22,9 +22,7 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
   const handleCancel = () => {
     reset(defaultEvaluation)
   }
-  console.log(evaluation.visualFeatures)
-  console.log(evaluation.diagnosis)
-  console.log(evaluation.treatment)
+  
 
   return (
     <div className="panel">
