@@ -26,7 +26,7 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
 }
 
   const evaluationPrompt = (Object.keys(evaluation) as Array<keyof EvaluationReport>)
-    .filter((key) => evaluation[key] !== '')
+    //.filter((key) => 
     .map((key) => {
       const value = evaluation[key]
       const formatted = typeof value === 'object'
@@ -43,6 +43,7 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       const sec = sectionsInfo.find((info) => info.type === section)
 
       if (!sec) return ''
+      
 
       return `
       - ${sec.title}: ${sec.description}`
@@ -55,6 +56,7 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       ${generatePatientPrompt(patient)}
       
       ## Condition details: ${evaluationPrompt}
+      
 
       ## Formatting requirements
       - Use <h2> tags for section headings and <p> tags for paragraphs.

@@ -32,6 +32,12 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
     const selectedTreat = cardTreatment.filter(treat =>
       selectedPlan.includes(treat.cardname)
     )
+    const selectedAltTreat = cardAltTreatment.filter(altTreat =>
+      selectedAltPlan.includes(altTreat.cardname)
+    )
+    const selectedFolTreat = cardFolTreatment.filter(fol =>
+      selectedFolPlan.includes(fol.cardname)
+    )
     
     
     const updatedEvaluation: EvaluationReport = {
@@ -39,6 +45,8 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
       visualFeatures: selectedFeatures,
       diagnosis: selectedDiag,
       treatment: selectedTreat,
+      alternativePlan: selectedAltTreat,
+      followUp: selectedFolTreat,
     }
     updateEvaluation(updatedEvaluation)
     onSave()
@@ -50,9 +58,14 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
   const [selectedCardnames, setSelectedCardnames] = useState<string[]>([]);
   const [selectedDiagnosis, setSelectedDiagnosis] = useState<string[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<string[]>([]);
+  const [selectedAltPlan, setSelectedAltPlan] = useState<string[]>([]);
+  const [selectedFolPlan, setSelectedFolPlan] = useState<string[]>([]);
   
   const cardDiagnosis = defaultEvaluation.diagnosis;
   const cardTreatment = defaultEvaluation.treatment;
+  const cardAltTreatment = defaultEvaluation.alternativePlan;
+  const cardFolTreatment = defaultEvaluation.followUp;
+
 
   const [newFeature, setNewFeature] = useState('')
   const [features, setFeatures] = useState<VisualFeatures[]>(defaultEvaluation.visualFeatures)
@@ -170,7 +183,7 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
                 <Text>{treat.cardname}</Text>
               </CheckboxCards.Item>
             ))}
-          </CheckboxCards.Root>
+            </CheckboxCards.Root>
           </label>
           
 
@@ -178,14 +191,36 @@ export default function EvaluationValidation({ defaultEvaluation, onSave }: Prop
             <Text as="div" size="2" mb="1" weight="bold">
               Alternative plan
             </Text>
-            <TextArea {...register("alternativePlan")}/>
+            <CheckboxCards.Root
+              value={selectedAltPlan}
+              onValueChange={setSelectedAltPlan}
+              >
+            {cardAltTreatment.map((altTreat) => (
+              <CheckboxCards.Item
+                key={altTreat.cardname}
+                value={altTreat.cardname}>
+                <Text>{altTreat.cardname}</Text>
+              </CheckboxCards.Item>
+            ))}
+          </CheckboxCards.Root>
           </label>
 
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
               Follow up
             </Text>
-            <TextArea {...register('followUp')} />
+              <CheckboxCards.Root
+                value={selectedFolPlan}
+                onValueChange={setSelectedFolPlan}
+                >
+              {cardFolTreatment.map((fol) => (
+                <CheckboxCards.Item
+                  key={fol.cardname}
+                  value={fol.cardname}>
+                  <Text>{fol.cardname}</Text>
+                </CheckboxCards.Item>
+              ))}
+            </CheckboxCards.Root>
           </label>
         </Flex>
         <Flex gap="3" mt="4" justify="start">

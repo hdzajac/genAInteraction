@@ -119,7 +119,7 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
             Alternative plan
           </Heading>
           <Text as="p" size="2">
-            {displayValue(evaluation.alternativePlan)}
+            {displayValue(evaluation.alternativePlan.map((f) => f.cardname).join(', '))}
           </Text>
         </div>
         <div>
@@ -127,7 +127,7 @@ export default function EvaluationPanel({ defaultEvaluation }: Props) {
             Follow up
           </Heading>
           <Text as="p" size="2">
-            {displayValue(evaluation.followUp)}
+            {displayValue(evaluation.followUp.map((f) => f.cardname).join(', '))}
           </Text>
         </div>
       </Flex>

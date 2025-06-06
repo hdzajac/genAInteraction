@@ -13,8 +13,8 @@ export type EvaluationReport = {
   visualFeatures: VisualFeatures[]
   diagnosis: Diagnosis[]
   treatment: Treatment[]
-  alternativePlan: string
-  followUp: string
+  alternativePlan: AlternativePlan[]
+  followUp: FollowUp[]
 }
 
 export type VisualFeatures = {
@@ -33,11 +33,13 @@ export type Treatment = {
 }
 
 export type AlternativePlan = {
-  
+  cardname: string
+  smartphrase: string
 }
 
-export type Followup = {
-
+export type FollowUp = {
+  cardname: string
+  smartphrase: string
 }
 
 
