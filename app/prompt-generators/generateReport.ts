@@ -7,6 +7,7 @@ import { GeneratePayload } from '@/hooks/useOpenAI'
 import { EvaluationReport, Patient } from '@/store/types'
 import sectionsInfo from './helpers/sections-info.js'
 import systemPrompt from './helpers/system-prompt'
+import { Key } from 'lucide-react'
 
 const openai = createOpenAI({
   fetch: fetch,
@@ -26,14 +27,27 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
 }
 
   const evaluationPrompt = (Object.keys(evaluation) as Array<keyof EvaluationReport>)
-    //.filter((key) => 
+    .filter((key) => {
+      const value = evaluation[key]
+
+      if (!Array.isArray(value)) return true
+
+      const nonEmpty = value.filter(
+        (item) =>
+          item.cardname?.trim() !== '' || item.smartphrase?.trim() !== ''
+      )
+      return nonEmpty.length > 0
+    })
+    
     .map((key) => {
       const value = evaluation[key]
+      
       const formatted = typeof value === 'object'
         ? Array.isArray(value)
           ? value.map((v) => formatEvaluationValue(v)).join(', ')
           : formatEvaluationValue(value)
         : value
+      
       return `
       - ${EvaluationLabels[key]}: ${formatted}`
     })
@@ -57,10 +71,12 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       
       ## Condition details: ${evaluationPrompt}
       
+      
 
       ## Formatting requirements
       - Use <h2> tags for section headings and <p> tags for paragraphs.
       - Highlight input data used in the report with <strong> tags.
+      
       
        
       
