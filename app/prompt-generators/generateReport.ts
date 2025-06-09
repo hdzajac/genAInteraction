@@ -69,13 +69,15 @@ export default async function ({ evaluation, patient, sections }: GeneratePayloa
       The report must include the following sections:${sectionsPrompt}
       ${generatePatientPrompt(patient)}
       
-      ## Condition details: ${evaluationPrompt}
       
+      ## Condition details: ${evaluationPrompt}
+      - Include all smartphrases 
       
 
       ## Formatting requirements
       - Use <h2> tags for section headings and <p> tags for paragraphs.
       - Highlight input data used in the report with <strong> tags.
+      - Highlight every starting smartphrase in a sentence with <i> tags.
       
       
        
